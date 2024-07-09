@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+
+{% block title %} About {% endblock title %}
+
+
+{% block content %}
+    
+    {% if not user.is_authenticated  %}
+        <br>
+        <a href="{% url 'home' %}" class="btn ghost-button">Go Back</a>
+    {% endif %}    
+    
+    <div class="align-middle" style="color: #ea2088; font-style: bold; font-size: 3rem;">Invi</div>
+    <div class="align-middle" style="color: #fff">An Inventory Management System</div>
+    <br><br>
+
+    <div class="align-middle"> 
+        <h2 style="color:#ea2088">| About |</h3> <br>
+            <p>
+                Invi is a robust inventory management solution designed to meet the specific needs of businesses.
+                The software efficiently tracks incoming and outgoing stock, ensuring real-time inventory updates and dynamically rendered bills including Real-Time Inventory Tracking, Supplier Profiles and Dynamic Billing.
+            </p>
+        <br>
+    </div>
+        <h2 style="color:#ea2088" class="align-middle">| Features |</h3> <br>
+            <ul style="display: table; margin: 0 auto;">
+                <li>Interactive charts display current available stock.</li>
+                <li>Detailed stock information is maintained, including current available stock.</li>
+                <li>Incoming transactions are managed through purchases.</li>
+                <li>Outgoing transactions are managed through sales.</li>
+                <li>All transactions performed through the software are recorded.</li>
+                <li>Bills are dynamically generated and can be printed.</li>
+                <li>Individual profiles are maintained for each supplier.</li>
+            </ul>
+
+            <br>
+    <div class="align-middle">
+        <h2 style="color:#ea2088" >| Developer |</h3> <br>
+            <a target="_blank" href="http://rajkumarv.125mb.com/" >Rajkumar V</a>
+            <br><br><br>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+    <title>Invi - Login</title>
+</head>
+<body>
+<div class="container">
+    <div class="top"></div>
+    <div class="bottom"></div>
+    <div class="center">
+        {% if user.is_authenticated %}
+            <h2>You are already logged in, {{ request.user.username }}!</h2>
+            <a class="cta" href="{% url 'home' %}" style="margin-top: 0px; margin-bottom: 0px;">
+                <span>Go to home</span>
+                <svg width="15px" height="10px" viewBox="0 0 13 10"><path d="M1,5 L11,5"></path><polyline points="8 1 12 5 8 9"></polyline></svg></a>
+            <a class="cta" href="{% url 'logout' %}" style="margin-top: 0px; margin-bottom: 0px;">
+                    <span>Logout</span>
+                    <svg width="15px" height="10px" viewBox="0 0 13 10"><path d="M1,5 L11,5"></path><polyline points="8 1 12 5 8 9"></polyline></svg></a>
+        {% else %}
+            <form method="POST">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <h2>Please Sign In</h2>
+                        {{ form }}
+                        <br/>
+                        <button class="cta">
+                            <span>Login</span>
+                            <svg width="15px" height="10px" viewBox="0 0 13 10"><path d="M1,5 L11,5"></path><polyline points="8 1 12 5 8 9"></polyline></svg>
+                        </button>
+                    </fieldset>
+                </form>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

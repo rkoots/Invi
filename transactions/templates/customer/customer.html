@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}
+{{ customer.name }}'s profile
+{% endblock %}
+{% block content %}
+    <div class="content-section">
+        <div class="media">
+            <div class="media-body">
+                <h2 style="color:#ea2088;" class="account-heading">&nbsp;{{ customer.name }}</h2>
+                <a href="{% url 'edit-customer' customer.name %}" class="btn ghost-button" style="float: right;">Edit Details</a>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="fal">
+                            Name &nbsp; : {{ customer.Name }} <br>
+                            Is Active &nbsp; : {{ customer.active }} <br>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="fal">
+                            Address: <br> {{ customer.Address|linebreaks }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock content %}
