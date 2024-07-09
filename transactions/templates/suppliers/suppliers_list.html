@@ -23,7 +23,6 @@
             <tr>
                 <th width="25%">Name</th>
                 <th width="20%">Phone No</th>
-                <th width="25%">GSTIN No</th>
                 <th width="30%">Actions</th>
             </tr>
         </thead>
@@ -37,7 +36,6 @@
                     <h3> <a href="{% url 'supplier' supplier.name %}">{{ supplier.name }}</a> </h3>
                 </td>
                 <td class="align-middle"> {{ supplier.phone }} </td>
-                <td class="align-middle"> {{ supplier.gstin }} </td>
                 <td class="align-middle">
                     <div class="align-middle">
                         <a href="{% url 'edit-supplier' supplier.pk %}" class="btn ghost-button">Edit Details</a>

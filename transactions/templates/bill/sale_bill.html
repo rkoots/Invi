@@ -24,12 +24,12 @@
                     <tbody>
                     
                         <tr style="height: 1px;">
-                            <td> <p style="text-align: center;">TAX INVOICE - SALE</p> </td>
+                            <td> <p style="text-align: center;">INVOICE - SALE</p> </td>
                         </tr>
                     
                         <tr style="text-align: center;">
                             <td >
-                                <span style="font-size: 350%;">Company</span> <br>
+                                <span style="font-size: 350%;">Invi : Brand Name & Logo </span> <br>
                                 <span style="font-size: 120%; font-weight: bold; text-decoration: underline;">DEALERS IN : Products</span> <br>
                                 <span style="text-decoration: underline; font-weight: bold;">REGD ADDRESS :</span> Address Line 1<br>Address line 2<br>
                                 <span style="text-decoration: underline; font-weight: bold;">EMAIL : email</span> <br><br>
@@ -55,7 +55,7 @@
                                     </tr>
                                     <tr>
                                         <td class="inner-box" style="width: 50%;" rowspan="3">{{ bill.address|linebreaks }}</td>
-                                        <td class="inner-box" style="width: 25%; font-weight: bold;">&nbsp;EWAY NO</td>
+                                        <td class="inner-box" style="width: 25%; font-weight: bold;">&nbsp;Tax-1</td>
                                         <td class="inner-box align-middle" style="width: 25%;"> <input type="text" name="eway" class="align-middle" style="border: 0; overflow: hidden;" value="{% if billdetails.eway %}{{ billdetails.eway }}{% endif %}"> </td>
                                     </tr>
                                     <tr>
@@ -67,7 +67,7 @@
                                         <td class="inner-box align-middle" style="width: 25%;"> <input type="text" name="destination" class="align-middle" style="border: 0; overflow: hidden;" value="{% if billdetails.destination %}{{ billdetails.destination }}{% endif %}"> </td>
                                     </tr>
                                     <tr>
-                                        <td class="inner-box" style="font-weight: bold;">&nbsp;GSTIN No : {{ bill.gstin }} </td>
+                                        <td class="inner-box" style="font-weight: bold;">&nbsp;Placeholder : {{ bill.gstin }} </td>
                                         <td class="inner-box" style="width: 25%; font-weight: bold;">&nbsp;PO NO &amp; DATE</td>
                                         <td class="inner-box align-middle" style="width: 25%;"> <input type="text" name="po" class="align-middle" style="border: 0; overflow: hidden;" value="{% if billdetails.po %}{{ billdetails.po }}{% endif %}"> </td>
                                     </tr>
@@ -83,7 +83,7 @@
                                     <tr>
                                         <td class="inner-box" style="width: 5%; font-weight: bold; text-align: center;">&nbsp;SL NO</td>
                                         <td class="inner-box" style="width: 30%; font-weight: bold; text-align: center;">DESCRIPTION OF THE GOODS</td>
-                                        <td class="inner-box" style="width: 12%; font-weight: bold; text-align: center;">&nbsp;HSN/SAC</td>
+                                        <td class="inner-box" style="width: 12%; font-weight: bold; text-align: center;">&nbsp;CODE </td>
                                         <td class="inner-box" style="width: 12%; font-weight: bold; text-align: center;">QTY MTS</td>
                                         <td class="inner-box" style="width: 12%; font-weight: bold; text-align: center;">RATE PMT</td>
                                         <td class="inner-box" style="width: 12%; font-weight: bold; text-align: center;">AMOUNT INRS</td>

@@ -11,13 +11,11 @@ from .forms import StockForm
 from django_filters.views import FilterView
 from .filters import StockFilter
 
-
 class StockListView(FilterView):
     filterset_class = StockFilter
     queryset = Stock.objects.filter(is_deleted=False)
     template_name = 'inventory.html'
     paginate_by = 10
-
 
 class StockCreateView(SuccessMessageMixin, CreateView):                                 # createview class to add new stock, mixin used to display message
     model = Stock                                                                       # setting 'Stock' model as model
@@ -31,7 +29,6 @@ class StockCreateView(SuccessMessageMixin, CreateView):                         
         context["title"] = 'New Stock'
         context["savebtn"] = 'Add to Inventory'
         return context       
-
 
 class StockUpdateView(SuccessMessageMixin, UpdateView):                                 # updateview class to edit stock, mixin used to display message
     model = Stock                                                                       # setting 'Stock' model as model
@@ -47,15 +44,12 @@ class StockUpdateView(SuccessMessageMixin, UpdateView):                         
         context["delbtn"] = 'Delete Stock'
         return context
 
-
 class StockDeleteView(View):                                                            # view class to delete stock
     template_name = "delete_stock.html"                                                 # 'delete_stock.html' used as the template
     success_message = "Stock has been deleted successfully"                             # displays message when form is submitted
-    
     def get(self, request, pk):
         stock = get_object_or_404(Stock, pk=pk)
         return render(request, self.template_name, {'object' : stock})
-
     def post(self, request, pk):  
         stock = get_object_or_404(Stock, pk=pk)
         stock.is_deleted = True
