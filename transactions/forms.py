@@ -111,7 +111,7 @@ class SelectCustomer(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['Name'].widget.attrs.update({'class': 'textinput form-control'})
         self.fields['Address'].widget.attrs.update({'class': 'textinput form-control', 'min': '0'})
-        self.fields['active'].widget.attrs.update({'class': 'form-check-input' })
+        self.fields['email'].widget.attrs.update({'class': 'form-check-input' })
     class Meta:
         model = Customer
-        fields = ['Name', 'Address', 'active']
+        fields = ['Name', 'Address', 'email']
