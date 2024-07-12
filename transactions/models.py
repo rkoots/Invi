@@ -111,12 +111,23 @@ class SaleBillDetails(models.Model):
     def __str__(self):
         return "Bill no: " + str(self.billno.billno)
 
+
 # Contains customers
 class Customer(models.Model):
+    BUSINESS_TYPES = [
+        ('electronics', 'Electronics'),
+        ('infrastructure', 'Infrastructure'),
+        ('custom_machinery', 'Custom Machinery'),
+        ('Others', 'Others'),
+    ]
     id = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=75, blank=False, null=False)
+    type_of_business = models.CharField(max_length=50, choices=BUSINESS_TYPES)
     Address = models.CharField(max_length=150, blank=True, null=True)
-    active = models.BooleanField(default=True)
+    phone = models.CharField(max_length=12, unique=True)
+    email = models.EmailField(max_length=254, unique=True)
+    EORI_number = models.CharField(max_length=50, unique=True)
+    VAT_number = models.CharField(max_length=50, unique=True)
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -127,14 +138,26 @@ class Customer(models.Model):
 # Contains demands
 class Demand(models.Model):
     id = models.AutoField(primary_key=True)
-    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name='demands')
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='demands')
-    quantity = models.IntegerField(default=1)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    part_name = models.CharField(max_length=30, unique=True, verbose_name='Name')
+    Part_desc = models.CharField(max_length=200, blank=True, null=True)
     file = models.FileField(upload_to='demand_files/', blank=True, null=True)
-    completed = models.BooleanField(default=False)
-    notes = models.CharField(max_length=50, blank=True, null=True)
+    quantity = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Demand #{self.id} - {self.stock.name}"
+        return f"Demand #{self.id} - {self.customer.Name}"
+
+class Quote(models.Model):
+    id = models.AutoField(primary_key=True)
+    demand = models.ForeignKey(Demand, on_delete=models.CASCADE)
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='demand_supplier')
+    quote_price = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.IntegerField(default=1)
+    note = models.CharField(max_length=200, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Demand #{self.id} - {self.demand.part_name}"

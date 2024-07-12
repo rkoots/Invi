@@ -8,7 +8,8 @@ from .models import (
     SaleItem,
     SaleBillDetails,
     Demand,
-    Customer
+    Customer,
+    Quote
 )
 
 admin.site.register(Supplier)
@@ -20,3 +21,4 @@ admin.site.register(SaleItem)
 admin.site.register(SaleBillDetails)
 admin.site.register(Demand)
 admin.site.register(Customer)
+admin.site.register(Quote)
