@@ -1,40 +1,40 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
-{% block title %} Customer List {% endblock title %}
+{% block title %} Demand List {% endblock title %}
 {% block content %}
     <div class="row" style="color: #ea2088; font-style: bold; font-size: 3rem;">
-        <div class="col-md-8">Customer List</div>
+        <div class="col-md-8">Demand List</div>
         <div class="col-md-4">               
-            <div style="float:right;"> <a class="btn ghost-blue" href="{% url 'new-customer' %}">Add New Customer</a> </div>
+            <div style="float:right;"> <a class="btn ghost-blue" href="{% url 'demand-list' %}">Add New Demand</a> </div>
         </div>
     </div>
     <br>
     <table class="table table-css">
         <thead class="thead-inverse align-middle">
             <tr>
-                <th width="25%">Name</th>
-                <th width="15%">Sector</th>
-                <th width="15%">EORI</th>
+                <th width="25%">customer</th>
+                <th width="15%">Part Name</th>
+                <th width="15%">quantity</th>
                 <th width="15%">VAT</th>
-                <th width="30%">Address</th>
+                <th width="30%">Request Date</th>
             </tr>
         </thead>
 {% if object_list %}
         <tbody>
-            {% for customer in object_list %}
+            {% for demand in object_list %}
             <tr>
                 <td>
-                    <h3> <a href="{% url 'customer' customer.Name %}">{{ customer.Name }}</a> </h3>
+                    <h3> <a href="{% url 'demand' demand.Name %}">{{ demand.customer }}</a> </h3>
                 </td>
-                <td class="align-middle"> {{ customer.type_of_business }} </td>
-                <td class="align-middle"> {{ customer.EORI_number }} </td>
-                <td class="align-middle"> {{ customer.VAT_number }} </td>
-                <td class="align-middle"> {{ customer.Address }} </td>
+                <td class="align-middle"> {{ demand.part_name }} </td>
+                <td class="align-middle"> {{ demand.Part_desc }} </td>
+                <td class="align-middle"> {{ demand.file }} </td>
+                <td class="align-middle"> {{ demand.quantity }} </td>
 
                 <td class="align-middle">
                     <div class="align-middle">
-                        <a href="{% url 'edit-customer' customer.pk %}" class="btn ghost-button">Edit Details</a>
-                        <a href="{% url 'delete-customer' customer.pk %}" class="btn ghost-red">Delete Customer</a>
+                        <a href="{% url 'edit-demand' demand.pk %}" class="btn ghost-button">Edit Details</a>
+                        <a href="{% url 'delete-demand' demand.pk %}" class="btn ghost-red">Delete Demand</a>
                     </div>
                 </td>
             </tr>

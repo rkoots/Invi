@@ -9,10 +9,10 @@ urlpatterns = [
     path('suppliers/<pk>/delete', views.SupplierDeleteView.as_view(), name='delete-supplier'),
     path('suppliers/<name>', views.SupplierView.as_view(), name='supplier'),
 
-    path('purchases/', views.PurchaseView.as_view(), name='purchases-list'), 
-    path('purchases/new', views.SelectSupplierView.as_view(), name='select-supplier'), 
-    path('purchases/new/<pk>', views.PurchaseCreateView.as_view(), name='new-purchase'),    
-    path('purchases/<pk>/delete', views.PurchaseDeleteView.as_view(), name='delete-purchase'),
+    #path('purchases/', views.PurchaseView.as_view(), name='purchases-list'),
+    #path('purchases/new', views.SelectSupplierView.as_view(), name='select-supplier'),
+    #path('purchases/new/<pk>', views.PurchaseCreateView.as_view(), name='new-purchase'),
+    #path('purchases/<pk>/delete', views.PurchaseDeleteView.as_view(), name='delete-purchase'),
     
     path('sales/', views.SaleView.as_view(), name='sales-list'),
     path('sales/new', views.SaleCreateView.as_view(), name='new-sale'),
@@ -26,5 +26,13 @@ urlpatterns = [
     path('customers/<pk>/edit', views.CustomerUpdateView.as_view(), name='edit-customer'),
     path('customers/<pk>/delete', views.CustomerDeleteView.as_view(), name='delete-customer'),
     path('customers/<name>', views.CustomerView.as_view(), name='customer'),
+
+
+    path('demand/', views.DemandListView.as_view(), name='demand-list'),
+    path('demand/new', views.DemandCreateView.as_view(), name='new-demand'),
+    path('demand/<pk>/edit', views.DemandUpdateView.as_view(), name='edit-demand'),
+    path('demand/<pk>/delete', views.DemandDeleteView.as_view(), name='delete-demand'),
+    path('demand/<name>', views.DemandView.as_view(), name='demand'),
+
 
 ]

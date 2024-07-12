@@ -8,7 +8,8 @@ from .models import (
     SaleBill, 
     SaleItem,
     SaleBillDetails,
-    Customer
+    Customer,
+    Demand
 )
 from inventory.models import Stock
 
@@ -110,8 +111,26 @@ class SelectCustomer(forms.ModelForm):
     def __init__(self, *args, **kwargs):                                                        # used to set css classes to the various fields
         super().__init__(*args, **kwargs)
         self.fields['Name'].widget.attrs.update({'class': 'textinput form-control'})
+        self.fields['type_of_business'].widget.attrs.update({'class': 'select form-control'})
         self.fields['Address'].widget.attrs.update({'class': 'textinput form-control', 'min': '0'})
-        self.fields['active'].widget.attrs.update({'class': 'form-check-input' })
+        self.fields['phone'].widget.attrs.update({'class': 'textinput form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'textinput form-control'})
+        self.fields['EORI_number'].widget.attrs.update({'class': 'textinput form-control'})
+        self.fields['VAT_number'].widget.attrs.update({'class': 'textinput form-control'})
+        self.fields['is_deleted'].widget.attrs.update({'class': 'checkbox form-check-input'})
     class Meta:
         model = Customer
-        fields = ['Name', 'Address', 'active']
+        fields = ['Name', 'Address', 'type_of_business','phone','email','EORI_number','VAT_number','is_deleted']
+
+
+
+class SelectDemand(forms.ModelForm):
+    def __init__(self, *args, **kwargs):                                                        # used to set css classes to the various fields
+        super().__init__(*args, **kwargs)
+        self.fields['customer'].widget.attrs.update({'class': 'textinput form-control'})
+        self.fields['part_name'].widget.attrs.update({'class': 'textinput form-control'})
+        self.fields['Part_desc'].widget.attrs.update({'class': 'textinput form-control'})
+        self.fields['quantity'].widget.attrs.update({'class': 'textinput form-control'})
+    class Meta:
+        model = Demand
+        fields = ['customer', 'part_name', 'Part_desc','quantity']
