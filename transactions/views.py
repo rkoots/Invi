@@ -48,7 +48,7 @@ class SupplierCreateView(SuccessMessageMixin, CreateView):
     model = Supplier
     form_class = SupplierForm
     success_url = '/transactions/suppliers'
-    success_message = "Supplier has been created successfully"
+    success_message = "Manufacturer has been created successfully"
     template_name = "suppliers/edit_supplier.html"
     
     def get_context_data(self, **kwargs):
@@ -62,7 +62,7 @@ class SupplierUpdateView(SuccessMessageMixin, UpdateView):
     model = Supplier
     form_class = SupplierForm
     success_url = '/transactions/suppliers'
-    success_message = "Supplier details has been updated successfully"
+    success_message = "Manufacturer details has been updated successfully"
     template_name = "suppliers/edit_supplier.html"
     
     def get_context_data(self, **kwargs):
@@ -75,7 +75,7 @@ class SupplierUpdateView(SuccessMessageMixin, UpdateView):
 # used to delete a supplier
 class SupplierDeleteView(View):
     template_name = "suppliers/delete_supplier.html"
-    success_message = "Supplier has been deleted successfully"
+    success_message = "Manufacturer has been deleted successfully"
 
     def get(self, request, pk):
         supplier = get_object_or_404(Supplier, pk=pk)

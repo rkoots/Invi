@@ -48,21 +48,38 @@
                 {# <p class="sidebar-paragraph">Dummy Heading</p> #}
                 <li>
                     <a class="sidebar-text sidebar-button" href="{% url 'home' %}">Home</a>
-                </li>               
+                </li>
                 <li>
-                    <a href="#inventorySubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Inventory</a>
-                    <ul class="collapse list-unstyled" id="inventorySubmenu">
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'inventory' %}">Inventory List</a> </li>
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-stock' %}">Add New Stock</a> </li>
+                    <a href="#customerSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Customer</a>
+                    <ul class="collapse list-unstyled" id="customerSubmenu">
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'customers-list' %}">Customers List</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-customer' %}">Add New Customer</a> </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#purchaseSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Purchases</a>
-                    <ul class="collapse list-unstyled" id="purchaseSubmenu">
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'purchases-list' %}">Purchases List</a> </li>
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'select-supplier' %}">New Incoming Stock</a> </li>
+                    <a href="#demandSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Demands</a>
+                    <ul class="collapse list-unstyled" id="demandSubmenu">
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'demand-list' %}">Demand List</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-demand' %}">New Demand</a> </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="#quoteSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Quotations</a>
+                    <ul class="collapse list-unstyled" id="quoteSubmenu">
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'demand-list' %}">List of Demand to Quote</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'demand-list' %}">List of Quotation</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-demand' %}">Add New Quotation</a> </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#supplierSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Manufacturer</a>
+                    <ul class="collapse list-unstyled" id="supplierSubmenu">
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'suppliers-list' %}">Manufacturer List</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-supplier' %}">Add New Manufacturer</a> </li>
+                    </ul>
+                </li>
+
                 <li>
                     <a href="#saleSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Sales</a>
                     <ul class="collapse list-unstyled" id="saleSubmenu">
@@ -70,18 +87,12 @@
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-sale' %}">New Outgoing Stock</a> </li>
                     </ul>
                 </li>
+
                 <li>
-                    <a href="#supplierSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Suppliers</a>
-                    <ul class="collapse list-unstyled" id="supplierSubmenu">
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'suppliers-list' %}">Suppliers List</a> </li>
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-supplier' %}">Add New Supplier</a> </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#customerSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Customer</a>
-                    <ul class="collapse list-unstyled" id="customerSubmenu">
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'customers-list' %}">Customers List</a> </li>
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-customer' %}">Add New Customer</a> </li>
+                    <a href="#inventorySubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Inventory</a>
+                    <ul class="collapse list-unstyled" id="inventorySubmenu">
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'inventory' %}">Inventory List</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-stock' %}">Add New Stock</a> </li>
                     </ul>
                 </li>
 
@@ -112,37 +123,27 @@
             {% endcomment %}
 
         </nav>
-    
         <div id="content">
-
             <div class="row">
                 <div class="col-md-12">
-                
                     {% if messages %}
                         {% for message in messages %}
                             <div class="alert alert-{{ message.tags }}"> {{ message }} </div>
                         {% endfor %}
                     {% endif %}
-                
-    {% endif %} 
-
+    {% endif %}
                     <div class="container">
                         {% block content %}{% endblock content %}
                     </div>
-                    
                 </div>
             </div>
             <br>
-
         </div>
-    
-    </main>    
-        
+    </main>
+
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="{% static 'bootstrap/jquery-3.3.1.slim.min.js' %}"></script>
     <script src="{% static 'bootstrap/popper.min.js' %}"></script>
     <script src="{% static 'bootstrap/bootstrap.min.js' %}"></script>
-
 </body>
-
 </html>
