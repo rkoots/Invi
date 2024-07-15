@@ -1,3 +1,4 @@
+import os,sys
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import (
     View, 
@@ -17,7 +18,9 @@ from .models import (
     SaleBill,  
     SaleItem,
     SaleBillDetails,
-    Customer
+    Customer,
+    Demand,
+    Quote
 )
 from .forms import (
     SelectSupplierForm, 
@@ -28,8 +31,10 @@ from .forms import (
     SaleItemFormset,
     SaleDetailsForm,
     SelectCustomer,
+    SelectDemand,
 )
 from inventory.models import Stock
+
 
 # shows a lists of all suppliers
 class SupplierListView(ListView):
@@ -101,60 +106,6 @@ class SupplierView(View):
             'bills'     : bills
         }
         return render(request, 'suppliers/supplier.html', context)
-
-class CustomerListView(ListView):
-    model = Customer
-    template_name = "customer/customer_list.html"
-    queryset = Customer.objects.filter(is_deleted=False)
-    paginate_by = 10
-
-class CustomerCreateView(SuccessMessageMixin, CreateView):
-    model = Customer
-    form_class = SelectCustomer
-    success_url = '/transactions/customers'
-    success_message = "Customer has been created successfully"
-    template_name = "customer/edit_customer.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = 'New Customer'
-        context["savebtn"] = 'Add Customer'
-        return context
-
-class CustomerUpdateView(SuccessMessageMixin, UpdateView):
-    model = Customer
-    form_class = SelectCustomer
-    success_url = '/transactions/customers'
-    success_message = "Customer details has been updated successfully"
-    template_name = "customer/edit_customer.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = 'Edit Customer'
-        context["savebtn"] = 'Save Changes'
-        context["delbtn"] = 'Delete Customer'
-        return context
-
-class CustomerDeleteView(View):
-    template_name = "customer/delete_customer.html"
-    success_message = "Customer Record has been deleted successfully"
-
-    def get(self, request, pk):
-        customer = get_object_or_404(Customer, pk=pk)
-        return render(request, self.template_name, {'object' : customer})
-
-    def post(self, request, pk):
-        customer = get_object_or_404(Customer, pk=pk)
-        customer.is_deleted = True
-        customer.save()
-        messages.success(request, self.success_message)
-        return redirect('customers-list')
-
-class CustomerView(View):
-    def get(self, request, name):
-        customer = get_object_or_404(Customer, Name=name)
-        return render(request, 'customer/customer.html', {'object' : customer})
-
 
     # shows the list of bills of all purchases
 class PurchaseView(ListView):
@@ -427,3 +378,116 @@ class SaleBillView(View):
             'bill_base'     : self.bill_base,
         }
         return render(request, self.template_name, context)
+
+
+
+class CustomerListView(ListView):
+    model = Customer
+    template_name = "customer/customer_list.html"
+    queryset = Customer.objects.filter(is_deleted=False)
+    paginate_by = 10
+
+class CustomerCreateView(SuccessMessageMixin, CreateView):
+    model = Customer
+    form_class = SelectCustomer
+    success_url = '/transactions/customers'
+    success_message = "Customer has been created successfully"
+    template_name = "customer/edit_customer.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'New Customer'
+        context["savebtn"] = 'Add Customer'
+        return context
+
+class CustomerUpdateView(SuccessMessageMixin, UpdateView):
+    model = Customer
+    form_class = SelectCustomer
+    success_url = '/transactions/customers'
+    success_message = "Customer details has been updated successfully"
+    template_name = "customer/edit_customer.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Edit Customer'
+        context["savebtn"] = 'Save Changes'
+        context["delbtn"] = 'Delete Customer'
+        return context
+
+class CustomerDeleteView(View):
+    template_name = "customer/delete_customer.html"
+    success_message = "Customer Record has been deleted successfully"
+
+    def get(self, request, pk):
+        customer = get_object_or_404(Customer, pk=pk)
+        return render(request, self.template_name, {'object' : customer})
+
+    def post(self, request, pk):
+        customer = get_object_or_404(Customer, pk=pk)
+        customer.is_deleted = True
+        customer.save()
+        messages.success(request, self.success_message)
+        return redirect('customers-list')
+
+class CustomerView(View):
+    def get(self, request, name):
+        customer = get_object_or_404(Customer, Name=name)
+        return render(request, 'customer/customer.html', {'customer' : customer})
+
+
+
+
+class DemandListView(ListView):
+    model = Demand
+    template_name = "demand/demand_list.html"
+    queryset = Demand.objects.filter()
+    paginate_by = 10
+
+class DemandCreateView(SuccessMessageMixin, CreateView):
+    model = Demand
+    form_class = SelectDemand
+    success_url = '/transactions/demand'
+    success_message = "Demand has been created successfully"
+    template_name = "demand/edit_demand.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'New Demand'
+        context["savebtn"] = 'Add Demand'
+        return context
+
+class DemandUpdateView(SuccessMessageMixin, UpdateView):
+    model = Demand
+    form_class = SelectDemand
+    success_url = '/transactions/demand'
+    success_message = "Demand details has been updated successfully"
+    template_name = "demand/edit_demand.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Edit Demand'
+        context["savebtn"] = 'Save Changes'
+        context["delbtn"] = 'Delete Demand'
+        return context
+
+class DemandDeleteView(View):
+    template_name = "demand/delete_demand.html"
+    success_message = "Demand Record has been deleted successfully"
+    def get(self, request, pk):
+        demand = get_object_or_404(Demand, pk=pk)
+        return render(request, self.template_name, {'object' : demand})
+
+    def post(self, request, pk):
+        demand = get_object_or_404(Demand, pk=pk)
+        demand.is_deleted = True
+        demand.save()
+        messages.success(request, self.success_message)
+        return redirect('demand-list')
+
+class DemandView(View):
+    def get(self, request, pk):
+        print("R===========================")
+        demand = get_object_or_404(Demand, pk=pk)
+        print(demand)
+        return render(request, 'demand/demand.html', {'demand' : demand})
+

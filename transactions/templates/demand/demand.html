@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}
+
+
+{{ demand.part_name }}'s Demand
+{% endblock %}
+{% block content %}
+<div class="content-section">
+    <div class="media">
+        <div class="media-body">
+            <h2 style="color:#ea2088;" class="account-heading">&nbsp;{{ demand.part_name }}</h2>
+            <a href="{% url 'edit-demand' demand.pk %}" class="btn ghost-button" style="float: right;">Edit Details</a>
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="fal">
+                        Quantity &nbsp; : {{ demand.quantity }} <br>
+                        Description &nbsp; : {{ demand.Part_desc }} <br>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

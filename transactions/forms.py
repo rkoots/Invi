@@ -8,7 +8,9 @@ from .models import (
     SaleBill, 
     SaleItem,
     SaleBillDetails,
-    Customer
+    Customer,
+    Demand,
+    Quote
 )
 from inventory.models import Stock
 
@@ -107,11 +109,31 @@ class SaleDetailsForm(forms.ModelForm):
 
 
 class SelectCustomer(forms.ModelForm):
-    def __init__(self, *args, **kwargs):                                                        # used to set css classes to the various fields
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['Name'].widget.attrs.update({'class': 'textinput form-control'})
-        self.fields['Address'].widget.attrs.update({'class': 'textinput form-control', 'min': '0'})
-        self.fields['email'].widget.attrs.update({'class': 'form-check-input' })
+        self.fields['Name'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['type_of_business'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['Address'].widget.attrs.update({'class': 'form-control'})
+        self.fields['phone'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['EORI_number'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['VAT_number'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['is_deleted'].widget.attrs.update({'class': 'form-check-input'})
+
     class Meta:
         model = Customer
-        fields = ['Name', 'Address', 'email']
+        fields = ['Name','type_of_business','Address','phone','email','EORI_number','VAT_number','is_deleted']
+
+class SelectDemand(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['customer'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['part_name'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['Part_desc'].widget.attrs.update({'class': 'form-control'})
+        self.fields['file'].widget.attrs.update({'class': 'form-control'})
+        self.fields['quantity'].widget.attrs.update({'class': 'form-control', 'min': '1', 'required': 'true'})
+    class Meta:
+        model = Demand
+        fields = ['customer','part_name','Part_desc','file','quantity']
+
+# Replace YourModelName with the actual name of your model

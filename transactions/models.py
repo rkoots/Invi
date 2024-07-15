@@ -133,7 +133,7 @@ class Customer(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Customer #{self.id} - {self.Name}"
+        return f"#{self.id} - {self.Name}"
 
 # Contains demands
 class Demand(models.Model):

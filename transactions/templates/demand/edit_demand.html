@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %} {{title}} {% endblock title %}
+{% block content %}
+    <div style="color:#ea2088; font-style: bold; font-size: 3rem; border-bottom: 1px solid white;">{{title}}</div> <br>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {{ form.customer.errors }}
+        {{ form.part_name.errors }}
+        {{ form.Part_desc.errors }}
+        {{ form.file.errors }}
+        {{ form.quantity.errors }}
+        <div class="form-group">
+            <label for="{{ form.customer.id_for_label }}">Customer:</label>
+            {{ form.customer }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.part_name.id_for_label }}">Part Name:</label>
+            {{ form.part_name }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.Part_desc.id_for_label }}">Part Desc:</label>
+            {{ form.Part_desc }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.file.id_for_label }}">File:</label>
+            {{ form.file }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.quantity.id_for_label }}">Quantity:</label>
+            {{ form.quantity }}
+        </div>
+        <br>
+        <div class="align-middle">
+            <button type="submit" class="btn ghost-green">{{ savebtn }}</button>
+            {% if title == "New Demand" %}
+                <button type="reset" class="btn ghost-blue" >Reset</button>
+            {% endif %}
+            {% if delbtn %}
+                <a href="{% url 'delete-demand' demand.pk %}" class="btn ghost-red"> Delete Demand </a>
+            {% endif %}
+            <a href="{% url 'demand-list' %}" class="btn ghost-button">Cancel</a>
+        </div>
+    </form>
+
+{% endblock content %}
