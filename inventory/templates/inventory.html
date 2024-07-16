@@ -26,17 +26,16 @@
                     </div>
                 </div>
             </div>
-
-
         </form>
-
         <br>
         
         <thead class="thead-inverse align-middle">
             <tr>
-                <th width="50%">Part Number</th>
-                <th width="20%">Current Stock in Inventory</th>
-                <th width="30%">Options</th>
+                <th width="15%">Part ID</th>
+                <th width="20%">Part Number</th>
+                <th width="30%">Part Description</th>
+                <th width="15%">Current Stock in Inventory</th>
+                <th width="20%">Options</th>
             </tr>
         </thead>
                   
@@ -45,9 +44,9 @@
         <tbody>         
             {% for stock in object_list %}
                 <tr>
-                    <td>
-                        <h4>{{ stock.name }}</h4>
-                    </td>
+                    <td>#{{ stock.pk }}</td>
+                    <td><h4>{{ stock.name }}</h4></td>
+                    <td>{{ stock.desc }}</td>
                     <td class="align-middle">{{ stock.quantity }}</td>
                     <td class="align-middle">
                         <a href="{% url 'edit-stock' stock.pk %}" class="btn ghost-button">Edit Details</a>
@@ -56,9 +55,7 @@
                 </tr>
             {% endfor %}                   
         </tbody>
-
-    </table>  
-
+    </table>
     <div class="align-middle">
         {% if is_paginated %}
 

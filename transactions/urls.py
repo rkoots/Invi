@@ -33,4 +33,11 @@ urlpatterns = [
     path('demand/<pk>/delete', views.DemandDeleteView.as_view(), name='delete-demand'),
     path('demand/<pk>', views.DemandView.as_view(), name='demand'),
 
+    path('demand_to_quote/', views.DemandQuoteListView.as_view(), name='demand-quote-list'),
+    path('quote/', views.QuoteListView.as_view(), name='quote-list'),
+    path('quote/new', views.QuoteCreateView.as_view(), name='new-quote'),
+    path('quote/<pk>/edit', views.QuoteUpdateView.as_view(), name='edit-quote'),
+    path('quote/<pk>/delete', views.QuoteDeleteView.as_view(), name='delete-quote'),
+    path('quote/<pk>', views.QuoteView.as_view(), name='quote'),
+
 ]

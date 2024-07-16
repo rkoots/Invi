@@ -23,12 +23,13 @@
             {{ form.Part_desc }}
         </div>
         <div class="form-group">
-            <label for="{{ form.file.id_for_label }}">File:</label>
-            {{ form.file }}
-        </div>
-        <div class="form-group">
             <label for="{{ form.quantity.id_for_label }}">Quantity:</label>
             {{ form.quantity }}
+        </div>
+        <div class="custom-file-drop-container">
+            {{ form.file.errors }}
+            <p class="custom-file-drop-title">Drop file here</p>
+            {{ form.file }}
         </div>
         <br>
         <div class="align-middle">

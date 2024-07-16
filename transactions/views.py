@@ -32,9 +32,10 @@ from .forms import (
     SaleDetailsForm,
     SelectCustomer,
     SelectDemand,
+    SelectQuote
 )
 from inventory.models import Stock
-
+from django.db.models import Count
 
 # shows a lists of all suppliers
 class SupplierListView(ListView):
@@ -491,3 +492,62 @@ class DemandView(View):
         print(demand)
         return render(request, 'demand/demand.html', {'demand' : demand})
 
+
+
+class QuoteListView(ListView):
+    model = Quote
+    template_name = "quote/quote_list.html"
+    queryset = Quote.objects.filter(is_deleted=False)
+    paginate_by = 10
+
+class QuoteCreateView(SuccessMessageMixin, CreateView):
+    model = Quote
+    form_class = SelectQuote
+    success_url = '/transactions/quote'
+    success_message = "Quatation has been created successfully"
+    template_name = "quote/edit_quote.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'New Quote'
+        context["savebtn"] = 'Add Quote'
+        return context
+
+class QuoteUpdateView(SuccessMessageMixin, UpdateView):
+    model = Quote
+    form_class = SelectQuote
+    success_url = '/transactions/quote'
+    success_message = "Qutation details has been updated successfully"
+    template_name = "quote/edit_quote.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Edit Quote'
+        context["savebtn"] = 'Save Changes'
+        context["delbtn"] = 'Delete Quote'
+        return context
+
+class QuoteDeleteView(View):
+    template_name = "quote/delete_quote.html"
+    success_message = "Quotation has been deleted successfully"
+    def get(self, request, pk):
+        quote = get_object_or_404(Quote, pk=pk)
+        return render(request, self.template_name, {'object' : quote})
+
+    def post(self, request, pk):
+        quote = get_object_or_404(Quote, pk=pk)
+        #quote.is_deleted = True
+        quote.save()
+        messages.success(request, self.success_message)
+        return redirect('quote-list')
+
+class QuoteView(View):
+    def get(self, request, pk):
+        quote = get_object_or_404(Quote, pk=pk)
+        return render(request, 'quote/quote.html', {'quote': quote})
+
+class DemandQuoteListView(ListView):
+    model = Demand
+    template_name = "demand/demand_list.html"
+    queryset = Demand.objects.annotate(quote_count=Count('quote')).filter(quote_count__gt=0)
+    paginate_by = 10

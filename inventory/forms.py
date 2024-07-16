@@ -7,7 +7,7 @@ class StockForm(forms.ModelForm):
         self.fields['name'].widget.attrs.update({'class': 'textinput form-control'})
         self.fields['desc'].widget.attrs.update({'class': 'textinput form-control'})
         self.fields['quantity'].widget.attrs.update({'class': 'textinput form-control', 'min': '0'})
-        self.fields['file'].widget.attrs.update({'class': 'fileinput form-control-file', 'accept': '.pdf,.doc,.docx', 'required': True})
+        self.fields['file'].widget.attrs.update({'class': 'custom-file-file-input', 'accept': '.pdf,.doc,.docx', 'required': True})
 
     class Meta:
         model = Stock

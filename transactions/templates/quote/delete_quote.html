@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-{% block title %} Delete Supplier {% endblock title %}
+{% block title %} Delete Quotation {% endblock title %}
 {% block content %}
     <form method="post">
         {% csrf_token %}
         <fieldset class="form-group">
-            <div style="color:#ea2088; font-style: bold; font-size: 3rem; border-bottom: 1px solid white;">Delete Customer</div> <br>
-            <h2>Are you sure you want to delete the Customer "{{ object.Name }}"?</h2>
+            <div style="color:#ea2088; font-style: bold; font-size: 3rem; border-bottom: 1px solid white;">Delete Quotation</div> <br>
+            <h2>Are you sure you want to delete the Quotation "{{ object }}"?</h2>
         </fieldset>
         <div class="form-group">  
             <button type="submit" class="btn ghost-red">Yes, Delete</button>
-            <a href="{% url 'customers-list' %}" class="btn ghost-button">Cancel</a>
+            <a href="{% url 'quote-list' %}" class="btn ghost-button">Cancel</a>
         </div>
     </form>
 {% endblock content %}

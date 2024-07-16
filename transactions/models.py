@@ -139,10 +139,11 @@ class Customer(models.Model):
 class Demand(models.Model):
     id = models.AutoField(primary_key=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    part_name = models.CharField(max_length=30, unique=True, verbose_name='Name')
+    part_name = models.CharField(max_length=30, verbose_name='Name')
     Part_desc = models.CharField(max_length=200, blank=True, null=True)
     file = models.FileField(upload_to='demand_files/', blank=True, null=True)
     quantity = models.IntegerField(default=1)
+    is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -150,12 +151,19 @@ class Demand(models.Model):
         return f"Demand #{self.id} - {self.customer.Name}"
 
 class Quote(models.Model):
+    QUOTE_STATUS = [
+        ('Approved', 'Approved'),
+        ('Hold', 'Hold'),
+        ('Rejected', 'Rejected'),
+    ]
     id = models.AutoField(primary_key=True)
     demand = models.ForeignKey(Demand, on_delete=models.CASCADE)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='demand_supplier')
     quote_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField(default=1)
     note = models.CharField(max_length=200, blank=True, null=True)
+    status = models.CharField(max_length=50, blank=True, null=True ,choices=QUOTE_STATUS)
+    is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
