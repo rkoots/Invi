@@ -7,9 +7,10 @@ from django.views.generic import (
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from .models import Stock
-from .forms import StockForm
+from .forms import StockForm, UserRegistrationForm
 from django_filters.views import FilterView
 from .filters import StockFilter
+from django.contrib.auth.forms import UserCreationForm
 
 class StockListView(FilterView):
     filterset_class = StockFilter
@@ -56,3 +57,13 @@ class StockDeleteView(View):                                                    
         stock.save()                                               
         messages.success(request, self.success_message)
         return redirect('inventory')
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # Redirect to login page after successful registration
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'register.html', {'form': form})

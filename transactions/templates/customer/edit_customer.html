@@ -5,6 +5,7 @@
     <form method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
+        {{ form.user.errors }}
         {{ form.Name.errors }}
         {{ form.type_of_business.errors }}
         {{ form.Address.errors }}
@@ -13,6 +14,10 @@
         {{ form.EORI_number.errors }}
         {{ form.VAT_number.errors }}
         {{ form.is_deleted.errors }}
+        <div class="form-group">
+            <label for="{{ form.user.id_for_label }}">User ID:</label>
+            {{ form.user }}
+        </div>
         <div class="form-group">
             <label for="{{ form.Name.id_for_label }}">Name:</label>
             {{ form.Name }}

@@ -1,9 +1,11 @@
 from django.db import models
 from inventory.models import Stock
+from django.contrib.auth.models import User
 
 # Contains suppliers
 class Supplier(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150)
     phone = models.CharField(max_length=12, unique=True)
     address = models.CharField(max_length=200)
@@ -111,7 +113,6 @@ class SaleBillDetails(models.Model):
     def __str__(self):
         return "Bill no: " + str(self.billno.billno)
 
-
 # Contains customers
 class Customer(models.Model):
     BUSINESS_TYPES = [
@@ -121,6 +122,7 @@ class Customer(models.Model):
         ('Others', 'Others'),
     ]
     id = models.AutoField(primary_key=True)
+    user = user = models.ForeignKey(User, on_delete=models.CASCADE)
     Name = models.CharField(max_length=75, blank=False, null=False)
     type_of_business = models.CharField(max_length=50, choices=BUSINESS_TYPES)
     Address = models.CharField(max_length=150, blank=True, null=True)

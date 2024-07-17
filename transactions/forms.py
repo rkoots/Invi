@@ -13,7 +13,7 @@ from .models import (
     Quote
 )
 from inventory.models import Stock
-
+from django.contrib.auth.models import User
 
 # form used to select a supplier
 class SelectSupplierForm(forms.ModelForm):
@@ -51,12 +51,13 @@ class PurchaseDetailsForm(forms.ModelForm):
 class SupplierForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['user'].queryset = User.objects.filter()
         self.fields['name'].widget.attrs.update({'class': 'textinput form-control', 'pattern' : '[a-zA-Z\s]{1,50}', 'title' : 'Alphabets and Spaces only'})
         self.fields['phone'].widget.attrs.update({'class': 'textinput form-control', 'maxlength': '10', 'pattern' : '[0-9]{10}', 'title' : 'Numbers only'})
         self.fields['email'].widget.attrs.update({'class': 'textinput form-control'})
     class Meta:
         model = Supplier
-        fields = ['name', 'phone', 'address', 'email']
+        fields = ['name', 'phone', 'address', 'email', 'user']
         widgets = {
             'address' : forms.Textarea(
                 attrs = {
@@ -111,6 +112,8 @@ class SaleDetailsForm(forms.ModelForm):
 class SelectCustomer(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['user'].queryset = User.objects.filter(customer__isnull=True)
+        self.fields['user'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
         self.fields['Name'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
         self.fields['type_of_business'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
         self.fields['Address'].widget.attrs.update({'class': 'form-control'})
@@ -120,9 +123,10 @@ class SelectCustomer(forms.ModelForm):
         self.fields['VAT_number'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
         self.fields['is_deleted'].widget.attrs.update({'class': 'form-check-input'})
 
+
     class Meta:
         model = Customer
-        fields = ['Name','type_of_business','Address','phone','email','EORI_number','VAT_number','is_deleted']
+        fields = ['Name','type_of_business','Address','phone','email','EORI_number','VAT_number','is_deleted', 'user']
 
 class SelectDemand(forms.ModelForm):
     def __init__(self, *args, **kwargs):

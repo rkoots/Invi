@@ -40,8 +40,25 @@
         <nav id="sidebar">
             
             <div class="sidebar-header">
-                <a class="navbar-brand titlefont mr-4" href="{% url 'home' %}"><h3>Invi</h3></a>
-                <div class="loader"></div>
+                <a class="navbar-brand titlefont mr-4" href="{% url 'home' %}"><h3>Invi</h3></a><br/>
+                <div class="loader">
+                    <svg viewBox="0 0 80 80">
+                        <circle r="32" cy="40" cx="40" id="test"></circle>
+                    </svg>
+                </div>
+
+                <div class="loader triangle">
+                    <svg viewBox="0 0 86 80">
+                        <polygon points="43 8 79 72 7 72"></polygon>
+                    </svg>
+                </div>
+
+                <div class="loader">
+                    <svg viewBox="0 0 80 80">
+                        <rect height="64" width="64" y="8" x="8"></rect>
+                    </svg>
+                </div>
+
             </div>
 
             <ul class="list-unstyled sidebar-components">
@@ -95,21 +112,19 @@
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-stock' %}">Add New Stock</a> </li>
                     </ul>
                 </li>
-
                 <li>
                     <a class="sidebar-text sidebar-button" href="{% url 'about' %}">About</a>
                 </li>
-
                 <li class="bottomleft">
                     <a href="#UserSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">{{ request.user.username }}</a>
                     <ul class="collapse list-unstyled" id="UserSubmenu">
                         {% if request.user.is_superuser %}
                             <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'admin:index' %}">Admin Page</a> </li>
+                            <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'register' %}">Register New User</a> </li>
                         {% endif %}
                             <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'logout' %}">Logout</a> </li>
                     </ul>
                 </li>
-
             </ul>
             {% comment %}
             <ul class="list-unstyled CTAs">

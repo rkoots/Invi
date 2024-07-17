@@ -12,17 +12,21 @@
     
         {% csrf_token %}
         {{ form.non_field_errors }}
-        
+        {{ form.user.errors }}
         {{ form.name.errors }}
         {{ form.phone.errors }}
         {{ form.address.errors }}
         {{ form.email.errors }}
-
+        <div class="form-row">
+        <div class="form-group  col-md-6">
+            <label for="{{ form.user.id_for_label }}">User ID:</label>
+            {{ form.user }}
+        </div>
         <div class="form-group">
             <label for="{{ form.name.id_for_label }}">Name:</label>
             {{ form.name }}
         </div>
-
+        </div>
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="{{ form.phone.id_for_label }}">Phone No:</label>

@@ -494,7 +494,6 @@ class DemandView(View):
             btn_class = 'ghost-red'
         return render(request, 'demand/demand.html', {'demand' : demand, 'quote' : quote, 'btn_class' : btn_class})
 
-
 class QuoteListView(ListView):
     model = Quote
     template_name = "quote/quote_list.html"
@@ -569,3 +568,4 @@ class QuoteStatusUpdateView(ListView):
             'btn_class' : btn_class,
         }
         return render(request, 'demand/demand.html', context)
+
