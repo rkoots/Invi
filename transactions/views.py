@@ -487,11 +487,12 @@ class DemandDeleteView(View):
 
 class DemandView(View):
     def get(self, request, pk):
-        print("R===========================")
         demand = get_object_or_404(Demand, pk=pk)
-        print(demand)
-        return render(request, 'demand/demand.html', {'demand' : demand})
-
+        quote = Quote.objects.filter(demand=demand).first()
+        btn_class = 'ghost-green'
+        if quote.status == 'Rejected':
+            btn_class = 'ghost-red'
+        return render(request, 'demand/demand.html', {'demand' : demand, 'quote' : quote, 'btn_class' : btn_class})
 
 
 class QuoteListView(ListView):
@@ -551,3 +552,20 @@ class DemandQuoteListView(ListView):
     template_name = "demand/demand_list.html"
     queryset = Demand.objects.annotate(quote_count=Count('quote')).filter(quote_count__gt=0)
     paginate_by = 10
+
+class QuoteStatusUpdateView(ListView):
+    def get(self, request, pk, status):
+        quote = get_object_or_404(Quote, pk=pk)
+        btn_class = 'ghost-green'
+        if status == 'Approved':
+            quote.status = 'Approved'
+        elif status == 'Rejected':
+            quote.status = 'Rejected'
+            btn_class = 'ghost-red'
+        quote.save()
+        context = {
+            'demand': quote.demand,  # Assuming demand is related to Quote
+            'quote': quote,
+            'btn_class' : btn_class,
+        }
+        return render(request, 'demand/demand.html', context)

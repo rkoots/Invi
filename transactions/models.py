@@ -169,3 +169,4 @@ class Quote(models.Model):
 
     def __str__(self):
         return f"Demand #{self.id} - {self.demand.part_name}"
+

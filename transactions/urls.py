@@ -39,5 +39,7 @@ urlpatterns = [
     path('quote/<pk>/edit', views.QuoteUpdateView.as_view(), name='edit-quote'),
     path('quote/<pk>/delete', views.QuoteDeleteView.as_view(), name='delete-quote'),
     path('quote/<pk>', views.QuoteView.as_view(), name='quote'),
+    path('quote/<int:pk>/update-status/<str:status>/', views.QuoteStatusUpdateView.as_view(), name='quote-update-status'),
+
 
 ]

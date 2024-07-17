@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
-{% block title %} Quotation List {% endblock title %}
+{% block title %} RFQ List {% endblock title %}
 {% block content %}
     <div class="row" style="color: #ea2088; font-style: bold; font-size: 3rem;">
         <div class="col-md-8">Quotation List</div>
         <div class="col-md-4">               
-            <div style="float:right;"> <a class="btn ghost-blue" href="{% url 'new-quote' %}">Add New Quotation</a> </div>
+            <div style="float:right;"> <a class="btn ghost-blue" href="{% url 'new-quote' %}">Add New RFQ</a> </div>
         </div>
     </div>
     <br>
@@ -35,7 +35,7 @@
                 <td class="align-middle">
                     <div class="align-middle">
                         <a href="{% url 'edit-quote' quote.pk %}" class="btn ghost-button">Edit Details</a>
-                        <a href="{% url 'delete-quote' quote.pk %}" class="btn ghost-red">Delete Quotation</a>
+                        <a href="{% url 'delete-quote' quote.pk %}" class="btn ghost-red">Delete RFQ</a>
                     </div>
                 </td>
             </tr>

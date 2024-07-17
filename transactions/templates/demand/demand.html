@@ -13,14 +13,41 @@
             <div class="row">
                 <div class="col-md-6">
                     <p class="fal">
-                        Quantity &nbsp; : {{ demand.quantity }} <br>
+                        Part Name : {{ demand.part_name }} <br>
                         Description &nbsp; : {{ demand.Part_desc }} <br>
+                        Quantity &nbsp; : {{ demand.quantity }} <br>
+                        File : {{ demand.file }}
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% if quote.pk %}
+<div class="content-section">
+    <div class="media">
+        <div class="media-body">
+            <h2 style="color:#ea2088;" class="account-heading">&nbsp;Q Id#{{ quote.pk }}</h2>
+            {% if not quote.status %}
+            <a href="{% url 'quote-update-status' quote.pk 'Approved' %}"  method="get"  class="btn ghost-button" style="float: right;">Approve</a>
+            <a href="{% url 'quote-update-status' quote.pk 'Rejected'  %}"  method="get"  class="btn ghost-button" style="float: right;">Reject</a>
+            {% else %}
+            <a class="btn {{ btn_class }}" style="float: right;" >{{ quote.status }}</a>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="fal">
+                        Supplier : {{ quote.supplier }} <br>
+                        Price &nbsp; : {{ quote.quote_price }} <br>
+                        Quantity &nbsp; : {{ quote.quantity }} <br>
+                        Note : {{ quote.note }}
                     </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+{% endif %}
 
 {% endblock content %}
