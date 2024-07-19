@@ -20,11 +20,11 @@
         <div class="form-row">
         <div class="form-group  col-md-6">
             <label for="{{ form.user.id_for_label }}">User ID:</label>
-            {{ form.user }}
+            <input type="text" class="form-control" value="{{ session_username }}" readonly>
         </div>
         <div class="form-group">
             <label for="{{ form.name.id_for_label }}">Name:</label>
-            {{ form.name }}
+            <input type="text" class="form-control" value="{{ session_first_name }} {{ session_first_name }}" readonly>
         </div>
         </div>
         <div class="form-row">
@@ -34,7 +34,7 @@
             </div>
             <div class="form-group col-md-6">
                 <label for="{{ form.email.id_for_label }}">Email ID:</label>
-                {{ form.email }}
+                <input type="text" class="form-control" value="{{ session_email }}" readonly>
             </div>
         </div>
 

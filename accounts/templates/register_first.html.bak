@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} User Registration {% endblock title %}
+{% block title %} Welcome {{session_first_name}}, {% endblock title %}
 
 {% block content %}
 <div class="container">
@@ -62,7 +62,7 @@
                         <input class="form-check-input" type="radio" name="is_staff" id="is_staff_false" value="0" {% if form.is_staff.value == '0' %}checked{% endif %}>
                         <label class="form-check-label" for="is_staff_false">Buyer</label>
                     </div>
-                <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
             </form>
         </div>
     </div>

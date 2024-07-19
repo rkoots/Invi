@@ -51,13 +51,10 @@ class PurchaseDetailsForm(forms.ModelForm):
 class SupplierForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['user'].queryset = User.objects.filter()
-        self.fields['name'].widget.attrs.update({'class': 'textinput form-control', 'pattern' : '[a-zA-Z\s]{1,50}', 'title' : 'Alphabets and Spaces only'})
         self.fields['phone'].widget.attrs.update({'class': 'textinput form-control', 'maxlength': '10', 'pattern' : '[0-9]{10}', 'title' : 'Numbers only'})
-        self.fields['email'].widget.attrs.update({'class': 'textinput form-control'})
     class Meta:
         model = Supplier
-        fields = ['name', 'phone', 'address', 'email', 'user']
+        fields = ['phone', 'address']
         widgets = {
             'address' : forms.Textarea(
                 attrs = {
@@ -130,15 +127,16 @@ class SelectCustomer(forms.ModelForm):
 
 class SelectDemand(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['customer'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
-        self.fields['part_name'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
-        self.fields['Part_desc'].widget.attrs.update({'class': 'form-control'})
-        self.fields['file'].widget.attrs.update({'class': 'custom-file-file-input'})
-        self.fields['quantity'].widget.attrs.update({'class': 'form-control', 'min': '1', 'required': 'true'})
+        super(SelectDemand, self).__init__(*args, **kwargs)
+        if 'initial' in kwargs and 'quote_currency' in kwargs['initial']:
+            self.fields['quote_currency'].initial = kwargs['initial']['quote_currency']
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs.update({'class': 'form-control'})
+        if self.instance and self.instance.is_deleted:
+            self.fields['title'].widget.attrs.update({'disabled': 'disabled'})
     class Meta:
         model = Demand
-        fields = ['customer','part_name','Part_desc','file','quantity']
+        fields = ['customer','title','nda_required','quote_currency','request_reason','parts','end_date','industry','is_deleted','rfq_desc','file']
 
 class SelectQuote(forms.ModelForm):
     class Meta:
@@ -147,7 +145,6 @@ class SelectQuote(forms.ModelForm):
             'demand',
             'supplier',
             'quote_price',
-            'quantity',
             'note',
         ]
 

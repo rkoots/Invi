@@ -10,25 +10,42 @@
         {{ form.Part_desc.errors }}
         {{ form.file.errors }}
         {{ form.quantity.errors }}
+        <input type="text" name="customer" hidden class="form-control{% if form.customer.errors %} is-invalid{% endif %}" id="id_user" value="{{ request.user.id }}">
         <div class="form-group">
-            <label for="{{ form.customer.id_for_label }}">Customer:</label>
-            {{ form.customer }}
+            <label for="{{ form.part_name.id_for_label }}">Title of RFQ:</label>
+            {{ form.title }}
         </div>
         <div class="form-group">
-            <label for="{{ form.part_name.id_for_label }}">Part Name:</label>
-            {{ form.part_name }}
+            <label for="{{ form.Part_desc.id_for_label }}">RFQ Desc:</label>
+            {{ form.rfq_desc }}
         </div>
         <div class="form-group">
-            <label for="{{ form.Part_desc.id_for_label }}">Part Desc:</label>
-            {{ form.Part_desc }}
+            <label for="{{ form.quantity.id_for_label }}">NDA Required:</label>
+            {{ form.nda_required }}
         </div>
         <div class="form-group">
-            <label for="{{ form.quantity.id_for_label }}">Quantity:</label>
-            {{ form.quantity }}
+            <label for="{{ form.quantity.id_for_label }}">Currency:</label>
+            {{ form.quote_currency }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.quantity.id_for_label }}">Reason for Request:</label>
+            {{ form.request_reason }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.quantity.id_for_label }}">Number of Parts:</label>
+            {{ form.parts }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.quantity.id_for_label }}">End Date:</label>
+            {{ form.end_date }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.quantity.id_for_label }}">Industry:</label>
+            {{ form.industry }}
         </div>
         <div class="custom-file-drop-container">
             {{ form.file.errors }}
-            <p class="custom-file-drop-title">Drop file here</p>
+            <p class="custom-file-drop-title">Drop Master file here</p>
             {{ form.file }}
         </div>
         <br>

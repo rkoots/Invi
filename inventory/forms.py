@@ -1,14 +1,7 @@
 from django import forms
 from .models import Stock
-
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
-class UserRegistrationForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'password1', 'password2', 'email','is_staff']
-
 
 class StockForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):                                                        # used to set css classes to the various fields

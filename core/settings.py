@@ -11,6 +11,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'homepage',
+    'accounts',
     'inventory',
     'transactions',
     'widget_tweaks',                            # uses 'django-widget-tweaks' app

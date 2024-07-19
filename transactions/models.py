@@ -6,16 +6,17 @@ from django.contrib.auth.models import User
 class Supplier(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=150)
     phone = models.CharField(max_length=12, unique=True)
     address = models.CharField(max_length=200)
-    email = models.EmailField(max_length=254, unique=True)
+    city = models.CharField(max_length=50, blank=False, null=False)
+    state = models.CharField(max_length=25, blank=False, null=False)
+    country = models.CharField(max_length=25, blank=False, null=False)
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return self.user
 
 # Contains the purchase bills made
 class PurchaseBill(models.Model):
@@ -121,15 +122,55 @@ class Customer(models.Model):
         ('custom_machinery', 'Custom Machinery'),
         ('Others', 'Others'),
     ]
+    INDUSTRY_CHOICES = [
+        (75, 'Aerospace and aviation industry'),
+        (73, 'Air conditioning, refrigeration and ventilation industry'),
+        (56, 'Apparatus engineering'),
+        (58, 'Automation and control engineering'),
+        (59, 'Automotive and vehicle construction'),
+        (74, 'Boiler, container and tank construction'),
+        (60, 'Building, agricultural and forestry machinery manufacturing'),
+        (65, 'Chemical industry'),
+        (81, 'Clean room technology'),
+        (61, 'Construction and architectural supplies'),
+        (55, 'Drive and gear engineering'),
+        (67, 'Electrical industry'),
+        (57, 'Fittings engineering'),
+        (79, 'Furniture industry'),
+        (70, 'Household appliance industry'),
+        (71, 'Hydraulic and pneumatic industry'),
+        (72, 'Information technology (hardware)'),
+        (62, 'Lighting industry'),
+        (86, 'Machine tool manufacturing'),
+        (77, 'Measurement and control technique, laboratory equipment'),
+        (161, 'Mechanical engineering'),
+        (76, 'Medical technology'),
+        (78, 'Military engineering'),
+        (63, 'Mining and tunnel engineering'),
+        (64, 'Office machinery and supplies'),
+        (85, 'Packaging industry'),
+        (80, 'Paper and printing machinery industry'),
+        (54, 'Plant engineering and construction'),
+        (68, 'Power generation and transmission industry'),
+        (69, 'Precision engineering, mechatronics and optics'),
+        (66, 'Railway and rail vehicles industry'),
+        (82, 'Shipbuilding industry'),
+        (83, 'Special purpose machinery manufacturing'),
+        (84, 'Telecommunication industry'),
+    ]
     id = models.AutoField(primary_key=True)
-    user = user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     Name = models.CharField(max_length=75, blank=False, null=False)
     type_of_business = models.CharField(max_length=50, choices=BUSINESS_TYPES)
     Address = models.CharField(max_length=150, blank=True, null=True)
+    city = models.CharField(max_length=50, blank=False, null=False)
+    state = models.CharField(max_length=25, blank=False, null=False)
+    country = models.CharField(max_length=25, blank=False, null=False)
     phone = models.CharField(max_length=12, unique=True)
     email = models.EmailField(max_length=254, unique=True)
     EORI_number = models.CharField(max_length=50, unique=True)
     VAT_number = models.CharField(max_length=50, unique=True)
+    industry_Choice = models.IntegerField(choices=INDUSTRY_CHOICES, default=0)
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -139,18 +180,71 @@ class Customer(models.Model):
 
 # Contains demands
 class Demand(models.Model):
+    CURRENCY_CHOICES = [
+        ('USD', 'US Dollar'),
+        ('EUR', 'Euro'),
+        ('JPY', 'Japanese Yen'),
+        ('GBP', 'British Pound'),
+        ('AUD', 'Australian Dollar'),
+        ('CAD', 'Canadian Dollar'),
+        ('CHF', 'Swiss Franc'),
+        ('CNY', 'Chinese Yuan'),
+        ('SEK', 'Swedish Krona'),
+        ('NZD', 'New Zealand Dollar'),
+        # Add more currencies as needed
+    ]
+    REQUEST_REASON_CHOICES = [
+        ('new_product', 'New product'),
+        ('second_source', 'Second source'),
+        ('supplier_failure', 'Supplier failure'),
+        ('benchmarking', 'Benchmarking'),
+        ('other', 'Other'),
+    ]
     id = models.AutoField(primary_key=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    part_name = models.CharField(max_length=30, verbose_name='Name')
-    Part_desc = models.CharField(max_length=200, blank=True, null=True)
+    title = models.CharField(max_length=200, verbose_name='Name')
+    rfq_desc = models.CharField(max_length=400, verbose_name='Name')
+    nda_required = models.BooleanField(default=False)
+    quote_currency = models.CharField(max_length=50, choices=CURRENCY_CHOICES)
+    request_reason = models.CharField(max_length=50, choices=REQUEST_REASON_CHOICES)
+    parts = models.IntegerField(default=1)
+    end_date = models.DateTimeField(blank=True, null=True)
+    industry = models.CharField(max_length=200, blank=True, null=True)
     file = models.FileField(upload_to='demand_files/', blank=True, null=True)
-    quantity = models.IntegerField(default=1)
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Demand #{self.id} - {self.customer.Name}"
+
+class DemandParts(models.Model):
+    technology_TYPES = [
+        ('Anodizing', 'Anodizing'),
+        ('Full-range turning', 'Full-range turning'),
+        ('Turning', 'Turning'),
+        ('Milling', 'Milling'),
+    ]
+    Material_TYPES = [
+        ('Structural steel', 'Structural steel'),
+        ('Stainless steel', 'Stainless steel'),
+        ('Aluminium', 'Aluminium'),
+        ('Case hardening', 'Case hardening'),
+    ]
+    id = models.AutoField(primary_key=True)
+    demand = models.ForeignKey(Demand, on_delete=models.CASCADE)
+    part_name = models.CharField(max_length=100, verbose_name='Name')
+    Part_desc = models.CharField(max_length=200, blank=True, null=True)
+    technology =models.CharField(max_length=50, choices=technology_TYPES)
+    Material =models.CharField(max_length=50, choices=Material_TYPES)
+    file = models.FileField(upload_to='demand_files/', blank=True, null=True)
+    quantity = models.IntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Demand_parts #{self.id} - {self.customer.Name}"
+
 
 class Quote(models.Model):
     QUOTE_STATUS = [
@@ -162,7 +256,6 @@ class Quote(models.Model):
     demand = models.ForeignKey(Demand, on_delete=models.CASCADE)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='demand_supplier')
     quote_price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.IntegerField(default=1)
     note = models.CharField(max_length=200, blank=True, null=True)
     status = models.CharField(max_length=50, blank=True, null=True ,choices=QUOTE_STATUS)
     is_deleted = models.BooleanField(default=False)

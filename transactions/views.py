@@ -45,33 +45,57 @@ class SupplierListView(ListView):
     paginate_by = 10
 
 # used to add a new supplier
-class SupplierCreateView(SuccessMessageMixin, CreateView):
-    model = Supplier
-    form_class = SupplierForm
-    success_url = '/transactions/suppliers'
-    success_message = "Manufacturer has been created successfully"
-    template_name = "suppliers/edit_supplier.html"
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = 'New Supplier'
-        context["savebtn"] = 'Add Supplier'
-        return context     
 
-# used to update a supplier's info
-class SupplierUpdateView(SuccessMessageMixin, UpdateView):
+# views.py
+
+from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect, get_object_or_404
+from .models import Supplier
+from .forms import SupplierForm
+
+class SupplierCreateUpdateView(SuccessMessageMixin, CreateView, UpdateView):
     model = Supplier
     form_class = SupplierForm
     success_url = '/transactions/suppliers'
-    success_message = "Manufacturer details has been updated successfully"
     template_name = "suppliers/edit_supplier.html"
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = 'Edit Supplier'
-        context["savebtn"] = 'Save Changes'
-        context["delbtn"] = 'Delete Supplier'
+
+        # Check if we are in edit mode
+        if 'pk' in self.kwargs:
+            context["title"] = 'Edit Supplier'
+            context["savebtn"] = 'Save Changes'
+            context["delbtn"] = 'Delete Supplier'
+            self.success_message = "Manufacturer details have been updated successfully"
+        else:
+            context["title"] = 'New Manufacturer'
+            context["savebtn"] = 'Add Manufacturer'
+            self.success_message = "Manufacturer has been created successfully"
+        # Add session data to context
+        context["session_user_id"] = self.request.session.get('session_user_id')
+        context["session_username"] = self.request.session.get('session_username')
+        context["session_first_name"] = self.request.session.get('session_first_name')
+        context["session_last_name"] = self.request.session.get('session_last_name')
+        context["session_email"] = self.request.session.get('session_email')
+        context["session_is_staff"] = self.request.session.get('session_is_staff')
         return context
+
+    def get_object(self, queryset=None):
+        # Return the object for updating if pk is present
+        if 'pk' in self.kwargs:
+            return get_object_or_404(Supplier, pk=self.kwargs['pk'])
+        return None  # For create view
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        # Clear the session data after successful form submission
+        for key in ['session_user_id', 'session_username', 'session_first_name', 'session_last_name', 'session_is_staff']:
+            if key in self.request.session:
+                del self.request.session[key]
+        return response
+
 
 # used to delete a supplier
 class SupplierDeleteView(View):
@@ -453,15 +477,15 @@ class DemandCreateView(SuccessMessageMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = 'New Demand'
-        context["savebtn"] = 'Add Demand'
+        context["title"] = 'New RFQ'
+        context["savebtn"] = 'Add RFQ'
         return context
 
 class DemandUpdateView(SuccessMessageMixin, UpdateView):
     model = Demand
     form_class = SelectDemand
     success_url = '/transactions/demand'
-    success_message = "Demand details has been updated successfully"
+    success_message = "RFQ details has been updated successfully"
     template_name = "demand/edit_demand.html"
 
     def get_context_data(self, **kwargs):
