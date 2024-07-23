@@ -11,11 +11,8 @@
         {{ form.note.errors }}
         <div class="form-group">
             <label for="{{ form.demand.id_for_label }}">Demand:</label>
-            {{ form.demand }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.supplier.id_for_label }}">Manufacturer:</label>
-            {{ form.supplier }}
+            <input type="text"  name="user" class="form-control{% if form.demand.errors %} is-invalid{% endif %}" id="id_user" value="{{ demand.id }}">
+            <input type="text"  name="supplier" class="form-control{% if form.supplier.errors %} is-invalid{% endif %}" id="id_supplier" value="{{ demand.user.id }}">
         </div>
         <div class="form-group">
             <label for="{{ form.quote_price.id_for_label }}">RFQ Price:</label>

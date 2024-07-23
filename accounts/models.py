@@ -1,6 +1,6 @@
 # models.py
 from django.db import models
-from transactions.models import User
+from django.contrib.auth.models import User
 
 
 class ManufacturingSector(models.Model):

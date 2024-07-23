@@ -1,5 +1,6 @@
 from django.db import models
 from inventory.models import Stock
+from accounts.models import Supplier_details
 from django.contrib.auth.models import User
 from django.utils import timezone
 
@@ -181,6 +182,12 @@ class Customer(models.Model):
 
 # Contains demands
 class Demand(models.Model):
+    Demand_STATUS = [
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected'),
+        ('Production', 'Production'),
+        ('Completed', 'Completed'),
+    ]
     CURRENCY_CHOICES = [
         ('USD', 'US Dollar'),
         ('EUR', 'Euro'),
@@ -213,6 +220,7 @@ class Demand(models.Model):
     industry = models.CharField(max_length=200, blank=True, null=True)
     file = models.FileField(upload_to='demand_files/', blank=True, null=True)
     quote_id = models.IntegerField(default=0)
+    status = models.CharField(max_length=50, blank=True, null=True ,choices=Demand_STATUS)
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -256,7 +264,7 @@ class Quote(models.Model):
     ]
     id = models.AutoField(primary_key=True)
     demand = models.ForeignKey(Demand, on_delete=models.CASCADE)
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='demand_supplier')
+    supplier = models.ForeignKey(Supplier_details , on_delete=models.CASCADE, related_name='demand_supplier')
     quote_price = models.DecimalField(max_digits=10, decimal_places=2)
     note = models.CharField(max_length=200, blank=True, null=True)
     status = models.CharField(max_length=50, blank=True, null=True ,choices=QUOTE_STATUS)

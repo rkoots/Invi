@@ -13,6 +13,7 @@ from .models import (
     Quote,
     DemandParts
 )
+from accounts.models import Supplier_details
 from inventory.models import Stock
 from django.contrib.auth.models import User
 
@@ -164,13 +165,8 @@ class SelectQuote(forms.ModelForm):
             'quote_price',
             'note',
         ]
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['demand'].queryset = Demand.objects.filter(is_deleted=False)
-        self.fields['demand'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
-        self.fields['supplier'].queryset = Supplier.objects.filter(is_deleted=False)
-        self.fields['supplier'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
         self.fields['quote_price'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
         self.fields['note'].widget.attrs.update({'class': 'form-control'})
 

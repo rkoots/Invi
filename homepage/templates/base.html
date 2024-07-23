@@ -51,7 +51,7 @@
                     <a href="#customerSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Customer</a>
                     <ul class="collapse list-unstyled" id="customerSubmenu">
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'customers-list' %}">Customers List</a> </li>
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-customer' %}">Add New Customer</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'register' %}">Add New Customer</a> </li>
                     </ul>
                 </li>
                 {% endif %}
@@ -61,7 +61,9 @@
                     <ul class="collapse list-unstyled" id="demandSubmenu">
                         {% if request.user.is_staff %}
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'demand-list' %}">List of RFQ's</a> </li>
+                        {% if request.user.is_superuser %}
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-demand' %}">Add New RFQ</a> </li>
+                        {% endif %}
                         {% else %}
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'demand-list' %}">My RFQ's</a> </li>
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-demand' %}">New RFQ</a> </li>
@@ -82,7 +84,9 @@
                 <li>
                     <a href="#supplierSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Manufacturer</a>
                     <ul class="collapse list-unstyled" id="supplierSubmenu">
+                        {% if not request.user.is_staff %}
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'suppliers-list' %}">Manufacturer List</a> </li>
+                        {% endif %}
                         {% if request.user.is_superuser %}
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-supplier' %}">Add New Manufacturer</a> </li>
                         {% endif %}
@@ -99,7 +103,7 @@
                 </li>
                 {% endif %}
 
-                {% if request.user.is_staff %}
+                {% if request.user.is_superuser %}
                 <li>
                     <a href="#inventorySubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Inventory</a>
                     <ul class="collapse list-unstyled" id="inventorySubmenu">
@@ -120,7 +124,7 @@
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'admin:index' %}">Admin Page</a> </li>
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'register' %}">Register New User</a> </li>
                         {% endif %}
-                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'logout' %}">Profile</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'profile' %}">Profile</a> </li>
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'logout' %}">Logout</a> </li>
                     </ul>
                 </li>

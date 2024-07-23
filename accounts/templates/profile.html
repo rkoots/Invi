@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    {% if supplier %}
+    <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="card-body p-4">
+            <h2 class="text-2xl font-bold mb-4">Supplier Profile</h2>
+            <table class="w-full text-left">
+                <tbody>
+                <tr>
+                    <th class="py-2 px-4 border-b">Company Name:</th>
+                    <td class="py-2 px-4 border-b">{{ supplier.companyname }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Phone:</th>
+                    <td class="py-2 px-4 border-b">{{ supplier.phone }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Address:</th>
+                    <td class="py-2 px-4 border-b">{{ supplier.address }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">City:</th>
+                    <td class="py-2 px-4 border-b">{{ supplier.city }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">State:</th>
+                    <td class="py-2 px-4 border-b">{{ supplier.state }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Country:</th>
+                    <td class="py-2 px-4 border-b">{{ supplier.country }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Activity Type:</th>
+                    <td class="py-2 px-4 border-b">{{ supplier.activity_type }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Company URL:</th>
+                    <td class="py-2 px-4 border-b"><a href="{{ supplier.company_url }}" target="_blank">{{ supplier.company_url }}</a></td>
+                </tr>
+                <!-- Add more fields as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% elif customer %}
+    <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="card-body p-4">
+            <h2 class="text-2xl font-bold mb-4">Customer Profile</h2>
+            <table class="w-full text-left">
+                <tbody>
+                <tr>
+                    <th class="py-2 px-4 border-b">Name:</th>
+                    <td class="py-2 px-4 border-b">{{ customer.Name }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Business Type:</th>
+                    <td class="py-2 px-4 border-b">{{ customer.get_type_of_business_display }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Address:</th>
+                    <td class="py-2 px-4 border-b">{{ customer.Address }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">City:</th>
+                    <td class="py-2 px-4 border-b">{{ customer.city }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">State:</th>
+                    <td class="py-2 px-4 border-b">{{ customer.state }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Country:</th>
+                    <td class="py-2 px-4 border-b">{{ customer.country }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Phone:</th>
+                    <td class="py-2 px-4 border-b">{{ customer.phone }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Email:</th>
+                    <td class="py-2 px-4 border-b">{{ customer.email }}</td>
+                </tr>
+                <!-- Add more fields as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <p class="text-center text-gray-600">No profile information available.</p>
+    {% endif %}
+</div>
+{% endblock %}

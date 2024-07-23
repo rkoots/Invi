@@ -61,3 +61,19 @@ class CreateCustomer(SuccessMessageMixin, CreateView):
         context["title"] = 'New Customer'
         context["savebtn"] = 'Add Customer'
         return context
+
+
+def ViewProfileDetails(request):
+    context = {}
+    print(request.user.is_staff)
+    if request.user.is_staff:
+        supplier = Supplier_details.objects.filter(user=request.user).first()
+        print(supplier)
+        if supplier:
+            context['supplier'] = supplier
+    else:
+        customer = Customer.objects.filter(user=request.user).first()
+        print(customer)
+        if customer:
+            context['customer'] = customer
+    return render(request, 'profile.html', context)

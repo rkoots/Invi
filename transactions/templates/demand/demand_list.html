@@ -4,15 +4,15 @@
 {% block content %}
     <div class="row" style="color: #ea2088; font-style: bold; font-size: 3rem;">
         <div class="col-md-8">RFQ List</div>
-        <div class="col-md-4">               
-            <div style="float:right;"> <a class="btn ghost-blue" href="{% url 'new-demand' %}">Add New Demand</a> </div>
+        <div class="col-md-4">
+            {% if not request.user.is_staff %}
+            <div style="float:right;"> <a class="btn ghost-blue" href="{% url 'new-demand' %}">Add New Demand</a></div>
+            {% endif %}
         </div>
     </div>
     <br>
-
 {% if object_list %}
-            {% for demand in object_list %}
-
+{% for demand in object_list %}
 <div class="courses-container">
     <div class="course">
         <div class="course-preview">
@@ -40,16 +40,20 @@
                         <h5>{{ demand.quote_currency }}</h5>
                     </td>
                     <td style="width: 33%;">
+                        {% if request.user.is_staff and demand.status == None %}
+                        <a class="btn ghost-green" href="{% url 'new-quote' demand.pk %}">Add Quotation</a><br/><br/>
+                        {% endif %}
+                        {% if demand.user == request.user %}
                         <a class="btn ghost-green"  href="{% url 'edit-demand' demand.pk %}" >Edit</a><br/><br/>
                         <a class="btn ghost-red" href="{% url 'delete-demand' demand.pk %}">Delete</a>
+                        {% endif %}
                     </td>
                 </tr>
             </table>
         </div>
     </div>
 </div>
-
-            {% endfor %}
+{% endfor %}
     <div class="align-middle">
         {% if is_paginated %}
             {% if page_obj.has_previous %}

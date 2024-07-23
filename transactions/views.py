@@ -568,14 +568,34 @@ class QuoteCreateView(SuccessMessageMixin, CreateView):
     model = Quote
     form_class = SelectQuote
     success_url = '/transactions/quote'
-    success_message = "Quatation has been created successfully"
+    success_message = "Quotation has been created successfully"
     template_name = "quote/edit_quote.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = 'New Quote'
         context["savebtn"] = 'Add Quote'
+        context["demand"] = Demand.objects.filter(pk=self.kwargs.get('pk')).first()
         return context
+
+    def post(self, request, *args, **kwargs):
+        user = request.POST.get('user')
+        supplier_id = request.POST.get('supplier')
+        quote_price = request.POST.get('quote_price')
+        note = request.POST.get('note')
+        pk = self.kwargs.get('pk')
+        demand = Demand.objects.get(pk=pk)
+        supplier_details = Supplier_details.objects.get(user=supplier_id)
+        quote = Quote(
+            demand=demand,
+            supplier=supplier_details,
+            quote_price=quote_price,
+            note=note
+        )
+        print(quote)
+        quote.save()
+        messages.success(request, self.success_message)
+        return redirect(self.success_url)
 
 class QuoteUpdateView(SuccessMessageMixin, UpdateView):
     model = Quote

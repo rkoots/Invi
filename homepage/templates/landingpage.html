@@ -8,7 +8,7 @@
     <title>ManufactureHub</title>
     <script>
         function showContent(section) {
-            const sections = ['default', 'privacy-policy', 'terms-of-service','about-mh','contact'];
+            const sections = ['default', 'privacy-policy', 'terms-of-service','about-mh','contact','login'];
             sections.forEach(sec => {
                 document.getElementById(sec).style.display = 'none';
             });
@@ -24,7 +24,7 @@
             <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3 py-2" onclick="showContent('default')">Home</a>
             <a href="#" onclick="showContent('about-mh')" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3 py-2">About MH</a>
             <a href="#" onclick="showContent('contact')" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3 py-2">Contact us</a>
-            <a href="login" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3 py-2">Login</a>
+            <a href="#" onclick="showContent('login')"  class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3 py-2">Login</a>
         </nav>
     </div>
 </div>
@@ -34,7 +34,7 @@
     <div id="default">
         <h1 class="text-4xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white">Your one-stop platform for buying and selling in the Engineering manufacturing industry</h1>
         <p class="mt-4 text-lg font-normal text-gray-600 dark:text-gray-400">Connect with suppliers, discover new products, and grow your business.</p>
-        <img src="{% static 'images/home.webp' %}" alt="Manufacturing Industry" class="mt-8 rounded-lg shadow-lg">
+        <img src="{% static 'images/home.webp' %}" alt="Manufacturing Industry" class="mt-8 rounded-lg">
         <br/>
     </div>
     <div id="privacy-policy" style="display: none;">
@@ -137,8 +137,45 @@
         </p>
     </div>
 
+    <div id="login" style="display: none;">
+        <div id="login" class="loginclass">
 
-
+            <div class="login-card">
+                {% if user.is_authenticated %}
+                <h2>Welcome back, {{ request.user.username }}!</h2>
+                <a class="cta" href="{% url 'home' %}">
+                    <span>Go to Home</span>
+                    <svg width="15px" height="10px" viewBox="0 0 13 10">
+                        <path d="M1,5 L11,5"></path>
+                        <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </a>
+                <a class="cta" href="{% url 'logout' %}">
+                    <span>Logout</span>
+                    <svg width="15px" height="10px" viewBox="0 0 13 10">
+                        <path d="M1,5 L11,5"></path>
+                        <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </a>
+                {% else %}
+                <form method="POST" class="login-form">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <h2>Please Sign In</h2>
+                        {{ form }}
+                        <button class="cta" type="submit">
+                            <span>Login</span>
+                            <svg width="15px" height="10px" viewBox="0 0 13 10">
+                                <path d="M1,5 L11,5"></path>
+                                <polyline points="8 1 12 5 8 9"></polyline>
+                            </svg>
+                        </button>
+                    </fieldset>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 <footer class="bg-gray-900 text-white">
     <div class="container mx-auto px-4 py-4">
