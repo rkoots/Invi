@@ -8,6 +8,7 @@ from django.views.generic import (
     DeleteView
 )
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import (
@@ -20,8 +21,13 @@ from .models import (
     SaleBillDetails,
     Customer,
     Demand,
-    Quote
+    Quote,
+    DemandParts
 )
+from accounts.models import (
+    Supplier_details
+)
+
 from .forms import (
     SelectSupplierForm, 
     PurchaseItemFormset,
@@ -32,27 +38,26 @@ from .forms import (
     SaleDetailsForm,
     SelectCustomer,
     SelectDemand,
-    SelectQuote
+    SelectQuote,
+    DemandPartsForm
 )
 from inventory.models import Stock
 from django.db.models import Count
-
-# shows a lists of all suppliers
-class SupplierListView(ListView):
-    model = Supplier
-    template_name = "suppliers/suppliers_list.html"
-    queryset = Supplier.objects.filter(is_deleted=False)
-    paginate_by = 10
-
-# used to add a new supplier
-
-# views.py
-
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, get_object_or_404
 from .models import Supplier
 from .forms import SupplierForm
+from django.shortcuts import redirect
+from django.views.generic.edit import CreateView
+from django.forms import formset_factory
+from django.utils import timezone
+
+class SupplierListView(ListView):
+    model = Supplier
+    template_name = "suppliers/suppliers_list.html"
+    queryset = Supplier.objects.filter()
+    paginate_by = 10
 
 class SupplierCreateUpdateView(SuccessMessageMixin, CreateView, UpdateView):
     model = Supplier
@@ -462,24 +467,60 @@ class CustomerView(View):
 
 
 
-class DemandListView(ListView):
+class DemandListView(LoginRequiredMixin, ListView):
     model = Demand
     template_name = "demand/demand_list.html"
-    queryset = Demand.objects.filter()
     paginate_by = 10
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Demand.objects.filter(end_date__gte=timezone.now(), quote_id=0, is_deleted=False)
+        else:
+            return Demand.objects.filter(user=user, is_deleted=False)
+
+
+
+
 
 class DemandCreateView(SuccessMessageMixin, CreateView):
     model = Demand
     form_class = SelectDemand
-    success_url = '/transactions/demand'
-    success_message = "Demand has been created successfully"
     template_name = "demand/edit_demand.html"
+    success_url = '/transactions/demand'
+    success_message = "RFQ has been created successfully"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = 'New RFQ'
         context["savebtn"] = 'Add RFQ'
+        PartFormSet = formset_factory(DemandPartsForm, extra=1)
+        context["formset"] = PartFormSet()
         return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            # Save the Demand instance
+            demand = form.save()
+
+            # Handle the DemandParts forms
+            num_parts = int(request.POST.get('parts', 0))
+            print("hererere == ",num_parts)
+            PartFormSet = formset_factory(DemandPartsForm, extra=num_parts)
+            print(PartFormSet)
+            parts_formset = PartFormSet(request.POST, request.FILES)
+            print(parts_formset)
+            if parts_formset.is_valid():
+                for part_form in parts_formset:
+                    if part_form.cleaned_data:
+                        part = part_form.save(commit=False)
+                        part.demand = demand
+                        part.save()
+            return redirect(self.success_url)
+        else:
+            return self.form_invalid(form)
+
+
 
 class DemandUpdateView(SuccessMessageMixin, UpdateView):
     model = Demand
@@ -512,11 +553,10 @@ class DemandDeleteView(View):
 class DemandView(View):
     def get(self, request, pk):
         demand = get_object_or_404(Demand, pk=pk)
-        quote = Quote.objects.filter(demand=demand).first()
-        btn_class = 'ghost-green'
-        if quote.status == 'Rejected':
-            btn_class = 'ghost-red'
-        return render(request, 'demand/demand.html', {'demand' : demand, 'quote' : quote, 'btn_class' : btn_class})
+        #demanddetails = DemandParts.objects.filter(demand=demand).all()
+        quote = Quote.objects.filter(demand=demand)
+        btn_class = 'ghost-blue'
+        return render(request, 'demand/demand.html', {'demand' : demand, 'quotes' : quote, 'btn_class' : btn_class})
 
 class QuoteListView(ListView):
     model = Quote

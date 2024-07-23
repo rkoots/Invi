@@ -862,3 +862,41 @@ a.article-title:hover {
 .custom-file-file-input::file-selector-button:hover {
   background: #0d45a5;
 }
+
+
+/* framecase RFQ Styling */
+.framecase-rfq {
+    border: 2px solid #ea2088; /* Pink border */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Space inside the box */
+    background-color: #f9f9f9; /* Light background color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-bottom: 20px; /* Space below the box */
+}
+
+.framecase-rfq h2 {
+    color: #ea2088; /* Heading color */
+    font-size: 24px; /* Heading size */
+    margin-bottom: 10px; /* Space below heading */
+}
+
+.framecase-rfq p.fal {
+    font-size: 16px; /* Text size */
+    line-height: 1.6; /* Line spacing */
+    color: #333; /* Text color */
+}
+
+.framecase-rfq .btn.ghost-button {
+    background-color: transparent; /* Transparent background */
+    border: 2px solid #ea2088; /* Pink border */
+    color: #ea2088; /* Text color */
+    padding: 10px 20px; /* Padding inside the button */
+    border-radius: 5px; /* Rounded corners */
+    text-transform: uppercase; /* Uppercase text */
+    font-weight: bold; /* Bold text */
+}
+
+.framecase-rfq .btn.ghost-button:hover {
+    background-color: #ea2088; /* Pink background on hover */
+    color: #fff; /* White text on hover */
+}

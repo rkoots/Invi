@@ -1,6 +1,7 @@
 from django.db import models
 from inventory.models import Stock
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Contains suppliers
 class Supplier(models.Model):
@@ -16,7 +17,7 @@ class Supplier(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 # Contains the purchase bills made
 class PurchaseBill(models.Model):
@@ -201,7 +202,7 @@ class Demand(models.Model):
         ('other', 'Other'),
     ]
     id = models.AutoField(primary_key=True)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, verbose_name='Name')
     rfq_desc = models.CharField(max_length=400, verbose_name='Name')
     nda_required = models.BooleanField(default=False)
@@ -211,12 +212,13 @@ class Demand(models.Model):
     end_date = models.DateTimeField(blank=True, null=True)
     industry = models.CharField(max_length=200, blank=True, null=True)
     file = models.FileField(upload_to='demand_files/', blank=True, null=True)
+    quote_id = models.IntegerField(default=0)
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Demand #{self.id} - {self.customer.Name}"
+        return f"Demand #{self.id} - {self.user.first_name}"
 
 class DemandParts(models.Model):
     technology_TYPES = [
@@ -243,7 +245,7 @@ class DemandParts(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Demand_parts #{self.id} - {self.customer.Name}"
+        return f"Demand_parts #{self.id} - {self.demand.title}"
 
 
 class Quote(models.Model):
@@ -263,5 +265,5 @@ class Quote(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Demand #{self.id} - {self.demand.part_name}"
+        return f"Demand #{self.id} - {self.demand.title}"
 

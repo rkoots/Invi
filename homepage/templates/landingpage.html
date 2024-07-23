@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/tailwind.css' %}">
+    <title>ManufactureHub</title>
+    <script>
+        function showContent(section) {
+            const sections = ['default', 'privacy-policy', 'terms-of-service','about-mh','contact'];
+            sections.forEach(sec => {
+                document.getElementById(sec).style.display = 'none';
+            });
+            document.getElementById(section).style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+<div class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+        <a href="#" class="text-xl font-bold text-gray-900 dark:text-white">ManufactureHub</a>
+        <nav>
+            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3 py-2" onclick="showContent('default')">Home</a>
+            <a href="#" onclick="showContent('about-mh')" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3 py-2">About MH</a>
+            <a href="#" onclick="showContent('contact')" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3 py-2">Contact us</a>
+            <a href="login" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3 py-2">Login</a>
+        </nav>
+    </div>
+</div>
+</header>
+<br/><br/><br/>
+<div class="container mx-auto px-4 py-8">
+    <div id="default">
+        <h1 class="text-4xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white">Your one-stop platform for buying and selling in the Engineering manufacturing industry</h1>
+        <p class="mt-4 text-lg font-normal text-gray-600 dark:text-gray-400">Connect with suppliers, discover new products, and grow your business.</p>
+        <img src="{% static 'images/home.webp' %}" alt="Manufacturing Industry" class="mt-8 rounded-lg shadow-lg">
+        <br/>
+    </div>
+    <div id="privacy-policy" style="display: none;">
+        <h2 class="text-2xl font-bold leading-none tracking-tight text-gray-900 dark:text-white">Privacy Policy</h2>
+        <br/>
+        <p class="mt-4 text-lg font-normal text-gray-600 dark:text-gray-400">
+            At ManufactureHub, we prioritize your privacy and are committed to protecting your personal data. This Privacy Policy outlines the types of information we collect from our users, how we use and safeguard this information, and your rights concerning your data. By using our platform, you agree to the terms outlined in this policy.
+            <br/><br/>
+            <strong>Information Collection and Use</strong><br/>
+            We collect personal information that you provide to us directly, such as your name, email address, contact details, and company information when you register, place an RFQ, or interact with our services. Additionally, we may collect data regarding your usage of our platform, including IP addresses, browser types, and access times, to improve user experience and ensure the security of our services. The information collected is used to facilitate communication between buyers and sellers, process transactions, and enhance the functionality and performance of our platform.
+            <br/><br/>
+            <strong>Data Protection and Security</strong><br/>
+            ManufactureHub employs robust security measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction. We use encryption technologies and secure servers to safeguard your information. Despite our efforts, we cannot guarantee absolute security, and we encourage you to take precautions to protect your own information. We do not sell or share your personal data with third parties without your consent, except as required by law or necessary to provide our services.
+            <br/><br/>
+            <strong>Your Rights</strong><br/>
+            You have the right to access, modify, or delete your personal data at any time by logging into your account or contacting our support team. We also provide options to manage your communication preferences and opt-out of non-essential communications. If you have any concerns or questions about your privacy or our data practices, please reach out to us.
+            <br/><br/>
+        </p>
+    </div>
+
+
+    <div id="terms-of-service" style="display: none;">
+        <h2 class="text-2xl font-bold leading-none tracking-tight text-gray-900 dark:text-white">Terms of Service</h2>
+        <br/>
+        <p class="mt-4 text-lg font-normal text-gray-600 dark:text-gray-400">
+            Welcome to ManufactureHub! These terms of service ("Terms") apply to your use of our website and services ("Platform"). By accessing or using our Platform, you agree to comply with and be bound by these Terms. Please read them carefully. If you do not agree with these Terms, you may not use our Platform.
+            <br/><br/>
+            <strong>1. Use of the Platform</strong><br/>
+            You agree to use the Platform only for lawful purposes and in accordance with these Terms. You are responsible for ensuring that your use of the Platform complies with all applicable laws and regulations. You agree not to:
+        <ul class="list-disc ml-6 mt-2 text-gray-600 dark:text-gray-400">
+            <li>Use the Platform in any manner that could disable, overburden, damage, or impair the Platform or interfere with any other party's use of the Platform.</li>
+            <li>Engage in any conduct that is fraudulent, misleading, or otherwise harmful to ManufactureHub or other users.</li>
+            <li>Upload or transmit any viruses, malware, or other harmful code.</li>
+            <li>Attempt to gain unauthorized access to any portion of the Platform, other user accounts, or any systems or networks connected to the Platform.</li>
+        </ul>
+        <br/>
+        <strong>2. Account Registration and Security</strong><br/>
+        To use certain features of the Platform, you may be required to register for an account. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete. You are responsible for maintaining the confidentiality of your account password and for all activities that occur under your account. You agree to notify us immediately of any unauthorized use of your account.
+        <br/><br/>
+        <strong>3. User Content</strong><br/>
+        By posting, uploading, or otherwise making available any content on the Platform ("User Content"), you grant ManufactureHub a non-exclusive, transferable, sub-licensable, royalty-free, worldwide license to use, reproduce, modify, distribute, and display such User Content in connection with the operation of the Platform. You represent and warrant that you own or have the necessary rights to the User Content you provide and that your User Content does not infringe the rights of any third party.
+        <br/><br/>
+        <strong>4. Intellectual Property</strong><br/>
+        All content and materials on the Platform, including but not limited to text, graphics, logos, icons, images, and software, are the property of ManufactureHub or its licensors and are protected by copyright, trademark, and other intellectual property laws. You agree not to copy, modify, distribute, or create derivative works based on any content or materials from the Platform without our prior written consent.
+        <br/><br/>
+        <strong>5. Disclaimers and Limitation of Liability</strong><br/>
+        The Platform is provided on an "as is" and "as available" basis. ManufactureHub makes no representations or warranties of any kind, express or implied, as to the operation of the Platform or the information, content, or materials included on the Platform. To the fullest extent permitted by law, we disclaim all warranties, express or implied, including but not limited to implied warranties of merchantability and fitness for a particular purpose. ManufactureHub will not be liable for any damages of any kind arising from the use of the Platform, including but not limited to direct, indirect, incidental, punitive, and consequential damages.
+        <br/><br/>
+        <strong>6. Governing Law</strong><br/>
+        These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which ManufactureHub is headquartered, without regard to its conflict of law principles. You agree to submit to the personal jurisdiction of the courts located in that jurisdiction for the purpose of litigating all such claims or disputes.
+        <br/><br/>
+        <strong>7. Changes to Terms</strong><br/>
+        We reserve the right to modify these Terms at any time. Any changes will be effective immediately upon posting on the Platform. Your continued use of the Platform following the posting of changes constitutes your acceptance of such changes. We encourage you to review these Terms periodically to stay informed of any updates.
+        <br/><br/>
+        <strong>8. Contact Us</strong><br/>
+        If you have any questions or concerns about these Terms, please contact us.
+        </p>
+    </div>
+
+    <div id="about-mh" style="display: none;">
+        <h2 class="text-2xl font-bold leading-none tracking-tight text-gray-900 dark:text-white">About ManufactureHub</h2>
+        <br/>
+        <p class="mt-4 text-lg font-normal text-gray-600 dark:text-gray-400">
+        <div class="about-section">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Our Mission</h2>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">At ManufactureHub, our mission is to streamline the buying and selling process in the engineering manufacturing industry. We aim to connect manufacturers and customers efficiently, offering a comprehensive platform for placing and responding to RFQs (Request for Quotes) for a variety of engineering services such as metal cutting, bending, and more.</p>
+        </div>
+
+        <div class="about-section mt-6">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">What We Offer</h2>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">ManufactureHub is a one-stop platform that provides:</p>
+            <ul class="list-disc ml-6 mt-2 text-gray-600 dark:text-gray-400">
+                <li>Easy RFQ submission for engineering services.</li>
+                <li>Access to a wide network of reputable manufacturers.</li>
+                <li>Detailed part and service descriptions.</li>
+                <li>Secure and efficient communication channels.</li>
+                <li>Comprehensive tracking of RFQs and responses.</li>
+            </ul>
+        </div>
+
+        <div class="about-section mt-6">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Our Vision</h2>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">We envision a manufacturing industry where efficiency and transparency are paramount. By leveraging the power of digital platforms, ManufactureHub aims to revolutionize the way manufacturers and customers interact, ensuring that the process of acquiring and providing engineering services is seamless, cost-effective, and accessible to all.</p>
+        </div>
+
+        <div class="about-section mt-6">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Contact Us</h2>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">If you have any questions or need further information, please do not hesitate to reach out to us at <a href="mailto:rajkumarv88@icloud.com" class="text-blue-600 dark:text-blue-400">rajkumarv88@icloud.com</a>.</p>
+        </div>
+        </p>
+    </div>
+
+    <div id="contact" style="display: none;">
+        <h2 class="text-2xl font-bold leading-none tracking-tight text-gray-900 dark:text-white">Contact Us</h2>
+        <br/>
+        <p class="mt-4 text-lg font-normal text-gray-600 dark:text-gray-400">
+            Our "Contact Us" page is currently under construction. We are working hard to provide you with the best experience possible. In the meantime, if you have any questions or need immediate assistance, please feel free to reach out to our support team at <a href="mailto:rajkumarv88@icloud.com" class="text-blue-600 dark:text-blue-400">rajkumarv88@icloud.com</a>.
+            <br/><br/>
+            Thank you for your patience and understanding!
+        </p>
+    </div>
+
+
+
+</div>
+<footer class="bg-gray-900 text-white">
+    <div class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+            <p>&copy; 2024 ManufactureHub. All rights reserved.</p>
+            <nav>
+                <a href="#" class="hover:text-gray-300 px-2" onclick="showContent('privacy-policy')">Privacy Policy</a>
+                <a href="#" class="hover:text-gray-300 px-2" onclick="showContent('terms-of-service')">Terms of Service</a>
+            </nav>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

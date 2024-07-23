@@ -8,22 +8,28 @@
 <div class="content-section">
     <div class="media">
         <div class="media-body">
-            <h2 style="color:#ea2088;" class="account-heading">&nbsp;{{ demand.part_name }}</h2>
+            <h2 style="color:#ea2088;" class="account-heading">&nbsp;{{ demand.title }}</h2>
+            {% if not quote.pk %}
             <a href="{% url 'edit-demand' demand.pk %}" class="btn ghost-button" style="float: right;">Edit Details</a>
+            {% endif %}
             <div class="row">
                 <div class="col-md-6">
                     <p class="fal">
-                        Part Name : {{ demand.part_name }} <br>
-                        Description &nbsp; : {{ demand.Part_desc }} <br>
-                        Quantity &nbsp; : {{ demand.quantity }} <br>
-                        File : {{ demand.file }}
+                        RFQ Description : {{ demand.rfq_desc }} <br>
+                        NDA Needed : {{ demand.nda_required }} <br>
+                        Currency &nbsp; : {{ demand.quote_currency }} <br>
+                        Reason &nbsp; : {{ demand.request_reason }} <br>
+                        Parts Associated &nbsp; : {{ demand.parts }} <br>
+                        RFQ End Date &nbsp; : {{ demand.end_date }} <br>
+                        Industry &nbsp; : {{ demand.industry }} <br>
+                        Master File &nbsp; : {{ demand.file }}
                     </p>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
+{% for quote in quotes %}
 {% if quote.pk %}
 <div class="content-section">
     <div class="media">
@@ -49,5 +55,5 @@
     </div>
 </div>
 {% endif %}
-
+{% endfor %}
 {% endblock content %}

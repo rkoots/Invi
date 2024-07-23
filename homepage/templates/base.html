@@ -1,29 +1,16 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/bootstrap.min.css' %}">
-
-    <!-- Main CSS, then Sidebar CSS and Dialog Box CSS -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">    
-    <link rel="stylesheet" type="text/css" href="{% static 'css/sidebar.css' %}">    
-    <link rel="stylesheet" type="text/css" href="{% static 'css/dialogbox.css' %}">    
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sidebar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dialogbox.css' %}">
     <title>Invi - {% block title %}Title Missing{% endblock title %}</title>
-
 </head>
-
 <body>
-
-    <!-- Dialog Box CSS  -->
     <div id="dialogoverlay"></div>
     <div id="dialogbox">
         <div class="align-middle">
@@ -32,13 +19,9 @@
             <div id="dialogboxfoot"></div>
         </div>
     </div>
-
     <main id="wrapper">
-    
     {% if user.is_authenticated %}
-    
         <nav id="sidebar">
-            
             <div class="sidebar-header">
                 <a class="navbar-brand titlefont mr-4" href="{% url 'home' %}"><h3>Invi</h3></a><br/>
                 <div class="loader">
@@ -46,26 +29,23 @@
                         <circle r="32" cy="40" cx="40" id="test"></circle>
                     </svg>
                 </div>
-
                 <div class="loader triangle">
                     <svg viewBox="0 0 86 80">
                         <polygon points="43 8 79 72 7 72"></polygon>
                     </svg>
                 </div>
-
                 <div class="loader">
                     <svg viewBox="0 0 80 80">
                         <rect height="64" width="64" y="8" x="8"></rect>
                     </svg>
                 </div>
-
             </div>
 
             <ul class="list-unstyled sidebar-components">
-                {# <p class="sidebar-paragraph">Invi</p> #}
                 <li>
                     <a class="sidebar-text sidebar-button" href="{% url 'home' %}">Dashboard</a>
                 </li>
+
                 {% if request.user.is_superuser %}
                 <li>
                     <a href="#customerSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Customer</a>
@@ -74,13 +54,14 @@
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-customer' %}">Add New Customer</a> </li>
                     </ul>
                 </li>
-                {% endif%}
+                {% endif %}
 
                 <li>
                     <a href="#demandSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">RFQ's</a>
                     <ul class="collapse list-unstyled" id="demandSubmenu">
                         {% if request.user.is_staff %}
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'demand-list' %}">List of RFQ's</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-demand' %}">Add New RFQ</a> </li>
                         {% else %}
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'demand-list' %}">My RFQ's</a> </li>
                         <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'new-demand' %}">New RFQ</a> </li>
@@ -107,6 +88,7 @@
                         {% endif %}
                     </ul>
                 </li>
+
                 {% if request.user.is_superuser %}
                 <li>
                     <a href="#saleSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Sales</a>
@@ -116,6 +98,7 @@
                     </ul>
                 </li>
                 {% endif %}
+
                 {% if request.user.is_staff %}
                 <li>
                     <a href="#inventorySubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">Inventory</a>
@@ -125,22 +108,26 @@
                     </ul>
                 </li>
                 {% endif %}
-                {% if request.user.is_staff %}
+
                 <li>
                     <a class="sidebar-text sidebar-button" href="{% url 'about' %}">About</a>
                 </li>
+
                 <li class="bottomleft">
                     <a href="#UserSubmenu" data-toggle="collapse" class="dropdown-toggle sidebar-text right-arrow sidebar-button">{{ request.user.username }}</a>
                     <ul class="collapse list-unstyled" id="UserSubmenu">
                         {% if request.user.is_superuser %}
-                            <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'admin:index' %}">Admin Page</a> </li>
-                            <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'register' %}">Register New User</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'admin:index' %}">Admin Page</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'register' %}">Register New User</a> </li>
                         {% endif %}
-                            <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'logout' %}">Logout</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'logout' %}">Profile</a> </li>
+                        <li> <a class="sidebar-text sidebar-subitem sidebar-button" href="{% url 'logout' %}">Logout</a> </li>
                     </ul>
                 </li>
-                {% endif %}
             </ul>
+
+
+
             {% comment %}
             <ul class="list-unstyled CTAs">
                 <li>

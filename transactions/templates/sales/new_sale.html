@@ -1,12 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
-
-
 {% block title %} New Sale {% endblock title %}
-
-
 {% block content %}
-
     <div style="color:#ea2088; font-style: bold; font-size: 3rem; border-bottom: 1px solid white;">New Sale</div>
     
     <br>
@@ -49,12 +44,12 @@
         <br>
 
         <div class="panel panel-default">
-            
+
             {{ formset.management_form }}
 
             <div class="panel-heading panel-heading-text">Product Details</div>
-            
-                <div id="stockitem"> 
+
+                <div id="stockitem">
                     <div class="panel-body">
                     {% for iform in formset %}
                         <div class="row form-row clone-row">
@@ -82,7 +77,7 @@
                             </div>
                         </div>
                     {% endfor %}
-                        <div style="text-align: right;">                    
+                        <div style="text-align: right;">
                             <a href="#" class="add-form-row">+ Add More</a>
                         </div>
                     </div>
@@ -95,7 +90,7 @@
                 <button type="submit" class="btn ghost-green">Add to Sales</button>
                 <a href="{% url 'sales-list' %}" class="btn ghost-button">Cancel</a>
             </div>
-            
+
         </div>
 
     </form>

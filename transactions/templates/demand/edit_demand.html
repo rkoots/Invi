@@ -1,64 +1,189 @@
 {% extends "base.html" %}
-{% block title %} {{title}} {% endblock title %}
+{% load static %}
+{% block title %} {{ title }} {% endblock title %}
 {% block content %}
-    <div style="color:#ea2088; font-style: bold; font-size: 3rem; border-bottom: 1px solid white;">{{title}}</div> <br>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        {{ form.customer.errors }}
-        {{ form.part_name.errors }}
-        {{ form.Part_desc.errors }}
-        {{ form.file.errors }}
-        {{ form.quantity.errors }}
-        <input type="text" name="customer" hidden class="form-control{% if form.customer.errors %} is-invalid{% endif %}" id="id_user" value="{{ request.user.id }}">
-        <div class="form-group">
-            <label for="{{ form.part_name.id_for_label }}">Title of RFQ:</label>
-            {{ form.title }}
+<div style="color:#ea2088; font-style: bold; font-size: 3rem; border-bottom: 1px solid white;">{{ title }}</div> <br>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form.user.errors }}
+    {{ form.title.errors }}
+    {{ form.rfq_desc.errors }}
+    {{ form.nda_required.errors }}
+    {{ form.quote_currency.errors }}
+    {{ form.request_reason.errors }}
+    {{ form.parts.errors }}
+    {{ form.end_date.errors }}
+    {{ form.industry.errors }}
+    {{ form.file.errors }}
+
+    <input type="hidden" name="user" value="{{ request.user.id }}">
+    <!-- Demand Form Fields in Table Format -->
+    <table class="table">
+        <tbody>
+        <tr>
+            <td><label for="{{ form.title.id_for_label }}">Title of RFQ:</label></td>
+            <td>{{ form.title }}</td>
+        </tr>
+        <tr>
+            <td><label for="{{ form.rfq_desc.id_for_label }}">RFQ Description:</label></td>
+            <td>{{ form.rfq_desc }}</td>
+        </tr>
+        <tr>
+            <td><label for="{{ form.nda_required.id_for_label }}">NDA Required:</label></td>
+            <td>{{ form.nda_required }}</td>
+        </tr>
+        <tr>
+            <td><label for="{{ form.quote_currency.id_for_label }}">Currency:</label></td>
+            <td>{{ form.quote_currency }}</td>
+        </tr>
+        <tr>
+            <td><label for="{{ form.request_reason.id_for_label }}">Reason for Request:</label></td>
+            <td>{{ form.request_reason }}</td>
+        </tr>
+        <tr>
+            <td><label for="{{ form.parts.id_for_label }}">Number of Parts:</label></td>
+            <td>{{ form.parts }}</td>
+        </tr>
+        <tr>
+            <td><label for="{{ form.end_date.id_for_label }}">End Date:</label></td>
+            <td>{{ form.end_date }}</td>
+        </tr>
+        <tr>
+            <td><label for="{{ form.industry.id_for_label }}">Industry:</label></td>
+            <td>{{ form.industry }}</td>
+        </tr>
+        <tr>
+            <td><label for="{{ form.file.id_for_label }}">Master File:</label></td>
+            <td>{{ form.file }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <!-- Render the DemandParts Formset in Table Format -->
+    {% if formset %}
+    <div class="parts-section">
+        <h3>Parts Associated with RFQ</h3>
+        <div id="formset-container">
+            {{ formset.management_form }}
+            {% for form in formset %}
+            <div class="form-row">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>{{ form.non_field_errors }}</td>
+                        <td>{{ form.part_name.errors }}</td>
+                        <td>{{ form.Part_desc.errors }}</td>
+                        <td>{{ form.technology.errors }}</td>
+                        <td>{{ form.Material.errors }}</td>
+                        <td>{{ form.file.errors }}</td>
+                        <td>{{ form.quantity.errors }}</td>
+                    </tr>
+                    <tr>
+                        <td><label for="{{ form.part_name.id_for_label }}">Part Name:</label></td>
+                        <td>{{ form.part_name }}</td>
+                        <td><label for="{{ form.Part_desc.id_for_label }}">Part Description:</label></td>
+                        <td>{{ form.Part_desc }}</td>
+                    </tr>
+                    <tr>
+                        <td><label for="{{ form.technology.id_for_label }}">Technology:</label></td>
+                        <td>{{ form.technology }}</td>
+                        <td><label for="{{ form.Material.id_for_label }}">Material:</label></td>
+                        <td>{{ form.Material }}</td>
+                    </tr>
+                    <tr>
+                        <td><label for="{{ form.file.id_for_label }}">File:</label></td>
+                        <td>{{ form.file }}</td>
+                        <td><label for="{{ form.quantity.id_for_label }}">Quantity:</label></td>
+                        <td>{{ form.quantity }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="button" class="form-control btn btn-danger remove-form-row">- Remove</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
         </div>
-        <div class="form-group">
-            <label for="{{ form.Part_desc.id_for_label }}">RFQ Desc:</label>
-            {{ form.rfq_desc }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.quantity.id_for_label }}">NDA Required:</label>
-            {{ form.nda_required }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.quantity.id_for_label }}">Currency:</label>
-            {{ form.quote_currency }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.quantity.id_for_label }}">Reason for Request:</label>
-            {{ form.request_reason }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.quantity.id_for_label }}">Number of Parts:</label>
-            {{ form.parts }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.quantity.id_for_label }}">End Date:</label>
-            {{ form.end_date }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.quantity.id_for_label }}">Industry:</label>
-            {{ form.industry }}
-        </div>
-        <div class="custom-file-drop-container">
-            {{ form.file.errors }}
-            <p class="custom-file-drop-title">Drop Master file here</p>
-            {{ form.file }}
-        </div>
-        <br>
-        <div class="align-middle">
-            <button type="submit" class="btn ghost-green">{{ savebtn }}</button>
-            {% if title == "New Demand" %}
-                <button type="reset" class="btn ghost-blue" >Reset</button>
-            {% endif %}
-            {% if delbtn %}
-                <a href="{% url 'delete-demand' demand.pk %}" class="btn ghost-red"> Delete Demand </a>
-            {% endif %}
-            <a href="{% url 'demand-list' %}" class="btn ghost-button">Cancel</a>
-        </div>
-    </form>
+        <a href="#" class="add-form-row">+ Add More</a>
+    </div>
+    {% endif %}
+
+    <div class="align-middle">
+        <button type="submit" class="btn ghost-green">{{ savebtn }}</button>
+        {% if title == "New RFQ" %}
+        <button type="reset" class="btn ghost-blue">Reset</button>
+        {% endif %}
+        {% if delbtn %}
+        <a href="{% url 'delete-demand' demand.pk %}" class="btn ghost-red">Delete Demand</a>
+        {% endif %}
+        <a href="{% url 'demand-list' %}" class="btn ghost-button">Cancel</a>
+    </div>
+</form>
+
+<!-- Custom JS to add and remove item forms -->
+<script type="text/javascript" src="{% static 'js/jquery-3.2.1.slim.min.js' %}"></script>
+<script type="text/javascript">
+
+    function updateElementIndex(el, prefix, ndx) {
+        var id_regex = new RegExp('(' + prefix + '-\\d+)');
+        var replacement = prefix + '-' + ndx;
+        if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+        if (el.id) el.id = el.id.replace(id_regex, replacement);
+        if (el.name) el.name = el.name.replace(id_regex, replacement);
+    }
+
+    function cloneMore(selector, prefix) {
+        var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+        var newElement = $(selector).clone(true);
+        newElement.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each(function() {
+            var name = $(this).attr('name');
+            if(name) {
+                name = name.replace('-' + (formCount - 1) + '-', '-' + formCount + '-');
+                var id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+            }
+        });
+        newElement.find('label').each(function() {
+            var forValue = $(this).attr('for');
+            if (forValue) {
+                forValue = forValue.replace('-' + (formCount - 1) + '-', '-' + formCount + '-');
+                $(this).attr({'for': forValue});
+            }
+        });
+        $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
+        $(selector).after(newElement);
+    }
+
+    function deleteForm(prefix, btn) {
+        var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+        if (formCount > 1) {
+            btn.closest('.form-row').remove();
+            $('#id_' + prefix + '-TOTAL_FORMS').val(formCount - 1);
+            $('.form-row').each(function(index) {
+                $(this).find(':input').each(function() {
+                    updateElementIndex(this, prefix, index);
+                });
+            });
+        } else {
+            alert('At least one form is required.');
+        }
+    }
+
+    $(document).on('click', '.add-form-row', function(e) {
+        e.preventDefault();
+        cloneMore('.form-row:last', 'form');
+    });
+
+    $(document).on('click', '.remove-form-row', function(e) {
+        e.preventDefault();
+        deleteForm('form', $(this));
+    });
+
+</script>
 
 {% endblock content %}

@@ -8,7 +8,9 @@ def custom_404_view(request, exception):
 
 class HomeView(View):
     template_name = "home.html"
-    def get(self, request):        
+    def get(self, request):
+        if not self.request.user.is_authenticated:
+            return render(request, "landingpage.html")
         labels = []
         data = []        
         stockqueryset = Stock.objects.filter(is_deleted=False).order_by('-quantity')

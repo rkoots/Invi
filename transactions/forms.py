@@ -10,7 +10,8 @@ from .models import (
     SaleBillDetails,
     Customer,
     Demand,
-    Quote
+    Quote,
+    DemandParts
 )
 from inventory.models import Stock
 from django.contrib.auth.models import User
@@ -136,7 +137,23 @@ class SelectDemand(forms.ModelForm):
             self.fields['title'].widget.attrs.update({'disabled': 'disabled'})
     class Meta:
         model = Demand
-        fields = ['customer','title','nda_required','quote_currency','request_reason','parts','end_date','industry','is_deleted','rfq_desc','file']
+        fields = ['user','title','nda_required','quote_currency','request_reason','parts','end_date','industry','is_deleted','rfq_desc','file']
+
+
+class DemandPartsForm(forms.ModelForm):
+    class Meta:
+        model = DemandParts
+        fields = ['part_name', 'Part_desc', 'technology', 'Material', 'file', 'quantity']
+        widgets = {
+            'part_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'Part_desc': forms.TextInput(attrs={'class': 'form-control'}),
+            'technology': forms.Select(attrs={'class': 'form-control'}),
+            'Material': forms.Select(attrs={'class': 'form-control'}),
+            'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
 
 class SelectQuote(forms.ModelForm):
     class Meta:
@@ -155,7 +172,6 @@ class SelectQuote(forms.ModelForm):
         self.fields['supplier'].queryset = Supplier.objects.filter(is_deleted=False)
         self.fields['supplier'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
         self.fields['quote_price'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
-        self.fields['quantity'].widget.attrs.update({'class': 'form-control', 'min': '1', 'required': 'true'})
         self.fields['note'].widget.attrs.update({'class': 'form-control'})
 
 
