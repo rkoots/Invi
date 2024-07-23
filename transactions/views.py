@@ -553,10 +553,10 @@ class DemandDeleteView(View):
 class DemandView(View):
     def get(self, request, pk):
         demand = get_object_or_404(Demand, pk=pk)
-        #demanddetails = DemandParts.objects.filter(demand=demand).all()
+        demanddetails = DemandParts.objects.filter(demand=demand).all()
         quote = Quote.objects.filter(demand=demand)
         btn_class = 'ghost-blue'
-        return render(request, 'demand/demand.html', {'demand' : demand, 'quotes' : quote, 'btn_class' : btn_class})
+        return render(request, 'demand/demand.html', {'demand' : demand, 'quotes' : quote, 'demanddetails':demanddetails, 'btn_class' : btn_class})
 
 class QuoteListView(ListView):
     model = Quote

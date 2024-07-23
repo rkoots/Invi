@@ -5,30 +5,88 @@
 {{ demand.part_name }}'s Demand
 {% endblock %}
 {% block content %}
-<div class="content-section">
-    <div class="media">
-        <div class="media-body">
-            <h2 style="color:#ea2088;" class="account-heading">&nbsp;{{ demand.title }}</h2>
-            {% if not quote.pk %}
-            <a href="{% url 'edit-demand' demand.pk %}" class="btn ghost-button" style="float: right;">Edit Details</a>
-            {% endif %}
-            <div class="row">
-                <div class="col-md-6">
-                    <p class="fal">
-                        RFQ Description : {{ demand.rfq_desc }} <br>
-                        NDA Needed : {{ demand.nda_required }} <br>
-                        Currency &nbsp; : {{ demand.quote_currency }} <br>
-                        Reason &nbsp; : {{ demand.request_reason }} <br>
-                        Parts Associated &nbsp; : {{ demand.parts }} <br>
-                        RFQ End Date &nbsp; : {{ demand.end_date }} <br>
-                        Industry &nbsp; : {{ demand.industry }} <br>
-                        Master File &nbsp; : {{ demand.file }}
-                    </p>
-                </div>
+
+<div class="courses-container">
+    <div class="course">
+        <div class="course-preview">
+            <h2>{{demand.title}}</h2>
+            <h4>{{demand.user}}</h4>
+        </div>
+        <div class="course-info">
+            <div class="progress-container">
+                <div class="progress"></div>
+                <span class="progress-text">
+					{{demand.parts}} Parts
+				</span>
             </div>
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 33%;">
+                        <h6>{{ demand.end_date|date:"Y-m-d" }} UTC</h6>
+                        <h5>{{ demand.industry }}</h5>
+                        <h5>{{ demand.request_reason }}</h5>
+                        <a href="#">{{ demand.file }}</a>
+                    </td>
+                    <td style="width: 33%;">
+                        <h5>{{ demand.rfq_desc }}</h5>
+                        <h5>{{ demand.nda_required }}</h5>
+                        <h5>{{ demand.quote_currency }}</h5>
+                    </td>
+                    <td style="width: 33%;">
+                        <a class="btn ghost-green"  href="{% url 'edit-demand' demand.pk %}" >Edit</a><br/><br/>
+                        <a class="btn ghost-red" href="{% url 'delete-demand' demand.pk %}">Delete</a>
+                    </td>
+                </tr>
+            </table><br/>
+    {% if demanddetails %}
+            <div class="course-preview">
+                <h2>Parts of RFQ</h2>
+            </div>
+                        {% for eachdemand in demanddetails %}
+
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 33%;">
+                        {{ eachdemand.id }}
+                    </td>
+                    <td style="width: 33%;">
+                        {{ eachdemand.part_name }}
+                    </td>
+                    <td style="width: 33%;">
+                        {{ eachdemand.Part_desc }}
+                    </td>
+                    <td style="width: 33%;" rowspan="2">
+                        <button class="Btn">
+                            <svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path>
+                            </svg>
+                            <span class="icon2"></span>
+                            <span class="tooltip">{{ eachdemand.file }}</span>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 33%;">
+                        {{ eachdemand.technology }}
+                    </td>
+                    <td style="width: 33%;">
+                        {{ eachdemand.Material }}
+                    </td>
+                    <td style="width: 33%;">
+                        {{ eachdemand.quantity }}
+                    </td>
+
+                </tr>
+            </table>
+
+            {% endfor %}
+                        {% endif %}
+
+
         </div>
     </div>
 </div>
+
 {% for quote in quotes %}
 {% if quote.pk %}
 <div class="content-section">
