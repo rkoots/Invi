@@ -10,8 +10,8 @@
         {{ form.quote_price.errors }}
         {{ form.note.errors }}
         <div class="form-group">
-            <input type="text" name="user" class="form-control{% if form.demand.errors %} is-invalid{% endif %}" id="id_user" value="{{ demand.id }}">
-            <input type="text" name="supplier" class="form-control{% if form.supplier.errors %} is-invalid{% endif %}" id="id_supplier" value="{{ request.user.id }}">
+            <input type="text" hidden name="user" class="form-control{% if form.demand.errors %} is-invalid{% endif %}" id="id_user" value="{{ demand.id }}">
+            <input type="text" hidden name="supplier" class="form-control{% if form.supplier.errors %} is-invalid{% endif %}" id="id_supplier" value="{{ request.user.id }}">
         </div>
         <div class="form-group">
             <label for="{{ form.quote_price.id_for_label }}">RFQ Price:</label>
