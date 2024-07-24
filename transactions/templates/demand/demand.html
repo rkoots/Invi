@@ -33,8 +33,13 @@
                         <h5>{{ demand.quote_currency }}</h5>
                     </td>
                     <td style="width: 33%;">
+                        {% if request.user.is_staff and demand.status == None %}
+                        <a class="btn ghost-green" href="{% url 'new-quote' demand.pk %}">Add Quotation</a><br/><br/>
+                        {% endif %}
+                        {% if not demand.status and demand.user == request.user %}
                         <a class="btn ghost-green"  href="{% url 'edit-demand' demand.pk %}" >Edit</a><br/><br/>
                         <a class="btn ghost-red" href="{% url 'delete-demand' demand.pk %}">Delete</a>
+                        {% endif %}
                     </td>
                 </tr>
             </table><br/>
@@ -100,13 +105,33 @@
             <a class="btn {{ btn_class }}" style="float: right;" >{{ quote.status }}</a>
             {% endif %}
             <div class="row">
-                <div class="col-md-6">
-                    <p class="fal">
-                        Supplier : {{ quote.supplier }} <br>
-                        Price &nbsp; : {{ quote.quote_price }} <br>
-                        Quantity &nbsp; : {{ quote.quantity }} <br>
-                        Note : {{ quote.note }}
-                    </p>
+                <div class="col-md-12">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="width: 33%;">
+                                Supplier
+                            </td>
+                            <td style="width: 67%;">
+                                {{ quote.supplier }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 33%;">
+                                Price
+                            </td>
+                            <td style="width: 67%;">
+                                {{ quote.quote_price }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 33%;">
+                                Note
+                            </td>
+                            <td style="width: 67%;">
+                                {{ quote.note }}
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>

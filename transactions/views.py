@@ -465,6 +465,14 @@ class CustomerView(View):
         return render(request, 'customer/customer.html', {'customer' : customer})
 
 
+class DemandListStatusView(LoginRequiredMixin, ListView):
+    model = Demand
+    template_name = "demand/demand_list.html"
+    paginate_by = 10
+    def get_queryset(self):
+        user = self.request.user
+        return Demand.objects.filter(user=user, is_deleted=False, status='Approved')
+
 
 
 class DemandListView(LoginRequiredMixin, ListView):
@@ -585,7 +593,9 @@ class QuoteCreateView(SuccessMessageMixin, CreateView):
         note = request.POST.get('note')
         pk = self.kwargs.get('pk')
         demand = Demand.objects.get(pk=pk)
+        print(demand)
         supplier_details = Supplier_details.objects.get(user=supplier_id)
+        print(supplier_details)
         quote = Quote(
             demand=demand,
             supplier=supplier_details,
@@ -639,17 +649,23 @@ class DemandQuoteListView(ListView):
 class QuoteStatusUpdateView(ListView):
     def get(self, request, pk, status):
         quote = get_object_or_404(Quote, pk=pk)
+        demand = Demand.objects.get(pk=quote.demand.id)
         btn_class = 'ghost-green'
         if status == 'Approved':
             quote.status = 'Approved'
+            demand.status = "Approved"
+            demand.quote_id = pk
+            demand.save()
         elif status == 'Rejected':
             quote.status = 'Rejected'
             btn_class = 'ghost-red'
         quote.save()
+        demanddetails = DemandParts.objects.filter(demand=demand).all()
         context = {
             'demand': quote.demand,  # Assuming demand is related to Quote
             'quote': quote,
             'btn_class' : btn_class,
+            'demanddetails':demanddetails,
         }
         return render(request, 'demand/demand.html', context)
 

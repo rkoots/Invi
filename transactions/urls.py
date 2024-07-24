@@ -28,6 +28,7 @@ urlpatterns = [
     path('customers/<name>', views.CustomerView.as_view(), name='customer'),
 
     path('demand/', views.DemandListView.as_view(), name='demand-list'),
+    path('demand/status', views.DemandListStatusView.as_view(), name='demand-status-list'),
     path('demand/new', views.DemandCreateView.as_view(), name='new-demand'),
     path('demand/<pk>/edit', views.DemandUpdateView.as_view(), name='edit-demand'),
     path('demand/<pk>/delete', views.DemandDeleteView.as_view(), name='delete-demand'),
