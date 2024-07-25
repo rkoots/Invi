@@ -17,17 +17,18 @@ class UserRegistrationForm(UserCreationForm):
         self.fields['last_name'].required = True
         self.fields['email'].required = True
 
-
 class SupplierDetailsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         self.fields['companyname'].initial = 'Default Company Name'
         self.fields['phone'].widget.attrs.update({'readonly': 'readonly'})
         self.fields['address'].widget.attrs.update({'placeholder': 'Enter your address here'})
         if 'company_street' in self.fields:
             self.fields['company_street'].widget = forms.HiddenInput()
-        user = kwargs.pop('user', None)
-        print(user,kwargs)
+        if self.user:
+            self.fields['user'].initial = self.user  # Assign user to the field
+
     class Meta:
         model = Supplier_details
         fields = [
@@ -37,7 +38,7 @@ class SupplierDetailsForm(forms.ModelForm):
             'info_source', 'amount_of_employees', 'turnover_per_year', 'certificates'
         ]
         widgets = {
-            'user': forms.HiddenInput(),  # Hide the supplier field if you set it programmatically
+            'user': forms.HiddenInput(),  # Hide the user field if you set it programmatically
             'activity_type': forms.Select(choices=Supplier_details.ACTIVITY_TYPE_CHOICES),
             'manufacturing_competency1': forms.Select(choices=Supplier_details.MANUFACTURING_COMPETENCY_CHOICES),
             'manufacturing_competency2': forms.Select(choices=Supplier_details.MANUFACTURING_COMPETENCY_CHOICES),

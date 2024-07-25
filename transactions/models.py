@@ -219,6 +219,7 @@ class Demand(models.Model):
     end_date = models.DateTimeField(blank=True, null=True)
     industry = models.CharField(max_length=200, blank=True, null=True)
     file = models.FileField(upload_to='demand_files/', blank=True, null=True)
+    supplier_id = models.IntegerField(default=0)
     quote_id = models.IntegerField(default=0)
     status = models.CharField(max_length=50, blank=True, null=True ,choices=Demand_STATUS)
     is_deleted = models.BooleanField(default=False)

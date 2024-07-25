@@ -120,7 +120,7 @@ class SupplierDeleteView(View):
 
 # used to view a supplier's profile
 class SupplierView(View):
-    def get(self, request, name):
+    def get(self, request, name = ''):
         supplierobj = get_object_or_404(Supplier, name=name)
         bill_list = PurchaseBill.objects.filter(supplier=supplierobj)
         page = request.GET.get('page', 1)
@@ -470,8 +470,8 @@ class DemandListStatusView(LoginRequiredMixin, ListView):
     template_name = "demand/demand_list.html"
     paginate_by = 10
     def get_queryset(self):
-        user = self.request.user
-        return Demand.objects.filter(user=user, is_deleted=False, status='Approved')
+        user = self.request.user.id
+        return Demand.objects.filter(is_deleted=False, status='Approved', supplier_id= user)
 
 
 
@@ -482,7 +482,19 @@ class DemandListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         if user.is_staff:
-            return Demand.objects.filter(end_date__gte=timezone.now(), quote_id=0, is_deleted=False)
+            return Demand.objects.filter(end_date__gte=timezone.now(), quote_id=0, is_deleted=False).order_by('-pk')
+        else:
+            return Demand.objects.filter(user=user, is_deleted=False)
+
+
+class DemandListApprovedView(LoginRequiredMixin, ListView):
+    model = Demand
+    template_name = "demand/demand_list.html"
+    paginate_by = 10
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Demand.objects.filter(end_date__gte=timezone.now(), quote_id=0, is_deleted=False).order_by('-pk')
         else:
             return Demand.objects.filter(user=user, is_deleted=False)
 
@@ -592,6 +604,7 @@ class QuoteCreateView(SuccessMessageMixin, CreateView):
         quote_price = request.POST.get('quote_price')
         note = request.POST.get('note')
         pk = self.kwargs.get('pk')
+        print(supplier_id, quote_price, note, pk)
         demand = Demand.objects.get(pk=pk)
         print(demand)
         supplier_details = Supplier_details.objects.get(user=supplier_id)
@@ -655,6 +668,7 @@ class QuoteStatusUpdateView(ListView):
             quote.status = 'Approved'
             demand.status = "Approved"
             demand.quote_id = pk
+            demand.supplier_id = self.request.user.id
             demand.save()
         elif status == 'Rejected':
             quote.status = 'Rejected'

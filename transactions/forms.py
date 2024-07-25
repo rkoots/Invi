@@ -127,18 +127,36 @@ class SelectCustomer(forms.ModelForm):
         model = Customer
         fields = ['Name','type_of_business','Address','phone','email','EORI_number','VAT_number','is_deleted', 'user']
 
+
+from django import forms
+from .models import Demand
+
 class SelectDemand(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SelectDemand, self).__init__(*args, **kwargs)
+
         if 'initial' in kwargs and 'quote_currency' in kwargs['initial']:
             self.fields['quote_currency'].initial = kwargs['initial']['quote_currency']
+
         for field_name in self.fields:
             self.fields[field_name].widget.attrs.update({'class': 'form-control'})
+
         if self.instance and self.instance.is_deleted:
             self.fields['title'].widget.attrs.update({'disabled': 'disabled'})
+
     class Meta:
         model = Demand
-        fields = ['user','title','nda_required','quote_currency','request_reason','parts','end_date','industry','is_deleted','rfq_desc','file']
+        fields = [
+            'user', 'title', 'nda_required', 'quote_currency', 'request_reason', 'parts',
+            'end_date', 'industry', 'is_deleted', 'rfq_desc', 'file'
+        ]
+        widgets = {
+            'nda_required': forms.CheckboxInput(attrs={'class': 'form-check-input'}),  # Ensure NDA required is a checkbox with proper class
+            'is_deleted': forms.HiddenInput(),  # Hide is_deleted field
+        }
+
+
+
 
 
 class DemandPartsForm(forms.ModelForm):

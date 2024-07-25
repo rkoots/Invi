@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SupplierDetailsForm, UserRegistrationForm, SelectCustomer
 from .models import Supplier_details
 from transactions.models import Customer
@@ -9,14 +9,19 @@ from django.views.generic import (
 )
 from django.contrib.messages.views import SuccessMessageMixin
 
-class CreateSupplier(SuccessMessageMixin, CreateView):                                 # createview class to add new stock, mixin used to display message
-    model = Supplier_details                                                                       # setting 'Stock' model as model
-    form_class = SupplierDetailsForm                                                              # setting 'StockForm' form as form
-    template_name = "register_supplier.html"                                                   # 'edit_stock.html' used as the template
-    success_url = '/'                                                          # redirects to 'inventory' page in the url after submitting the form
-    success_message = "Account has been created successfully"                             # displays message when form is submitted
+class CreateSupplier(SuccessMessageMixin, CreateView):
+    model = Supplier_details
+    form_class = SupplierDetailsForm
+    template_name = "register_supplier.html"
+    success_url = '/'  # Redirects to home page after submitting the form
+    success_message = "Manufacturer account has been created successfully"
 
-    def get_context_data(self, **kwargs):                                               # used to send additional context
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # Pass the user to the form
+        return kwargs
+
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["session_user_id"] = self.request.session.get('session_user_id')
         context["session_username"] = self.request.session.get('session_username')
@@ -24,7 +29,11 @@ class CreateSupplier(SuccessMessageMixin, CreateView):                          
         context["session_last_name"] = self.request.session.get('session_last_name')
         context["session_email"] = self.request.session.get('session_email')
         context["session_is_staff"] = self.request.session.get('session_is_staff')
+        print(context)
         return context
+    def form_invalid(self, form):
+        print("Form errors:", form.errors)
+        return super().form_invalid(form)
 
 
 def register(request):
@@ -58,9 +67,15 @@ class CreateCustomer(SuccessMessageMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["session_user_id"] = self.request.session.get('session_user_id')
+        context["session_username"] = self.request.session.get('session_username')
+        context["session_first_name"] = self.request.session.get('session_first_name')
+        context["session_last_name"] = self.request.session.get('session_last_name')
+        context["session_email"] = self.request.session.get('session_email')
+        context["session_is_staff"] = self.request.session.get('session_is_staff')
         context["title"] = 'New Customer'
         context["savebtn"] = 'Add Customer'
         return context
+
 
 
 def ViewProfileDetails(request):

@@ -9,10 +9,15 @@ from .models import (
     SaleBillDetails,
     Demand,
     Customer,
-    Quote
+    Quote,
+    Supplier_details,
+    DemandParts
+
 )
 
 admin.site.register(Supplier)
+admin.site.register(Supplier_details)
+admin.site.register(DemandParts)
 admin.site.register(PurchaseBill)
 admin.site.register(PurchaseItem)
 admin.site.register(PurchaseBillDetails)

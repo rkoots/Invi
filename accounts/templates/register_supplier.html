@@ -136,17 +136,26 @@
                         <div class="invalid-feedback">{{ error }}</div>
                         {% endfor %}
                     </div>
+
                     <div class="form-group">
-                        <label for="id_yearly_turnover">Yearly Turnover:</label>
-                        <input type="text" name="yearly_turnover" class="form-control{% if form.yearly_turnover.errors %} is-invalid{% endif %}" id="id_yearly_turnover" value="{{ form.yearly_turnover.value|default_if_none:'' }}">
-                        {% for error in form.yearly_turnover.errors %}
+                        <label for="id_turnover_per_year">Certificate:</label>
+                        <select name="turnover_per_year" class="form-control{% if form.turnover_per_year.errors %} is-invalid{% endif %}" id="id_turnover_per_year">
+                            {% for value, label in form.turnover_per_year.field.choices %}
+                            <option value="{{ value }}" {% if value == form.turnover_per_year.value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        {% for error in form.turnover_per_year.errors %}
                         <div class="invalid-feedback">{{ error }}</div>
                         {% endfor %}
                     </div>
                     <div class="form-group">
-                        <label for="id_tax_number">Tax Number:</label>
-                        <input type="text" name="tax_number" class="form-control{% if form.tax_number.errors %} is-invalid{% endif %}" id="id_tax_number" value="{{ form.tax_number.value|default_if_none:'' }}">
-                        {% for error in form.tax_number.errors %}
+                        <label for="id_certificates">Certificate:</label>
+                        <select name="certificates" class="form-control{% if form.certificates.errors %} is-invalid{% endif %}" id="id_certificates">
+                            {% for value, label in form.certificates.field.choices %}
+                            <option value="{{ value }}" {% if value == form.certificates.value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        {% for error in form.certificates.errors %}
                         <div class="invalid-feedback">{{ error }}</div>
                         {% endfor %}
                     </div>
