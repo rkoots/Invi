@@ -1131,4 +1131,10 @@ a.article-title:hover {
   }
 }
 
+.fixed-top {
+    z-index: 1030; /* Higher than other elements */
+}
 
+.pt-top {
+     padding-top: 11rem
+ }

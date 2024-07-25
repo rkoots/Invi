@@ -43,20 +43,29 @@
                     </svg>
                 </a>
                 {% else %}
-                <form method="POST" class="login-form">
-                    {% csrf_token %}
-                    <fieldset class="form-group">
-                        <h2>Please Sign In</h2>
-                        {{ form }}
-                        <button class="cta" type="submit">
-                            <span>Login</span>
-                            <svg width="15px" height="10px" viewBox="0 0 13 10">
-                                <path d="M1,5 L11,5"></path>
-                                <polyline points="8 1 12 5 8 9"></polyline>
-                            </svg>
-                        </button>
-                    </fieldset>
-                </form>
+                <div class="container d-flex justify-content-center align-items-center min-vh-100">
+                    <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
+                        <div class="card-body">
+                            <h2 class="card-title text-center mb-4">Please Sign In</h2>
+                            <form method="POST" class="login-form">
+                                {% csrf_token %}
+                                <fieldset class="form-group">
+                                    {{ form|crispy }}
+                                    <div class="d-grid mt-3">
+                                        <button class="btn btn-primary" type="submit">
+                                            Login
+                                            <svg width="15px" height="10px" viewBox="0 0 13 10" class="ms-2">
+                                                <path d="M1,5 L11,5"></path>
+                                                <polyline points="8 1 12 5 8 9"></polyline>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 {% endif %}
             </div>
         </div>

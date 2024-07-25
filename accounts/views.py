@@ -72,7 +72,8 @@ def ViewProfileDetails(request):
         if supplier:
             context['supplier'] = supplier
     else:
-        customer = Customer.objects.filter(user=request.user).first()
+        print(request.user.id, Customer.objects.values())
+        customer = Customer.objects.filter(user=request.user.id).first()
         print(customer)
         if customer:
             context['customer'] = customer

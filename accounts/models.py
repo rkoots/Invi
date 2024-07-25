@@ -165,6 +165,7 @@ class Supplier_details(models.Model):
         ('92', 'Trade Fair / Technical Speech'),
         ('96', 'Other'),
     ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     companyname = models.CharField(max_length=40, blank=True, null=True)
     phone = models.CharField(max_length=12, unique=True)

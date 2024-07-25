@@ -3,16 +3,20 @@ from .models import Supplier_details
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from transactions.models import Customer
+from django import forms
+from .models import Supplier_details
 
 class UserRegistrationForm(UserCreationForm):
     is_staff = forms.ChoiceField(choices=[(1, 'Supplier'), (0, 'Buyer')], widget=forms.RadioSelect)
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'password1', 'password2', 'email','is_staff']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+        self.fields['email'].required = True
 
-
-from django import forms
-from .models import Supplier_details
 
 class SupplierDetailsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
