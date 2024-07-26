@@ -17,6 +17,11 @@ from accounts.models import Supplier_details
 from inventory.models import Stock
 from django.contrib.auth.models import User
 
+
+from django import forms
+from .models import Demand
+
+
 # form used to select a supplier
 class SelectSupplierForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -128,8 +133,7 @@ class SelectCustomer(forms.ModelForm):
         fields = ['Name','type_of_business','Address','phone','email','EORI_number','VAT_number','is_deleted', 'user']
 
 
-from django import forms
-from .models import Demand
+
 
 class SelectDemand(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -151,11 +155,10 @@ class SelectDemand(forms.ModelForm):
             'end_date', 'industry', 'is_deleted', 'rfq_desc', 'file'
         ]
         widgets = {
-            'nda_required': forms.CheckboxInput(attrs={'class': 'form-check-input'}),  # Ensure NDA required is a checkbox with proper class
+            'end_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),  # Set the widget for date picking
+            'nda_required': forms.Select(choices=[(True, 'Yes'), (False, 'No')]),  # Change to dropdown with Yes/No
             'is_deleted': forms.HiddenInput(),  # Hide is_deleted field
         }
-
-
 
 
 

@@ -54,9 +54,9 @@ from django.forms import formset_factory
 from django.utils import timezone
 
 class SupplierListView(ListView):
-    model = Supplier
+    model = Supplier_details
     template_name = "suppliers/suppliers_list.html"
-    queryset = Supplier.objects.filter()
+    queryset = Supplier_details.objects.filter()
     paginate_by = 10
 
 class SupplierCreateUpdateView(SuccessMessageMixin, CreateView, UpdateView):
@@ -120,20 +120,11 @@ class SupplierDeleteView(View):
 
 # used to view a supplier's profile
 class SupplierView(View):
-    def get(self, request, name = ''):
-        supplierobj = get_object_or_404(Supplier, name=name)
-        bill_list = PurchaseBill.objects.filter(supplier=supplierobj)
-        page = request.GET.get('page', 1)
-        paginator = Paginator(bill_list, 10)
-        try:
-            bills = paginator.page(page)
-        except PageNotAnInteger:
-            bills = paginator.page(1)
-        except EmptyPage:
-            bills = paginator.page(paginator.num_pages)
+    def get(self, request, pk = ''):
+        supplierobj = get_object_or_404(Supplier_details, pk=pk)
+        paginate_by = 5
         context = {
             'supplier'  : supplierobj,
-            'bills'     : bills
         }
         return render(request, 'suppliers/supplier.html', context)
 
@@ -415,7 +406,7 @@ class CustomerListView(ListView):
     model = Customer
     template_name = "customer/customer_list.html"
     queryset = Customer.objects.filter(is_deleted=False)
-    paginate_by = 10
+    paginate_by = 5
 
 class CustomerCreateView(SuccessMessageMixin, CreateView):
     model = Customer
@@ -460,8 +451,9 @@ class CustomerDeleteView(View):
         return redirect('customers-list')
 
 class CustomerView(View):
-    def get(self, request, name):
-        customer = get_object_or_404(Customer, Name=name)
+    def get(self, request, pk):
+        customer = get_object_or_404(Customer, pk=pk)
+        print(customer)
         return render(request, 'customer/customer.html', {'customer' : customer})
 
 

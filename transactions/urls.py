@@ -7,7 +7,7 @@ urlpatterns = [
     path('suppliers/new', views.SupplierCreateUpdateView.as_view(), name='new-supplier'),
     path('suppliers/<pk>/edit', views.SupplierCreateUpdateView.as_view(), name='edit-supplier'),
     path('suppliers/<pk>/delete', views.SupplierDeleteView.as_view(), name='delete-supplier'),
-    path('supplier/<name>', views.SupplierView.as_view(), name='supplier'),
+    path('supplier/<pk>', views.SupplierView.as_view(), name='supplier'),
 
     path('purchases/', views.PurchaseView.as_view(), name='purchases-list'), 
     path('purchases/new', views.SelectSupplierView.as_view(), name='select-supplier'), 
@@ -25,7 +25,7 @@ urlpatterns = [
     path('customers/new', views.CustomerCreateView.as_view(), name='new-customer'),
     path('customers/<pk>/edit', views.CustomerUpdateView.as_view(), name='edit-customer'),
     path('customers/<pk>/delete', views.CustomerDeleteView.as_view(), name='delete-customer'),
-    path('customers/<name>', views.CustomerView.as_view(), name='customer'),
+    path('customers/<pk>', views.CustomerView.as_view(), name='customer'),
 
     path('demand/', views.DemandListView.as_view(), name='demand-list'),
     path('demand/approved', views.DemandListView.as_view(), name='demand-list-Approved'),

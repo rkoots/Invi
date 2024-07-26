@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
-{% block title %} Demand List {% endblock title %}
+{% block title %} RFQ List {% endblock title %}
 {% block content %}
     <div class="row" style="color: #ea2088; font-style: bold; font-size: 2rem;">
-        <div class="col-md-8">RFQ List</div>
+        <h5 class="mb-4">List of RFQ's</h5>
         <div class="col-md-4">
             {% if not request.user.is_staff %}
             <div style="float:right;"> <a class="btn ghost-blue" href="{% url 'new-demand' %}">Add New Demand</a></div>

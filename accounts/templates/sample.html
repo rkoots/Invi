@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %} Manufacturer List {% endblock title %}
+{% block content %}
+<main class="main-wrapper ms-sm-auto py-4 px-md-4 border-start">
+    <div class="row my-4">
+        <div class="col-lg-12 col-12">
+            <div class="custom-block bg-white">
+                <h5 class="mb-4">Manufacturer List</h5>
+                <div class="table-responsive">
+                    <table class="account-table table">
+                        <thead class="thead-inverse align-middle">
+                            <tr>
+                                <th width="15%">Company Name</th>
+                                <th width="10%">Phone</th>
+                                <th width="15%">Address</th>
+                                <th width="10%">City</th>
+                                <th width="10%">State</th>
+                                <th width="10%">Country</th>
+                                <th width="20%">Action</th>
+                            </tr>
+                        </thead>
+                        {% if object_list %}
+                            <tbody>
+                                {% for supplier in object_list %}
+                                <tr>
+                                    <td>
+                                        <h6><a href="{% url 'supplier-detail' supplier.pk %}">{{ supplier.companyname }}</a> </h6>
+                                    </td>
+                                    <td class="align-middle"> {{ supplier.phone }} </td>
+                                    <td class="align-middle"> {{ supplier.address }} </td>
+                                    <td class="align-middle"> {{ supplier.city }} </td>
+                                    <td class="align-middle"> {{ supplier.state }} </td>
+                                    <td class="align-middle"> {{ supplier.country }} </td>
+                                    <td class="align-middle">
+                                        <div class="align-middle">
+                                            <a href="{% url 'edit-supplier' supplier.pk %}" class="badge text-bg-success">Edit</a>
+                                            <a href="{% url 'delete-supplier' supplier.pk %}" class="badge text-bg-danger">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                    <

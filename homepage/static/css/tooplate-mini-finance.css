@@ -783,11 +783,18 @@ strong {
 }
 
 .custom-block-profile strong {
-  min-width: 125px;
+  min-width: 275px;
   margin-right: 10px;
 }
 
+.custom-checkbox .form-check-input:checked {
+    background-color: #007bff; /* Bootstrap primary color or any color you prefer */
+    border-color: #007bff;
+}
 
+.custom-checkbox .form-check-input {
+    margin-right: 0.5rem;
+}
 /*---------------------------------------
   SEARCH, PROFILE FORM               
 -----------------------------------------*/

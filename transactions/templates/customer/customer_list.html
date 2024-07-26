@@ -2,14 +2,13 @@
 {% load widget_tweaks %}
 {% block title %} Customer List {% endblock title %}
 {% block content %}
-    <div class="row" style="color: #ea2088; font-style: bold; font-size: 3rem;">
-        <div class="col-md-8">Customer List</div>
-        <div class="col-md-4">               
-            <div style="float:right;"> <a class="btn ghost-blue" href="{% url 'new-customer' %}">Add New Customer</a> </div>
-        </div>
-    </div>
-    <br>
-    <table class="table table-css">
+<main class="main-wrapper ms-sm-auto py-4 px-md-4 border-start">
+    <div class="row my-4">
+        <div class="col-lg-12 col-12">
+            <div class="custom-block bg-white">
+                <h5 class="mb-4">Customers List</h5>
+                <div class="table-responsive">
+    <table class="account-table table">
         <thead class="thead-inverse align-middle">
             <tr>
                 <th width="20%">Name</th>
@@ -26,7 +25,7 @@
             {% for customer in object_list %}
             <tr>
                 <td>
-                    <h3> <a href="{% url 'customer' customer.Name %}">{{ customer.Name }}</a> </h3>
+                    <h6><a href="{% url 'customer' customer.pk %}">{{ customer.Name }}</a> </h6>
                 </td>
                 <td class="align-middle"> {{ customer.type_of_business }} </td>
                 <td class="align-middle"> {{ customer.phone }} </td>
@@ -35,14 +34,20 @@
                 <td class="align-middle"> {{ customer.VAT_number }} </td>
                 <td class="align-middle">
                     <div class="align-middle">
-                        <a href="{% url 'edit-customer' customer.pk %}" class="btn ghost-button">Edit Details</a>
-                        <a href="{% url 'delete-customer' customer.pk %}" class="btn ghost-red">Delete Customer</a>
+                        <a href="{% url 'edit-customer' customer.pk %}" class="badge text-bg-success">Edit Details</a>
+                        <a href="{% url 'delete-customer' customer.pk %}" class="badge text-bg-danger">Delete Customer</a>
                     </div>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="align-middle">
         {% if is_paginated %}
             {% if page_obj.has_previous %}
@@ -68,4 +73,5 @@
     <br><br><br><br><br><br><br><br>
     <div style="color: #ea2088; font-style: bold; font-size: 1.5rem; text-align: center;">WOW, SUCH EMPTY</div>
 {% endif %}
+</main>
 {% endblock content %}
