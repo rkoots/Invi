@@ -34,8 +34,8 @@
                 <td class="align-middle"> {{ customer.VAT_number }} </td>
                 <td class="align-middle">
                     <div class="align-middle">
-                        <a href="{% url 'edit-customer' customer.pk %}" class="badge text-bg-success">Edit Details</a>
-                        <a href="{% url 'delete-customer' customer.pk %}" class="badge text-bg-danger">Delete Customer</a>
+                        <a href="{% url 'edit-customer' customer.pk %}" class="badge text-bg-success">+ Edit</a><br/>
+                        <a href="{% url 'delete-customer' customer.pk %}" class="badge text-bg-danger">- Delete</a>
                     </div>
                 </td>
             </tr>

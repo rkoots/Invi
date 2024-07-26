@@ -467,17 +467,46 @@ class DemandListStatusView(LoginRequiredMixin, ListView):
 
 
 
+
 class DemandListView(LoginRequiredMixin, ListView):
     model = Demand
     template_name = "demand/demand_list.html"
     paginate_by = 10
+
     def get_queryset(self):
         user = self.request.user
-        if user.is_staff:
-            return Demand.objects.filter(end_date__gte=timezone.now(), quote_id=0, is_deleted=False).order_by('-pk')
-        else:
-            return Demand.objects.filter(user=user, is_deleted=False)
+        sort = self.request.GET.get('sort', '')
+        industry_id = self.request.GET.get('industry', '')
 
+        if user.is_staff:
+            queryset = Demand.objects.filter(end_date__gte=timezone.now(), quote_id=0, is_deleted=False)
+        else:
+            queryset = Demand.objects.filter(user=user, is_deleted=False)
+
+        if industry_id:
+            queryset = queryset.filter(industry_id=industry_id)
+
+        if sort == 'date_asc':
+            queryset = queryset.order_by('end_date')
+        elif sort == 'date_desc':
+            queryset = queryset.order_by('-end_date')
+        elif sort == 'parts_asc':
+            queryset = queryset.order_by('parts')
+        elif sort == 'parts_desc':
+            queryset = queryset.order_by('-parts')
+        if sort == 'cr_date_asc':
+            queryset = queryset.order_by('created_at')
+        elif sort == 'cr_date_desc':
+            queryset = queryset.order_by('-created_at')
+        else:
+            queryset = queryset.order_by('-pk')
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sort'] = self.request.GET.get('sort', '')
+        return context
 
 class DemandListApprovedView(LoginRequiredMixin, ListView):
     model = Demand
