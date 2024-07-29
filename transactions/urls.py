@@ -29,13 +29,14 @@ urlpatterns = [
 
     path('demand/', views.DemandListView.as_view(), name='demand-list'),
     path('demand/approved', views.DemandListView.as_view(), name='demand-list-Approved'),
-    path('demand/status', views.DemandListStatusView.as_view(), name='demand-status-list'),
+    path('demand/status/<str:status>', views.DemandListStatusView.as_view(), name='demand-status-list'),
     path('demand/new', views.DemandCreateView.as_view(), name='new-demand'),
     path('demand/<pk>/edit', views.DemandUpdateView.as_view(), name='edit-demand'),
     path('demand/<pk>/delete', views.DemandDeleteView.as_view(), name='delete-demand'),
     path('demand/<pk>', views.DemandView.as_view(), name='demand'),
-
     path('demand_to_quote/', views.DemandQuoteListView.as_view(), name='demand-quote-list'),
+
+
     path('quote/', views.QuoteListView.as_view(), name='quote-list'),
     path('quote/new', views.QuoteCreateView.as_view(), name='new-quote'),
     path('quote/new/<pk>', views.QuoteCreateView.as_view(), name='new-quote'),
@@ -43,6 +44,7 @@ urlpatterns = [
     path('quote/<pk>/delete', views.QuoteDeleteView.as_view(), name='delete-quote'),
     path('quote/<pk>', views.QuoteView.as_view(), name='quote'),
     path('quote/<int:pk>/update-status/<str:status>/', views.QuoteStatusUpdateView.as_view(), name='quote-update-status'),
+    path('demand/<int:pk>/update-status/<str:status>/', views.DemandStatusUpdateView.as_view(), name='demand-update-status'),
 
 
 ]

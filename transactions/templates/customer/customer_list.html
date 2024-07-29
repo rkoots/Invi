@@ -3,12 +3,14 @@
 {% block title %} Customer List {% endblock title %}
 {% block content %}
 <main class="main-wrapper ms-sm-auto py-4 px-md-4 border-start">
+
     <div class="row my-4">
         <div class="col-lg-12 col-12">
             <div class="custom-block bg-white">
                 <h5 class="mb-4">Customers List</h5>
                 <div class="table-responsive">
     <table class="account-table table">
+        {% render_field filter.form.Name class="input" placeholder="Search by Customer" %}
         <thead class="thead-inverse align-middle">
             <tr>
                 <th width="20%">Name</th>

@@ -5,12 +5,21 @@
 {{ demand.part_name }}'s Demand
 {% endblock %}
 {% block content %}
+{% if demand.status == 'Approved' %}
+<a href="{% url 'demand-update-status' demand.pk 'Production' %}" class="btn ghost-green" style="float:right;">+ Start Production</a>
+{% endif %}
+{% if demand.status == 'Production' %}
+<a href="{% url 'demand-update-status' demand.pk 'Complete' %}" class="btn ghost-green" style="float:right;">+ Complete RFQ</a><br/>
+{% endif %}
 
 <div class="courses-container">
     <div class="course">
         <div class="course-preview">
             <h2>{{demand.title}}</h2>
             <h4>{{demand.user}}</h4>
+            {% if demand.status == 'Production' %}
+            <a href="#" class="badge text-bg-success" style="float:right;">In Production</a>
+            {% endif %}
         </div>
         <div class="course-info">
             <div class="progress-container">
@@ -25,7 +34,30 @@
                         <h6>{{ demand.end_date|date:"Y-m-d" }} UTC</h6>
                         <h5>{{ demand.industry }}</h5>
                         <h5>{{ demand.request_reason }}</h5>
-                        <a href="#">{{ demand.file }}</a>
+                        <a href="#" data-toggle="modal" data-target="#filePreviewModal{{ demand.id }}">
+                            {{ demand.file }}
+                        </a>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="filePreviewModal{{ demand.id }}" tabindex="-1" role="dialog" aria-labelledby="filePreviewModalLabel{{ demand.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="filePreviewModalLabel{{ demand.id }}">File Preview</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img src="{{ demand.file.url }}" class="img-fluid" alt="Preview">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </td>
                     <td style="width: 33%;">
                         <h5>{{ demand.rfq_desc }}</h5>
@@ -61,13 +93,35 @@
                         {{ eachdemand.Part_desc }}
                     </td>
                     <td style="width: 33%;" rowspan="2">
-                        <button class="Btn">
-                            <svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path>
-                            </svg>
-                            <span class="icon2"></span>
-                            <span class="tooltip">{{ eachdemand.file }}</span>
-                        </button>
+
+                        <a href="#" data-toggle="modal" data-target="#filePreviewModal{{ eachdemand.id }}">
+                            <button class="Btn">
+                                <svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path>
+                                </svg>
+                                <span class="icon2"></span>
+                                <span class="tooltip">{{ eachdemand.file }}</span>
+                            </button>
+                        </a>
+                        <div class="modal fade" id="filePreviewModal{{ eachdemand.id }}" tabindex="-1" role="dialog" aria-labelledby="filePreviewModalLabel{{ demand.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="filePreviewModalLabel{{ eachdemand.id }}">File Preview</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img src="{{ eachdemand.file.url }}" class="img-fluid" alt="Preview">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </td>
                 </tr>
                 <tr>

@@ -1,5 +1,6 @@
 import os,sys
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.views.generic import (
     View, 
     ListView,
@@ -28,6 +29,9 @@ from accounts.models import (
     Supplier_details
 )
 
+from django_filters.views import FilterView
+from .filters import CustomerFilter
+
 from .forms import (
     SelectSupplierForm, 
     PurchaseItemFormset,
@@ -39,8 +43,11 @@ from .forms import (
     SelectCustomer,
     SelectDemand,
     SelectQuote,
-    DemandPartsForm
+    DemandPartsForm,
 )
+
+from accounts.forms import SupplierDetailsForm
+
 from inventory.models import Stock
 from django.db.models import Count
 from django.views.generic.edit import CreateView, UpdateView
@@ -60,8 +67,8 @@ class SupplierListView(ListView):
     paginate_by = 10
 
 class SupplierCreateUpdateView(SuccessMessageMixin, CreateView, UpdateView):
-    model = Supplier
-    form_class = SupplierForm
+    model = Supplier_details
+    form_class = SupplierDetailsForm
     success_url = '/transactions/suppliers'
     template_name = "suppliers/edit_supplier.html"
 
@@ -90,7 +97,7 @@ class SupplierCreateUpdateView(SuccessMessageMixin, CreateView, UpdateView):
     def get_object(self, queryset=None):
         # Return the object for updating if pk is present
         if 'pk' in self.kwargs:
-            return get_object_or_404(Supplier, pk=self.kwargs['pk'])
+            return get_object_or_404(Supplier_details, pk=self.kwargs['pk'])
         return None  # For create view
 
     def form_valid(self, form):
@@ -108,11 +115,11 @@ class SupplierDeleteView(View):
     success_message = "Manufacturer has been deleted successfully"
 
     def get(self, request, pk):
-        supplier = get_object_or_404(Supplier, pk=pk)
+        supplier = get_object_or_404(Supplier_details, pk=pk)
         return render(request, self.template_name, {'object' : supplier})
 
     def post(self, request, pk):  
-        supplier = get_object_or_404(Supplier, pk=pk)
+        supplier = get_object_or_404(Supplier_details, pk=pk)
         supplier.is_deleted = True
         supplier.save()                                               
         messages.success(request, self.success_message)
@@ -128,7 +135,8 @@ class SupplierView(View):
         }
         return render(request, 'suppliers/supplier.html', context)
 
-    # shows the list of bills of all purchases
+
+
 class PurchaseView(ListView):
     model = PurchaseBill
     template_name = "purchases/purchases_list.html"
@@ -402,8 +410,9 @@ class SaleBillView(View):
 
 
 
-class CustomerListView(ListView):
+class CustomerListView(ListView,FilterView):
     model = Customer
+    filterset_class = CustomerFilter
     template_name = "customer/customer_list.html"
     queryset = Customer.objects.filter(is_deleted=False)
     paginate_by = 5
@@ -453,7 +462,6 @@ class CustomerDeleteView(View):
 class CustomerView(View):
     def get(self, request, pk):
         customer = get_object_or_404(Customer, pk=pk)
-        print(customer)
         return render(request, 'customer/customer.html', {'customer' : customer})
 
 
@@ -462,8 +470,10 @@ class DemandListStatusView(LoginRequiredMixin, ListView):
     template_name = "demand/demand_list.html"
     paginate_by = 10
     def get_queryset(self):
+        status = self.kwargs.get('status')  # Get the status from the URL parameters
         user = self.request.user.id
-        return Demand.objects.filter(is_deleted=False, status='Approved', supplier_id= user)
+        print(status)
+        return Demand.objects.filter(is_deleted=False, status=status, supplier_id=user)
 
 
 
@@ -546,11 +556,8 @@ class DemandCreateView(SuccessMessageMixin, CreateView):
 
             # Handle the DemandParts forms
             num_parts = int(request.POST.get('parts', 0))
-            print("hererere == ",num_parts)
             PartFormSet = formset_factory(DemandPartsForm, extra=num_parts)
-            print(PartFormSet)
             parts_formset = PartFormSet(request.POST, request.FILES)
-            print(parts_formset)
             if parts_formset.is_valid():
                 for part_form in parts_formset:
                     if part_form.cleaned_data:
@@ -599,11 +606,26 @@ class DemandView(View):
         btn_class = 'ghost-blue'
         return render(request, 'demand/demand.html', {'demand' : demand, 'quotes' : quote, 'demanddetails':demanddetails, 'btn_class' : btn_class})
 
+
+class DemandProduce(View):
+    def get(self, request, pk):
+        demand = get_object_or_404(Demand, pk=pk)
+        demand.status = 'Production'
+        btn_class = 'ghost-blue'
+        return render(request, 'demand/demand.html', {'demand' : demand, 'quotes' : quote, 'demanddetails':demanddetails, 'btn_class' : btn_class})
+
+
+
 class QuoteListView(ListView):
     model = Quote
     template_name = "quote/quote_list.html"
     queryset = Quote.objects.filter(is_deleted=False)
     paginate_by = 10
+
+    def get_queryset(self):
+        user = self.request.user.id
+        queryset = Quote.objects.filter(is_deleted=False, supplier = user )
+        return queryset
 
 class QuoteCreateView(SuccessMessageMixin, CreateView):
     model = Quote
@@ -625,18 +647,14 @@ class QuoteCreateView(SuccessMessageMixin, CreateView):
         quote_price = request.POST.get('quote_price')
         note = request.POST.get('note')
         pk = self.kwargs.get('pk')
-        print(supplier_id, quote_price, note, pk)
         demand = Demand.objects.get(pk=pk)
-        print(demand)
         supplier_details = Supplier_details.objects.get(user=supplier_id)
-        print(supplier_details)
         quote = Quote(
             demand=demand,
             supplier=supplier_details,
             quote_price=quote_price,
             note=note
         )
-        print(quote)
         quote.save()
         messages.success(request, self.success_message)
         return redirect(self.success_url)
@@ -691,6 +709,11 @@ class QuoteStatusUpdateView(ListView):
             demand.quote_id = pk
             demand.supplier_id = self.request.user.id
             demand.save()
+            reject_others_quotes = Quote.objects.filter(demand=quote.demand.id, status__isnull=True)
+            for rejectquote in reject_others_quotes:
+                print(rejectquote)
+                rejectquote.status = 'Rejected'
+                rejectquote.save()
         elif status == 'Rejected':
             quote.status = 'Rejected'
             btn_class = 'ghost-red'
@@ -702,5 +725,17 @@ class QuoteStatusUpdateView(ListView):
             'btn_class' : btn_class,
             'demanddetails':demanddetails,
         }
-        return render(request, 'demand/demand.html', context)
+        return redirect(reverse('demand', kwargs={'pk': demand.id}))
+
+
+class DemandStatusUpdateView(ListView):
+    def get(self, request, pk, status):
+        demand = get_object_or_404(Demand, pk=pk)
+        if status == 'Production' and demand.status == 'Approved':
+            demand.status = 'Production'
+            demand.save()
+        if status == 'Completed' and demand.status == 'Production' :
+            demand.status = 'Completed'
+            demand.save()
+        return redirect(reverse('demand', kwargs={'pk': demand.id}))
 

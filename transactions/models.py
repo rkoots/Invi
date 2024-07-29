@@ -248,7 +248,7 @@ class DemandParts(models.Model):
     Part_desc = models.CharField(max_length=200, blank=True, null=True)
     technology =models.CharField(max_length=50, choices=technology_TYPES)
     Material =models.CharField(max_length=50, choices=Material_TYPES)
-    file = models.FileField(upload_to='demand_files/', blank=True, null=True)
+    file = models.FileField(upload_to='media/demand_files/', blank=True, null=True)
     quantity = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
