@@ -289,3 +289,6 @@ class RfqBill(models.Model):
 
     def __str__(self):
         return "Bill no: " + str(self.billno)
+
+    def get_items_list(self):
+        return DemandParts.objects.filter(demand=self.demand.id)

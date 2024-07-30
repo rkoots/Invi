@@ -231,10 +231,10 @@ class PurchaseDeleteView(SuccessMessageMixin, DeleteView):
 
 # shows the list of bills of all sales 
 class SaleView(ListView):
-    model = SaleBill
+    model = RfqBill
     template_name = "sales/sales_list.html"
     context_object_name = 'bills'
-    ordering = ['-time']
+    ordering = ['-created_at']
     paginate_by = 10
 
 # used to generate a bill object and save items
