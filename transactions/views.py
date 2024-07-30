@@ -236,6 +236,19 @@ class SaleView(ListView):
     context_object_name = 'bills'
     ordering = ['-created_at']
     paginate_by = 10
+    def get(self, request):
+        user = self.request.user
+        if self.request.user.is_staff:
+            supplier = Supplier_details.objects.filter(user=user).first()
+            rfq = RfqBill.objects.filter(supplier=supplier)
+            print(supplier,rfq)
+        else:
+            customer = Customer.objects.filter(user=user).first()
+            rfq = RfqBill.objects.filter(customer=customer)
+            print(customer,rfq)
+        context = {'bills':rfq}
+
+        return render(request, self.template_name, context)
 
 # used to generate a bill object and save items
 class SaleCreateView(View):
@@ -484,24 +497,23 @@ class DemandListStatusView(LoginRequiredMixin, ListView):
     template_name = "demand/demand_list.html"
     paginate_by = 10
     def get_queryset(self):
-        status = self.kwargs.get('status')  # Get the status from the URL parameters
+        status = self.kwargs.get('status')
         user = self.request.user.id
-        print(status)
-        return Demand.objects.filter(is_deleted=False, status=status, supplier_id=user)
-
-
-
+        if self.request.user.is_staff:
+            supplier_id = Supplier_details.objects.get(user=user).pk
+            demand = Demand.objects.filter(is_deleted=False, status=status, supplier_id=supplier_id)
+        else:
+            demand = Demand.objects.filter(is_deleted=False, status=status, user=user)
+        return demand
 
 class DemandListView(LoginRequiredMixin, ListView):
     model = Demand
     template_name = "demand/demand_list.html"
     paginate_by = 10
-
     def get_queryset(self):
         user = self.request.user
         sort = self.request.GET.get('sort', '')
         industry_id = self.request.GET.get('industry', '')
-
         if user.is_staff:
             queryset = Demand.objects.filter(end_date__gte=timezone.now(), quote_id=0, is_deleted=False)
         else:
@@ -542,9 +554,6 @@ class DemandListApprovedView(LoginRequiredMixin, ListView):
             return Demand.objects.filter(end_date__gte=timezone.now(), quote_id=0, is_deleted=False).order_by('-pk')
         else:
             return Demand.objects.filter(user=user, is_deleted=False)
-
-
-
 
 
 class DemandCreateView(SuccessMessageMixin, CreateView):
@@ -638,7 +647,8 @@ class QuoteListView(ListView):
 
     def get_queryset(self):
         user = self.request.user.id
-        queryset = Quote.objects.filter(is_deleted=False, supplier = user )
+        supplier = Supplier_details.objects.get(user=user).pk
+        queryset = Quote.objects.filter(is_deleted=False, supplier = supplier )
         return queryset
 
 class QuoteCreateView(SuccessMessageMixin, CreateView):
@@ -721,7 +731,7 @@ class QuoteStatusUpdateView(ListView):
             quote.status = 'Approved'
             demand.status = "Approved"
             demand.quote_id = pk
-            demand.supplier_id = self.request.user.id
+            demand.supplier_id = quote.supplier_id  # --- WRONGLY SUPPLIER ID Updated
             demand.save()
             reject_others_quotes = Quote.objects.filter(demand=quote.demand.id, status__isnull=True)
             for rejectquote in reject_others_quotes:
@@ -754,7 +764,7 @@ class DemandStatusUpdateView(ListView):
             if not RfqBill.objects.filter(demand = demand):
                 quote = get_object_or_404(Quote, pk=demand.quote_id)
                 supplier = get_object_or_404(Supplier_details, pk=demand.supplier_id)
-                customer = get_object_or_404(Customer, pk=demand.user.id)
+                customer = get_object_or_404(Customer, user=demand.user.id)
                 rfq_bill = RfqBill.objects.create(demand = demand, quote = quote, supplier = supplier, customer = customer )
         return redirect(reverse('demand', kwargs={'pk': demand.id}))
 

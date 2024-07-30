@@ -143,13 +143,12 @@
                         </a>
                     </li>
                     {% endif %}
-
-                    {% if request.user.is_superuser %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'sales-list' %}active{% endif %} " href="{% url 'sales-list' %}">
                             <i class="bi-cash me-2"></i> Sales Orders
                         </a>
                     </li>
+                    {% if request.user.is_superuser %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'new-sale' %}active{% endif %} " href="{% url 'new-sale' %}">
                             <i class="bi-cart-plus me-2"></i> New Outgoing Stock

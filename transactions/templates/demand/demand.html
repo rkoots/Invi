@@ -6,13 +6,25 @@
 {% endblock %}
 {% block content %}
 {% if demand.status == 'Approved' %}
+{% if request.user.is_staff %}
 <a href="{% url 'demand-update-status' demand.pk 'Production' %}" class="btn ghost-green" style="float:right;">+ Start Production</a>
+{% else %}
+<a href="#" class="btn ghost-green" style="float:right;">Approved</a>
+{% endif %}
 {% endif %}
 {% if demand.status == 'Production' %}
+{% if request.user.is_staff %}
 <a href="{% url 'demand-update-status' demand.pk 'Completed' %}" class="btn ghost-green" style="float:right;">+ Complete RFQ</a><br/>
+{% else %}
+<a href="#" class="btn ghost-green" style="float:right;">In Production</a>
+{% endif %}
 {% endif %}
 {% if demand.status == 'Completed' %}
+{% if request.user.is_staff %}
 <a href="{% url 'demand-update-status' demand.pk 'Completed' %}" class="btn ghost-green" style="float:right;">+ Generate Bill</a><br/>
+{% else %}
+<a href="#" class="btn ghost-green" style="float:right;">Completed</a>
+{% endif %}
 {% endif %}
 <div class="courses-container">
     <div class="course">
@@ -39,7 +51,7 @@
                         <h5>{{ demand.industry }}</h5>
                         <h5>{{ demand.request_reason }}</h5>
                         <a href="#" data-toggle="modal" data-target="#filePreviewModal{{ demand.id }}">
-                            {{ demand.file }}
+                            Preview RFQ File
                         </a>
 
                         <!-- Modal -->
@@ -157,9 +169,11 @@
     <div class="media">
         <div class="media-body">
             <h2 style="color:#ea2088;" class="account-heading">&nbsp;Q Id#{{ quote.pk }}</h2>
-            {% if not quote.status %}
+            {% if not quote.status and not request.user.is_staff %}
             <a href="{% url 'quote-update-status' quote.pk 'Approved' %}"  method="get"  class="btn ghost-button" style="float: right;">Approve</a>
             <a href="{% url 'quote-update-status' quote.pk 'Rejected'  %}"  method="get"  class="btn ghost-button" style="float: right;">Reject</a>
+            {%elif not quote.status and request.user.is_staff %}
+            <a class="btn {{ btn_class }}" style="float: right;" >Customer Action Pending</a>
             {% else %}
             <a class="btn {{ btn_class }}" style="float: right;" >{{ quote.status }}</a>
             {% endif %}

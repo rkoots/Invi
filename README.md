@@ -1,6 +1,6 @@
-# Invi - The Inventory Management System
+# ManufactureHub - The Supply Demand Management System
 
-Invi is a robust and efficient inventory management system built with Django. It allows users to add stock items, generate bills, and manage inventory seamlessly. All data is stored in a database and rendered in real-time, providing a smooth user experience.
+ManufactureHub is a robust and efficient Supply, Demand and inventory management system built with Django. It allows users to add stock items, generate bills, and manage inventory seamlessly. All data is stored in a database and rendered in real-time, providing a smooth user experience.
 
 ## Getting Started
 
@@ -15,8 +15,8 @@ Ensure you have Python and Django installed on your machine. If not, you can dow
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/invi.git
-   cd invi
+   git clone https://github.com/yourusername/ManufactureHub.git
+   cd ManufactureHub
    ```
 
 2. **Install Dependencies**
@@ -87,7 +87,7 @@ Follow the prompts to set the username, email, and password.
 
 ## Contributing
 
-We welcome contributions to enhance Invi. To contribute:
+We welcome contributions to enhance ManufactureHub. To contribute:
 
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature/your-feature`).
@@ -97,7 +97,7 @@ We welcome contributions to enhance Invi. To contribute:
 
 ## Licensing and Commercial Terms
 
-Invi is a commercial software product. Usage of this application is chargeable, and the source code is available under separate commercial terms. For licensing and purchasing details, please contact rajkumarv88@icloud.com.
+ManufactureHub is a commercial software product. Usage of this application is chargeable, and the source code is available under separate commercial terms. For licensing and purchasing details, please contact rajkumarv88@icloud.com.
 
 ## Contact
 
@@ -105,4 +105,4 @@ For any questions or feedback, please contact us at [rajkumarv88@icloud.com](mai
 
 ---
 
-With Invi, managing your inventory has never been easier. Get started today and experience a streamlined inventory management process!
+With ManufactureHub, managing your supply, demand and inventory has never been easier. Get started today and experience a streamlined inventory management process!
