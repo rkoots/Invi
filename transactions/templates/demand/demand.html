@@ -97,7 +97,7 @@
                         {{ eachdemand.Part_desc }}
                     </td>
                     <td style="width: 33%;" rowspan="2">
-
+                        {% if eachdemand.file %}
                         <a href="#" data-toggle="modal" data-target="#filePreviewModal{{ eachdemand.id }}">
                             <button class="Btn">
                                 <svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg">
@@ -107,6 +107,7 @@
                                 <span class="tooltip">{{ eachdemand.file }}</span>
                             </button>
                         </a>
+                        {% endif %}
                         <div class="modal fade" id="filePreviewModal{{ eachdemand.id }}" tabindex="-1" role="dialog" aria-labelledby="filePreviewModalLabel{{ demand.id }}" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
