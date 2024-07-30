@@ -87,6 +87,7 @@ class SaleBill(models.Model):
         total = sum(item.totalprice for item in saleitems)
         return total
 
+
 # Contains the sale stocks made
 class SaleItem(models.Model):
     billno = models.ForeignKey(SaleBill, on_delete=models.CASCADE, related_name='salebillno')
@@ -276,3 +277,15 @@ class Quote(models.Model):
     def __str__(self):
         return f"Demand #{self.id} - {self.demand.title}"
 
+
+class RfqBill(models.Model):
+    billno = models.AutoField(primary_key=True)
+    demand =  models.ForeignKey(Demand, on_delete=models.CASCADE, related_name='demand')
+    quote =  models.ForeignKey(Quote, on_delete=models.CASCADE, related_name='quote')
+    supplier =  models.ForeignKey(Supplier_details, on_delete=models.CASCADE, related_name='supplier_details')
+    customer =  models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "Bill no: " + str(self.billno)

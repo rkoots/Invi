@@ -83,13 +83,10 @@ def ViewProfileDetails(request):
     print(request.user.is_staff)
     if request.user.is_staff:
         supplier = Supplier_details.objects.filter(user=request.user).first()
-        print(supplier)
         if supplier:
             context['supplier'] = supplier
     else:
-        print(request.user.id, Customer.objects.values())
         customer = Customer.objects.filter(user=request.user.id).first()
-        print(customer)
         if customer:
             context['customer'] = customer
     return render(request, 'profile.html', context)

@@ -49,7 +49,7 @@
             {% endif %}
             {% if demand.status == 'Production' %}
             <a href="#" class="badge text-bg-success" style="float:right;">In Production</a>
-            <a href="{% url 'demand-update-status' demand.pk 'Complete' %}" class="badge text-bg-success" style="float:right;">+ Complete RFQ</a>
+            <a href="{% url 'demand-update-status' demand.pk 'Completed' %}" class="badge text-bg-success" style="float:right;">+ Complete RFQ</a>
             {% endif %}
         </div>
         <div class="course-info">

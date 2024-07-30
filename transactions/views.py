@@ -23,7 +23,8 @@ from .models import (
     Customer,
     Demand,
     Quote,
-    DemandParts
+    DemandParts,
+    RfqBill
 )
 from accounts.models import (
     Supplier_details
@@ -47,7 +48,6 @@ from .forms import (
 )
 
 from accounts.forms import SupplierDetailsForm
-
 from inventory.models import Stock
 from django.db.models import Count
 from django.views.generic.edit import CreateView, UpdateView
@@ -59,6 +59,7 @@ from django.shortcuts import redirect
 from django.views.generic.edit import CreateView
 from django.forms import formset_factory
 from django.utils import timezone
+
 
 class SupplierListView(ListView):
     model = Supplier_details
@@ -237,7 +238,7 @@ class SaleView(ListView):
     paginate_by = 10
 
 # used to generate a bill object and save items
-class SaleCreateView(View):                                                      
+class SaleCreateView(View):
     template_name = 'sales/new_sale.html'
 
     def get(self, request):
@@ -267,7 +268,7 @@ class SaleCreateView(View):
                     'formset'   : formset,
                 }
                 return render(request, self.template_name, context)
-            
+
             try:
                 # create bill details object
                 billdetailsobj = SaleBillDetails(billno=billobj)
@@ -288,12 +289,12 @@ class SaleCreateView(View):
                 billitem = form.save(commit=False)
                 billitem.billno = billobj                                       # links the bill object to the items
                 # gets the stock item
-                stock = get_object_or_404(Stock, name=billitem.stock.name)      
+                stock = get_object_or_404(Stock, name=billitem.stock.name)
                 # calculates the total price
                 billitem.totalprice = billitem.perprice * billitem.quantity
                 # updates quantity in stock db
                 stock.quantity -= billitem.quantity
-                billdetailsobj.total += billitem.totalprice 
+                billdetailsobj.total += billitem.totalprice
                 # saves bill item and stock
                 stock.save()
                 billitem.save()
@@ -369,16 +370,29 @@ class PurchaseBillView(View):
 
 # used to display the sale bill object
 class SaleBillView(View):
-    model = SaleBill
+    model = RfqBill
     template_name = "bill/sale_bill.html"
     bill_base = "bill/bill_base.html"
     
     def get(self, request, billno):
+        rfq_bill = RfqBill.objects.filter(billno=billno).first()
+        demand = Demand.objects.get(pk=rfq_bill.demand.id)
+        items = DemandParts.objects.filter(demand =rfq_bill.demand.id)
+        quote = Quote.objects.filter(pk = rfq_bill.quote.id).first()
+        supplier = Supplier_details.objects.filter(pk = rfq_bill.supplier.id).first()
+        customer = Customer.objects.filter(pk = rfq_bill.customer.id).first()
+        total = 0
+        for each in items:
+            total += each.quantity
+        total = total*quote.quote_price
         context = {
-            'bill'          : SaleBill.objects.get(billno=billno),
-            'items'         : SaleItem.objects.filter(billno=billno),
-            'billdetails'   : SaleBillDetails.objects.get(billno=billno),
-            'bill_base'     : self.bill_base,
+            'bill'  : rfq_bill,
+            'demand' : demand,
+            'items' :items,
+            'quote': quote,
+            'supplier':supplier,
+            'customer':customer,
+            'total' : total
         }
         return render(request, self.template_name, context)
 
@@ -737,5 +751,10 @@ class DemandStatusUpdateView(ListView):
         if status == 'Completed' and demand.status == 'Production' :
             demand.status = 'Completed'
             demand.save()
+            if not RfqBill.objects.filter(demand = demand):
+                quote = get_object_or_404(Quote, pk=demand.quote_id)
+                supplier = get_object_or_404(Supplier_details, pk=demand.supplier_id)
+                customer = get_object_or_404(Customer, pk=demand.user.id)
+                rfq_bill = RfqBill.objects.create(demand = demand, quote = quote, supplier = supplier, customer = customer )
         return redirect(reverse('demand', kwargs={'pk': demand.id}))
 

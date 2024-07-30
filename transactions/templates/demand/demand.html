@@ -9,9 +9,11 @@
 <a href="{% url 'demand-update-status' demand.pk 'Production' %}" class="btn ghost-green" style="float:right;">+ Start Production</a>
 {% endif %}
 {% if demand.status == 'Production' %}
-<a href="{% url 'demand-update-status' demand.pk 'Complete' %}" class="btn ghost-green" style="float:right;">+ Complete RFQ</a><br/>
+<a href="{% url 'demand-update-status' demand.pk 'Completed' %}" class="btn ghost-green" style="float:right;">+ Complete RFQ</a><br/>
 {% endif %}
-
+{% if demand.status == 'Completed' %}
+<a href="{% url 'demand-update-status' demand.pk 'Completed' %}" class="btn ghost-green" style="float:right;">+ Generate Bill</a><br/>
+{% endif %}
 <div class="courses-container">
     <div class="course">
         <div class="course-preview">
@@ -19,6 +21,8 @@
             <h4>{{demand.user}}</h4>
             {% if demand.status == 'Production' %}
             <a href="#" class="badge text-bg-success" style="float:right;">In Production</a>
+            {% elif demand.status == 'Completed' %}
+            <a href="#" class="badge text-bg-success" style="float:right;">Production Completed</a>
             {% endif %}
         </div>
         <div class="course-info">

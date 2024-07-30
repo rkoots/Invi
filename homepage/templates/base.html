@@ -45,9 +45,9 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg-end notifications-block-wrap bg-white shadow" aria-labelledby="navbarLightDropdownMenuLink">
                     <small>Notifications</small>
-                    <li>A</li>
-                    <li>B</li>
-                    <li>C</li>
+                    <li><a href="{%url 'demand-list' %}">Dummy Notification</a></li>
+                    <li><a href="{%url 'home' %}">User Specific Notification</a></li>
+                    <li><a href="{%url 'demand-list' %}">My RFQ Activity</a></li>
                 </ul>
             </div>
 
@@ -98,47 +98,47 @@
             <div class="position-sticky py-4 px-3 sidebar-sticky">
                 <ul class="nav flex-column h-100">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'home' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" aria-current="page" href="{% url 'home' %}">
                             <i class="bi-house-fill me-2"></i> Dashboard
                         </a>
                     </li>
                     {% if request.user.is_superuser %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'customers-list' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'customers-list' %}active{% endif %}" href="{% url 'customers-list' %}">
                             <i class="bi-person-lines-fill me-2"></i> Customers List
                         </a>
                     </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'suppliers-list' %}">
+                        <a class="nav-link  {% if request.resolver_match.url_name == 'suppliers-list' %}active{% endif %} " href="{% url 'suppliers-list' %}">
                             <i class="bi-building me-2"></i> Manufacturer
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'demand-list' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'demand-list' %}active{% endif %} " href="{% url 'demand-list' %}">
                             <i class="bi-file-earmark-text me-2"></i> {% if request.user.is_staff %}List of RFQ's{% else %}My RFQ's{% endif %}
                         </a>
                     </li>
                     {% if request.user.is_superuser or not request.user.is_staff %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'new-demand' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'new-demand' %}active{% endif %} " href="{% url 'new-demand' %}">
                             <i class="bi-plus-circle me-2"></i> Add New RFQ
                         </a>
                     </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'demand-status-list' 'Approved'%}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'demand-status-list' and request.resolver_match.kwargs.status == 'Approved' %}active{% endif %} " href="{% url 'demand-status-list' 'Approved'%}">
                             <i class="bi-plus-circle me-2"></i> RFQ's Accepted
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'demand-status-list' 'Production'%}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'demand-status-list' and request.resolver_match.kwargs.status == 'Production' %}active{% endif %} " href="{% url 'demand-status-list' 'Production'%}">
                             <i class="bi-plus-circle me-2"></i> RFQ's In Production
                         </a>
                     </li>
                     {% if request.user.is_staff %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'quote-list' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'quote-list' %}active{% endif %} " href="{% url 'quote-list' %}">
                             <i class="bi-file-earmark-text me-2"></i> My Quotation
                         </a>
                     </li>
@@ -146,27 +146,27 @@
 
                     {% if request.user.is_superuser %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'sales-list' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'sales-list' %}active{% endif %} " href="{% url 'sales-list' %}">
                             <i class="bi-cash me-2"></i> Sales Orders
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'new-sale' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'new-sale' %}active{% endif %} " href="{% url 'new-sale' %}">
                             <i class="bi-cart-plus me-2"></i> New Outgoing Stock
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'inventory' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'inventory' %}active{% endif %} " href="{% url 'inventory' %}">
                             <i class="bi-box-seam me-2"></i> Inventory List
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'new-stock' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'new-stock' %}active{% endif %} " href="{% url 'new-stock' %}">
                             <i class="bi-plus-circle me-2"></i> Add New Stock
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'register' %}active{% endif %} " href="{% url 'register' %}">
                             <i class="bi-person-plus me-2"></i> Add New User
                         </a>
                     </li>
