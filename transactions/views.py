@@ -500,8 +500,12 @@ class DemandListStatusView(LoginRequiredMixin, ListView):
         status = self.kwargs.get('status')
         user = self.request.user.id
         if self.request.user.is_staff:
-            supplier_id = Supplier_details.objects.get(user=user).pk
-            demand = Demand.objects.filter(is_deleted=False, status=status, supplier_id=supplier_id)
+            supplier_id = Supplier_details.objects.get(user=user)
+            if supplier_id:
+                supplier = supplier_id.pk
+            else:
+                supplier = None
+            demand = Demand.objects.filter(is_deleted=False, status=status, supplier_id=supplier)
         else:
             demand = Demand.objects.filter(is_deleted=False, status=status, user=user)
         return demand
