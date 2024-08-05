@@ -772,3 +772,42 @@ class DemandStatusUpdateView(ListView):
                 rfq_bill = RfqBill.objects.create(demand = demand, quote = quote, supplier = supplier, customer = customer )
         return redirect(reverse('demand', kwargs={'pk': demand.id}))
 
+
+
+
+
+
+
+
+class global_search_view(LoginRequiredMixin, ListView):
+    model = Demand
+    template_name = "globalsearch.html"
+    paginate_by = 10
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        user = self.request.user
+        fieldlist = ['user','title','rfq_desc','quote_currency','request_reason','parts','end_date','industry','file']
+        split_query = query.split(' ', 1)
+        print(query, split_query)
+        search_field = 'title'
+        search_value = ''
+        if len(split_query) >= 2:
+            search_field = split_query[0]
+            if search_field not in fieldlist:
+                search_field = 'title'
+            search_value = split_query[1:]
+        elif len(split_query) == 1:
+            search_value = split_query[0]
+        if search_value:
+            print(search_field)
+            queryset = Demand.objects.filter(is_deleted=False)
+            return queryset.filter(**{f"{search_field}__icontains": search_value})
+        else:
+            queryset = Demand.objects.filter(id = 0, is_deleted=False)
+        print(queryset)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search'] = self.request.GET.get('search', '')
+        return context

@@ -46,5 +46,6 @@ urlpatterns = [
     path('quote/<int:pk>/update-status/<str:status>/', views.QuoteStatusUpdateView.as_view(), name='quote-update-status'),
     path('demand/<int:pk>/update-status/<str:status>/', views.DemandStatusUpdateView.as_view(), name='demand-update-status'),
 
+    path('search/', views.global_search_view.as_view(), name='global_search_view'),
 
 ]
