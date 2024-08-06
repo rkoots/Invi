@@ -30,10 +30,10 @@
                     <h6><a href="{% url 'customer' customer.pk %}">{{ customer.Name }}</a> </h6>
                 </td>
                 <td class="align-middle"> {{ customer.type_of_business }} </td>
-                <td class="align-middle"> {{ customer.phone }} </td>
-                <td class="align-middle"> {{ customer.email }} </td>
-                <td class="align-middle"> {{ customer.EORI_number }} </td>
-                <td class="align-middle"> {{ customer.VAT_number }} </td>
+                <td class="align-middle blurred-text blur-text" > {{ customer.phone }} </td>
+                <td class="align-middle blurred-text blur-text" > {{ customer.email }} </td>
+                <td class="align-middle blurred-text blur-text" > {{ customer.EORI_number }} </td>
+                <td class="align-middle "> {{ customer.VAT_number }} </td>
                 <td class="align-middle">
                     <div class="align-middle">
                         <a href="{% url 'edit-customer' customer.pk %}" class="badge text-bg-success">+ Edit</a><br/>

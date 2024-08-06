@@ -1,36 +1,21 @@
 {% extends "base.html" %}
 {% block title %}
-
+{% load custom_filters %}
 
 {{ demand.part_name }}'s Demand
 {% endblock %}
 {% block content %}
-{% if demand.status == 'Approved' %}
-{% if request.user.is_staff %}
-<a href="{% url 'demand-update-status' demand.pk 'Production' %}" class="btn ghost-green" style="float:right;">+ Start Production</a>
-{% else %}
-<a href="#" class="btn ghost-green" style="float:right;">Approved</a>
-{% endif %}
-{% endif %}
-{% if demand.status == 'Production' %}
-{% if request.user.is_staff %}
-<a href="{% url 'demand-update-status' demand.pk 'Completed' %}" class="btn ghost-green" style="float:right;">+ Complete RFQ</a><br/>
-{% else %}
-<a href="#" class="btn ghost-green" style="float:right;">In Production</a>
-{% endif %}
-{% endif %}
-{% if demand.status == 'Completed' %}
-{% if request.user.is_staff %}
-<a href="{% url 'demand-update-status' demand.pk 'Completed' %}" class="btn ghost-green" style="float:right;">+ Generate Bill</a><br/>
-{% else %}
-<a href="#" class="btn ghost-green" style="float:right;">Completed</a>
-{% endif %}
-{% endif %}
+
+{% for button in demand.demand_buttons %}
+<a href="{% if button.url %}{% url button.url button.pk button.status %}{% else %}#{% endif %}" class="{{ button.class }}" style="{{ button.style }}">{{ button.label }}</a>
+{% endfor %}
+
+
 <div class="courses-container">
     <div class="course">
         <div class="course-preview">
-            <h2>{{demand.title}}</h2>
-            <h4>{{demand.user}}</h4>
+            <h2>RFQ :  {{demand.title}}</h2>
+            <h4>Customer : {{demand.user.first_name}}</h4>
             {% if demand.status == 'Production' %}
             <a href="#" class="badge text-bg-success" style="float:right;">In Production</a>
             {% elif demand.status == 'Completed' %}
@@ -65,7 +50,13 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
+                                        {% if demand.file.url|is_image %}
                                         <img src="{{ demand.file.url }}" class="img-fluid" alt="Preview">
+                                        {% elif demand.file.url|is_pdf %}
+                                        <embed src="{{ demand.file.url }}" type="application/pdf" width="100%" height="600px" />
+                                        {% else %}
+                                        <p>No preview available for this file type.</p>
+                                        {% endif %}
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -130,7 +121,13 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
+                                        {% if eachdemand.file.url|is_image %}
                                         <img src="{{ eachdemand.file.url }}" class="img-fluid" alt="Preview">
+                                        {% elif demand.file.url|is_pdf %}
+                                        <embed src="{{ eachdemand.file.url }}" type="application/pdf" width="100%" height="600px" />
+                                        {% else %}
+                                        <p>No preview available for this file type.</p>
+                                        {% endif %}
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

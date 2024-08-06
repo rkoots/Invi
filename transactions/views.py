@@ -1,4 +1,3 @@
-import os,sys
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic import (
@@ -26,12 +25,10 @@ from .models import (
     DemandParts,
     RfqBill
 )
-from accounts.models import (
-    Supplier_details
-)
-
+from accounts.models import (Supplier_details, Customer)
 from django_filters.views import FilterView
-from .filters import CustomerFilter
+from utils import utils
+
 
 from .forms import (
     SelectSupplierForm, 
@@ -41,7 +38,6 @@ from .forms import (
     SaleForm,
     SaleItemFormset,
     SaleDetailsForm,
-    SelectCustomer,
     SelectDemand,
     SelectQuote,
     DemandPartsForm,
@@ -435,63 +431,6 @@ class SaleBillView(View):
         }
         return render(request, self.template_name, context)
 
-
-
-class CustomerListView(ListView,FilterView):
-    model = Customer
-    filterset_class = CustomerFilter
-    template_name = "customer/customer_list.html"
-    queryset = Customer.objects.filter(is_deleted=False)
-    paginate_by = 5
-
-class CustomerCreateView(SuccessMessageMixin, CreateView):
-    model = Customer
-    form_class = SelectCustomer
-    success_url = '/transactions/customers'
-    success_message = "Customer has been created successfully"
-    template_name = "customer/edit_customer.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = 'New Customer'
-        context["savebtn"] = 'Add Customer'
-        return context
-
-class CustomerUpdateView(SuccessMessageMixin, UpdateView):
-    model = Customer
-    form_class = SelectCustomer
-    success_url = '/transactions/customers'
-    success_message = "Customer details has been updated successfully"
-    template_name = "customer/edit_customer.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = 'Edit Customer'
-        context["savebtn"] = 'Save Changes'
-        context["delbtn"] = 'Delete Customer'
-        return context
-
-class CustomerDeleteView(View):
-    template_name = "customer/delete_customer.html"
-    success_message = "Customer Record has been deleted successfully"
-
-    def get(self, request, pk):
-        customer = get_object_or_404(Customer, pk=pk)
-        return render(request, self.template_name, {'object' : customer})
-
-    def post(self, request, pk):
-        customer = get_object_or_404(Customer, pk=pk)
-        customer.is_deleted = True
-        customer.save()
-        messages.success(request, self.success_message)
-        return redirect('customers-list')
-
-class CustomerView(View):
-    def get(self, request, pk):
-        customer = get_object_or_404(Customer, pk=pk)
-        return render(request, 'customer/customer.html', {'customer' : customer})
-
-
 class DemandListStatusView(LoginRequiredMixin, ListView):
     model = Demand
     template_name = "demand/demand_list.html"
@@ -499,8 +438,9 @@ class DemandListStatusView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         status = self.kwargs.get('status')
         user = self.request.user.id
+        print(self.request.user.id)
         if self.request.user.is_staff:
-            supplier_id = Supplier_details.objects.get(user=user)
+            supplier_id = Supplier_details.objects.filter(user=user).first()
             if supplier_id:
                 supplier = supplier_id.pk
             else:
@@ -522,10 +462,8 @@ class DemandListView(LoginRequiredMixin, ListView):
             queryset = Demand.objects.filter(end_date__gte=timezone.now(), quote_id=0, is_deleted=False)
         else:
             queryset = Demand.objects.filter(user=user, is_deleted=False)
-
         if industry_id:
             queryset = queryset.filter(industry_id=industry_id)
-
         if sort == 'date_asc':
             queryset = queryset.order_by('end_date')
         elif sort == 'date_desc':
@@ -540,7 +478,6 @@ class DemandListView(LoginRequiredMixin, ListView):
             queryset = queryset.order_by('-created_at')
         else:
             queryset = queryset.order_by('-pk')
-
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -631,7 +568,8 @@ class DemandView(View):
         demanddetails = DemandParts.objects.filter(demand=demand).all()
         quote = Quote.objects.filter(demand=demand)
         btn_class = 'ghost-blue'
-        return render(request, 'demand/demand.html', {'demand' : demand, 'quotes' : quote, 'demanddetails':demanddetails, 'btn_class' : btn_class})
+        demand.demand_buttons = utils.demand_buttons(demand,request.user.is_staff)
+        return render(request, 'demand/demand.html', {'demand' : demand, 'quotes' : quote, 'demanddetails':demanddetails, 'btn_class' : btn_class })
 
 
 class DemandProduce(View):
@@ -651,7 +589,9 @@ class QuoteListView(ListView):
 
     def get_queryset(self):
         user = self.request.user.id
-        supplier = Supplier_details.objects.get(user=user).pk
+        supplier = Supplier_details.objects.filter(user=user).first()
+        if supplier:
+            supplier = supplier.pk
         queryset = Quote.objects.filter(is_deleted=False, supplier = supplier )
         return queryset
 
@@ -773,12 +713,6 @@ class DemandStatusUpdateView(ListView):
         return redirect(reverse('demand', kwargs={'pk': demand.id}))
 
 
-
-
-
-
-
-
 class global_search_view(LoginRequiredMixin, ListView):
     model = Demand
     template_name = "globalsearch.html"
@@ -788,7 +722,6 @@ class global_search_view(LoginRequiredMixin, ListView):
         user = self.request.user
         fieldlist = ['user','title','rfq_desc','quote_currency','request_reason','parts','end_date','industry','file']
         split_query = query.split(' ', 1)
-        print(query, split_query)
         search_field = 'title'
         search_value = ''
         if len(split_query) >= 2:
@@ -799,15 +732,13 @@ class global_search_view(LoginRequiredMixin, ListView):
         elif len(split_query) == 1:
             search_value = split_query[0]
         if search_value:
-            print(search_field)
             queryset = Demand.objects.filter(is_deleted=False)
             return queryset.filter(**{f"{search_field}__icontains": search_value})
         else:
             queryset = Demand.objects.filter(id = 0, is_deleted=False)
-        print(queryset)
         return queryset
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search'] = self.request.GET.get('search', '')
         return context
+

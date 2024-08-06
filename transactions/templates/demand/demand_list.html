@@ -81,8 +81,15 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
+                                    {% load custom_filters %}
                                     <div class="modal-body">
+                                        {% if demand.file.url|is_image %}
                                         <img src="{{ demand.file.url }}" class="img-fluid" alt="Preview">
+                                        {% elif demand.file.url|is_pdf %}
+                                        <embed src="{{ demand.file.url }}" type="application/pdf" width="100%" height="600px" />
+                                        {% else %}
+                                        <p>No preview available for this file type.</p>
+                                        {% endif %}
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

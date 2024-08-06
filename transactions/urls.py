@@ -21,12 +21,6 @@ urlpatterns = [
     path("purchases/<billno>", views.PurchaseBillView.as_view(), name="purchase-bill"),
     path("sales/<billno>", views.SaleBillView.as_view(), name="sale-bill"),
 
-    path('customers/', views.CustomerListView.as_view(), name='customers-list'),
-    path('customers/new', views.CustomerCreateView.as_view(), name='new-customer'),
-    path('customers/<pk>/edit', views.CustomerUpdateView.as_view(), name='edit-customer'),
-    path('customers/<pk>/delete', views.CustomerDeleteView.as_view(), name='delete-customer'),
-    path('customers/<pk>', views.CustomerView.as_view(), name='customer'),
-
     path('demand/', views.DemandListView.as_view(), name='demand-list'),
     path('demand/approved', views.DemandListView.as_view(), name='demand-list-Approved'),
     path('demand/status/<str:status>', views.DemandListStatusView.as_view(), name='demand-status-list'),

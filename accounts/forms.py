@@ -65,3 +65,25 @@ class SelectCustomer(forms.ModelForm):
     class Meta:
         model = Customer
         fields = ['Name','type_of_business','Address','phone','email','EORI_number','VAT_number','is_deleted', 'user']
+
+
+
+class SelectCustomer(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['user'].queryset = User.objects.filter(customer__isnull=True)
+        self.fields['user'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['Name'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['type_of_business'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['Address'].widget.attrs.update({'class': 'form-control'})
+        self.fields['phone'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['EORI_number'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['VAT_number'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['is_deleted'].widget.attrs.update({'class': 'form-check-input'})
+
+
+    class Meta:
+        model = Customer
+        fields = ['Name','type_of_business','Address','phone','email','EORI_number','VAT_number','is_deleted', 'user']
+

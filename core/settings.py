@@ -1,4 +1,5 @@
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qyu(9l9v%^+r(vt#ecf+36#lis516#3bo5@bo-rd*d%a=!%8#!'
 DEBUG = True
@@ -83,11 +84,12 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'                     # bootstrap template crispy-form uses
 LOGIN_REDIRECT_URL = 'home'                             # sets the login redirect to the 'home' page after login
-LOGIN_URL = 'login'                                     # sets the 'login' page as default when user tries to illegally access profile or other hidden pages
+LOGIN_URL = '/login/#login'                                     # sets the 'login' page as default when user tries to illegally access profile or other hidden pages
 LOGIN_REQUIRED_IGNORE_VIEW_NAMES = [                    # urls ignored by the login_required. Can be accessed with out logging in
     'login',
     'logout',
     'about',
+    'home'
 ]
 
 

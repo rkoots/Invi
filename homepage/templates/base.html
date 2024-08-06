@@ -94,7 +94,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
             <div class="position-sticky py-4 px-3 sidebar-sticky">
                 <ul class="nav flex-column h-100">
                     <li class="nav-item">
@@ -233,6 +233,25 @@
     var options = {{get_monthly_data_json}};
     var chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
+
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Select all elements with the class 'blur-text'
+    var blurredTexts = document.querySelectorAll('.blur-text');
+
+    blurredTexts.forEach(function(element) {
+        element.addEventListener('mouseover', function() {
+            this.classList.remove('blurred-text');
+        });
+
+        element.addEventListener('mouseout', function() {
+            this.classList.add('blurred-text');
+        });
+    });
+});
 </script>
 </body>
 </html>

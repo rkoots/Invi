@@ -1,6 +1,6 @@
 from django.db import models
 from inventory.models import Stock
-from accounts.models import Supplier_details
+from accounts.models import Supplier_details, Customer
 from django.contrib.auth.models import User
 from django.utils import timezone
 
@@ -116,70 +116,6 @@ class SaleBillDetails(models.Model):
 
     def __str__(self):
         return "Bill no: " + str(self.billno.billno)
-
-# Contains customers
-class Customer(models.Model):
-    BUSINESS_TYPES = [
-        ('electronics', 'Electronics'),
-        ('infrastructure', 'Infrastructure'),
-        ('custom_machinery', 'Custom Machinery'),
-        ('Others', 'Others'),
-    ]
-    INDUSTRY_CHOICES = [
-        (75, 'Aerospace and aviation industry'),
-        (73, 'Air conditioning, refrigeration and ventilation industry'),
-        (56, 'Apparatus engineering'),
-        (58, 'Automation and control engineering'),
-        (59, 'Automotive and vehicle construction'),
-        (74, 'Boiler, container and tank construction'),
-        (60, 'Building, agricultural and forestry machinery manufacturing'),
-        (65, 'Chemical industry'),
-        (81, 'Clean room technology'),
-        (61, 'Construction and architectural supplies'),
-        (55, 'Drive and gear engineering'),
-        (67, 'Electrical industry'),
-        (57, 'Fittings engineering'),
-        (79, 'Furniture industry'),
-        (70, 'Household appliance industry'),
-        (71, 'Hydraulic and pneumatic industry'),
-        (72, 'Information technology (hardware)'),
-        (62, 'Lighting industry'),
-        (86, 'Machine tool manufacturing'),
-        (77, 'Measurement and control technique, laboratory equipment'),
-        (161, 'Mechanical engineering'),
-        (76, 'Medical technology'),
-        (78, 'Military engineering'),
-        (63, 'Mining and tunnel engineering'),
-        (64, 'Office machinery and supplies'),
-        (85, 'Packaging industry'),
-        (80, 'Paper and printing machinery industry'),
-        (54, 'Plant engineering and construction'),
-        (68, 'Power generation and transmission industry'),
-        (69, 'Precision engineering, mechatronics and optics'),
-        (66, 'Railway and rail vehicles industry'),
-        (82, 'Shipbuilding industry'),
-        (83, 'Special purpose machinery manufacturing'),
-        (84, 'Telecommunication industry'),
-    ]
-    id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    Name = models.CharField(max_length=75, blank=False, null=False)
-    type_of_business = models.CharField(max_length=50, choices=BUSINESS_TYPES)
-    Address = models.CharField(max_length=150, blank=True, null=True)
-    city = models.CharField(max_length=50, blank=False, null=False)
-    state = models.CharField(max_length=25, blank=False, null=False)
-    country = models.CharField(max_length=25, blank=False, null=False)
-    phone = models.CharField(max_length=12, unique=True)
-    email = models.EmailField(max_length=254, unique=True)
-    EORI_number = models.CharField(max_length=50, unique=True)
-    VAT_number = models.CharField(max_length=50, unique=True)
-    industry_Choice = models.IntegerField(choices=INDUSTRY_CHOICES, default=0)
-    is_deleted = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"#{self.id} - {self.Name}"
 
 # Contains demands
 class Demand(models.Model):

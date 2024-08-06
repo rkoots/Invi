@@ -9,13 +9,35 @@
     <title>ManufactureHub</title>
     <script>
         function showContent(section) {
-            const sections = ['default', 'privacy-policy', 'terms-of-service','about-mh','contact','login'];
+            const sections = ['default', 'privacy-policy', 'terms-of-service', 'about', 'contact', 'login', 'pricing'];
             sections.forEach(sec => {
                 document.getElementById(sec).style.display = 'none';
             });
             document.getElementById(section).style.display = 'block';
         }
+
+        function handleHashChange() {
+            const hash = window.location.hash.substring(1); // Remove the '#' character
+            const validSections = ['default', 'privacy-policy', 'terms-of-service', 'about', 'contact', 'login', 'pricing'];
+
+            if (validSections.includes(hash)) {
+                showContent(hash);
+            } else {
+                showContent('default'); // Show default if hash is not valid
+            }
+        }
+
+        // Call handleHashChange on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            handleHashChange();
+        });
+
+        // Optional: Call handleHashChange on hash change
+        window.addEventListener('hashchange', function() {
+            handleHashChange();
+        });
     </script>
+
 </head>
 <body>
 <div class="container py-4 shadow-sm mb-4 fixed-top bg-white">
@@ -23,9 +45,10 @@
         <a href="#" class="h3 font-weight-bold text-dark">ManufactureHub</a>
         <nav>
             <a href="#" class="text-muted px-3 py-2" onclick="showContent('default')">Home</a>
-            <a href="#" onclick="showContent('about-mh')" class="text-muted px-3 py-2">About MH</a>
-            <a href="#" onclick="showContent('contact')" class="text-muted px-3 py-2">Contact us</a>
-            <a href="#" onclick="showContent('login')" class="text-muted px-3 py-2">Login</a>
+            <a href="#about" onclick="showContent('about')" class="text-muted px-3 py-2">About MH</a>
+            <a href="#pricing" onclick="showContent('pricing')" class="text-muted px-3 py-2">Pricing</a>
+            <a href="#contact" onclick="showContent('contact')" class="text-muted px-3 py-2">Contact us</a>
+            <a href="#login" onclick="showContent('login')" class="text-muted px-3 py-2">Login</a>
         </nav>
     </div>
 </div>
@@ -93,7 +116,7 @@
         </p>
     </div>
 
-    <div id="about-mh" style="display: none;">
+    <div id="about" style="display: none;">
         <h2 class="h4 font-weight-bold text-dark">About ManufactureHub</h2>
         <br/>
         <p class="mt-4 lead text-muted">
@@ -140,12 +163,115 @@
         </form>
     </div>
 
+    <div id="pricing" style="display: none;">
+        <div class="container d-flex justify-content-center align-items-center">
+            <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
+                <div class="card-body">
+                     <div class="plan">
+                        <div class="inner">
+                            <span class="pricing"><span>$1500 <small>/ year</small></span></span>
+                            <p class="title">Basic</p>
+                            <p class="info">Ideal for small manufacturers and customers with basic RFQ and quote management needs.</p>
+                            <ul class="features">
+                                <li>
+                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
+                                    <span><strong>5</strong> RFQs per month</span>
+                                </li>
+                                <li>
+                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
+                                    <span><strong>1</strong> user</span>
+                                </li>
+                                <li>
+                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
+                                    <span>Basic support</span>
+                                </li>
+                            </ul>
+                            <div class="action">
+                                <a class="button" href="#">
+                                    Choose plan
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>&nbsp;
+            <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
+                <div class="card-body">
+                    <div class="plan">
+                        <div class="inner">
+                            <span class="pricing"><span>$2000 <small>/ year</small></span></span>
+                            <p class="title">Professional</p>
+                            <p class="info">Best for medium-sized manufacturers needing advanced RFQ features and team collaboration tools.</p>
+                            <ul class="features">
+                                <li>
+                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
+                                    <span><strong>20</strong> RFQs per month</span>
+                                </li>
+                                <li>
+                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
+                                    <span><strong>5</strong> users</span>
+                                </li>
+                                <li>
+                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
+                                    <span>Priority support</span>
+                                </li>
+                            </ul>
+                            <div class="action">
+                                <a class="button" href="#">
+                                    Choose plan
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>&nbsp;
+            <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
+                <div class="card-body">
+
+                    <div class="plan">
+                        <div class="inner">
+                            <span class="pricing"><span>$3500 <small>/ year</small></span></span>
+                            <p class="title">Enterprise</p>
+                            <p class="info">Designed for large manufacturers with extensive RFQ needs and dedicated account management.</p>
+                            <ul class="features">
+                                <li>
+                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
+                                    <span><strong>Unlimited</strong> RFQs per month</span>
+                                </li>
+                                <li>
+                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
+                                    <span><strong>Unlimited</strong> users</span>
+                                </li>
+                                <li>
+                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
+                                    <span>Dedicated support</span>
+                                </li>
+                            </ul>
+                            <div class="action">
+                                <a class="button" href="#">
+                                    Choose plan
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+
+    </div>
+
     <div id="login" style="display: none;">
         <div class="container d-flex justify-content-center align-items-center">
             <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
                 <div class="card-body">
                     <h2 class="h4 font-weight-bold text-dark text-center">Login</h2>
-                    <form class="mt-4" method="post" action="{% url 'login' %}">
+                    <form class="mt-4" method="post" action="{% url 'login' %}#login">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="username" class="text-dark">Username</label>
@@ -155,6 +281,18 @@
                             <label for="password" class="text-dark">Password</label>
                             <input type="password" class="form-control" id="password" name="password" required>
                         </div>
+                        {% if form.errors %}
+                        <div class="alert alert-danger mt-3">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                         <div class="d-grid mt-4">
                             <button type="submit" class="btn btn-primary">Login</button>
                         </div>
@@ -171,8 +309,8 @@
 <div class="container py-4 shadow-down mt-4">
     <footer class="d-flex justify-content-between align-items-center bg-gray-900">
         <div>
-            <a href="#" onclick="showContent('privacy-policy')" class="text-muted px-3 py-2">Privacy Policy</a>
-            <a href="#" onclick="showContent('terms-of-service')" class="text-muted px-3 py-2">Terms of Service</a>
+            <a href="#privacy-policy" onclick="showContent('privacy-policy')" class="text-muted px-3 py-2">Privacy Policy</a>
+            <a href="#terms-of-service" onclick="showContent('terms-of-service')" class="text-muted px-3 py-2">Terms of Service</a>
         </div>
         <p class="text-muted">&copy; 2024 ManufactureHub. All rights reserved.</p>
     </footer>

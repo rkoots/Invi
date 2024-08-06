@@ -10,3 +10,11 @@ def multiply(value, arg):
         return value * arg
     except (TypeError, ValueError):
         return None
+
+@register.filter
+def is_image(file_url):
+    return file_url.lower().endswith(('.jpg', '.jpeg', '.png'))
+
+@register.filter
+def is_pdf(file_url):
+    return file_url.lower().endswith('.pdf')
