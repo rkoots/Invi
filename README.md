@@ -41,12 +41,12 @@ To set up the database for the first time, run the following commands in the pro
 ```bash
 python manage.py makemigrations homepage
 python manage.py migrate homepage
-python manage.py makemigrations inventory
-python manage.py migrate inventory
-python manage.py makemigrations transactions
-python manage.py migrate transactions
 python manage.py makemigrations accounts
 python manage.py migrate accounts
+python manage.py makemigrations transactions
+python manage.py migrate transactions
+python manage.py makemigrations inventory
+python manage.py migrate inventory
 ```
 
 For subsequent model changes, you only need to run:
