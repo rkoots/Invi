@@ -1,13 +1,14 @@
 from django.db import models
 from inventory.models import Stock
 from accounts.models import Supplier_details, Customer
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from django.conf import settings
 from django.utils import timezone
 
 # Contains suppliers
 class Supplier(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone = models.CharField(max_length=12, unique=True)
     address = models.CharField(max_length=200)
     city = models.CharField(max_length=50, blank=False, null=False)
@@ -146,7 +147,7 @@ class Demand(models.Model):
         ('other', 'Other'),
     ]
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, verbose_name='Name')
     rfq_desc = models.CharField(max_length=400, verbose_name='Name')
     nda_required = models.BooleanField(default=False)

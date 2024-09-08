@@ -39,6 +39,7 @@ class CreateSupplier(SuccessMessageMixin, CreateView):
 
 
 def register(request):
+    print(request.method,'****')
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
