@@ -13,9 +13,7 @@ from .models import (
     Quote,
     DemandParts
 )
-from accounts.models import Supplier_details
 from inventory.models import Stock
-from django.contrib.auth.models import User
 
 
 from django import forms

@@ -207,7 +207,7 @@
 
 <script type="text/javascript">
     var options = {
-      series: [{{demands_with_no_quotes}}, {{demands_with_quotes}}, {{demands_approved}}],
+      series: [JSON.parse(`{{demands_with_no_quotes}}`), JSON.parse(`{{demands_with_quotes}}`), JSON.parse(`{{demands_approved}}`)],
       chart: {
         width: 380,
         type: 'pie',
@@ -230,7 +230,7 @@
 </script>
 
 <script type="text/javascript">
-    var options = {{get_monthly_data_json}};
+    var options = JSON.parse(`{{get_monthly_data_json}}`);
     var chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 

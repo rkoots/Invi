@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'widget_tweaks',                            # uses 'django-widget-tweaks' app
     'crispy_forms',                             # uses 'django-crispy-forms' app
     'login_required',                           # uses 'django-login-required-middleware' app
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -54,8 +55,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'invi',
+        'USER': 'root',
+        'PASSWORD': 'Haripriya!061298',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -89,9 +94,15 @@ LOGIN_REQUIRED_IGNORE_VIEW_NAMES = [                    # urls ignored by the lo
     'login',
     'logout',
     'about',
-    'home'
+    'home',
 ]
 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 3600
+
+AUTH_USER_MODEL = 'core.User'
+AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend']

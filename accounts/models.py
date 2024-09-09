@@ -1,6 +1,7 @@
 # models.py
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class ManufacturingSector(models.Model):
@@ -166,7 +167,7 @@ class Supplier_details(models.Model):
         ('96', 'Other'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     companyname = models.CharField(max_length=40, blank=True, null=True)
     phone = models.CharField(max_length=12, unique=True)
     address = models.CharField(max_length=200)
@@ -235,7 +236,7 @@ class Customer(models.Model):
         (84, 'Telecommunication industry'),
     ]
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     Name = models.CharField(max_length=75, blank=False, null=False)
     type_of_business = models.CharField(max_length=50, choices=BUSINESS_TYPES)
     Address = models.CharField(max_length=150, blank=True, null=True)

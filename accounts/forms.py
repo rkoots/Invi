@@ -1,10 +1,16 @@
 from django import forms
 from .models import Supplier_details
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from django.conf import settings
 from transactions.models import Customer
 from django import forms
 from .models import Supplier_details
+from django.apps import apps
+
+model_str = settings.AUTH_USER_MODEL
+app_label, model_name = model_str.split('.')
+User = apps.get_model(app_label, model_name)
 
 class UserRegistrationForm(UserCreationForm):
     is_staff = forms.ChoiceField(choices=[(1, 'Supplier'), (0, 'Buyer')], widget=forms.RadioSelect)
