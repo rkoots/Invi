@@ -9,7 +9,7 @@
     <title>ManufactureHub</title>
     <script>
         function showContent(section) {
-            const sections = ['default', 'privacy-policy', 'terms-of-service', 'about', 'contact', 'login', 'pricing', 'homepage-register'];
+            const sections = ['default', 'message', 'privacy-policy', 'terms-of-service', 'about', 'contact', 'login', 'pricing', 'homepage-register'];
             sections.forEach(sec => {
                 document.getElementById(sec).style.display = 'none';
             });
@@ -18,7 +18,7 @@
 
         function handleHashChange() {
             const hash = window.location.hash.substring(1); // Remove the '#' character
-            const validSections = ['default', 'privacy-policy', 'terms-of-service', 'about', 'contact', 'login', 'pricing','homepage-register'];
+            const validSections = ['default', 'message', 'privacy-policy', 'terms-of-service', 'about', 'contact', 'login', 'pricing','homepage-register'];
 
             if (validSections.includes(hash)) {
                 showContent(hash);
@@ -49,11 +49,12 @@
             <a href="#pricing" onclick="showContent('pricing')" class="text-muted px-3 py-2">Pricing</a>
             <a href="#contact" onclick="showContent('contact')" class="text-muted px-3 py-2">Contact us</a>
             <a href="#login" onclick="showContent('login')" class="text-muted px-3 py-2">Login</a>
-            <a href="{% url 'register' %}" onclick="showContent('homepage-register')" class="text-muted px-3 py-2">Register</a>
+            <a href="#homepage-register" onclick="showContent('homepage-register')" class="text-muted px-3 py-2">Register</a>
         </nav>
     </div>
 </div>
 <div class="container py-8 pt-top">
+    </div>    
     <div id="default">
         <h1 class="display-4 font-weight-bold text-dark">Your one-stop platform for buying and selling in the Engineering manufacturing industry</h1>
         <p class="mt-4 lead text-muted">Connect with suppliers, discover new products, and grow your business.</p>
@@ -314,7 +315,7 @@
                     <div class="card border-light shadow-sm rounded">
                         <div class="card-body p-2">
                             <h3 class="text-center mb-4" style="color: #1a9ba9; font-weight: bold;">User Registration</h3>
-                            <form class="mt-4" method="post">
+                            <form class="mt-4" method="post" action="{% url 'register' %}">
                                 {% csrf_token %}
                                 <div class="row">
                                     <div class="col-md-6 form-group">
@@ -401,6 +402,5 @@
         <p class="text-muted">&copy; 2024 ManufactureHub. All rights reserved.</p>
     </footer>
 </div>
-
 </body>
 </html>
