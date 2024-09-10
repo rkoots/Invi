@@ -9,7 +9,7 @@
     <title>ManufactureHub</title>
     <script>
         function showContent(section) {
-            const sections = ['default', 'message', 'privacy-policy', 'terms-of-service', 'about', 'contact', 'login', 'pricing', 'homepage-register'];
+            const sections = ['default', 'privacy-policy', 'terms-of-service', 'about', 'contact', 'login', 'pricing', 'homepage-register'];
             sections.forEach(sec => {
                 document.getElementById(sec).style.display = 'none';
             });
@@ -18,7 +18,7 @@
 
         function handleHashChange() {
             const hash = window.location.hash.substring(1); // Remove the '#' character
-            const validSections = ['default', 'message', 'privacy-policy', 'terms-of-service', 'about', 'contact', 'login', 'pricing','homepage-register'];
+            const validSections = ['default', 'privacy-policy', 'terms-of-service', 'about', 'contact', 'login', 'pricing','homepage-register'];
 
             if (validSections.includes(hash)) {
                 showContent(hash);
@@ -37,7 +37,6 @@
             handleHashChange();
         });
     </script>
-
 </head>
 <body>
 <div class="container py-4 shadow-sm mb-4 fixed-top bg-white">
@@ -53,8 +52,7 @@
         </nav>
     </div>
 </div>
-<div class="container py-8 pt-top">
-    </div>    
+<div class="container py-8 pt-top">   
     <div id="default">
         <h1 class="display-4 font-weight-bold text-dark">Your one-stop platform for buying and selling in the Engineering manufacturing industry</h1>
         <p class="mt-4 lead text-muted">Connect with suppliers, discover new products, and grow your business.</p>
@@ -145,127 +143,102 @@
     </div>
 
     <div id="contact" style="display: none;">
-        <h2 class="h4 font-weight-bold text-dark">Contact Us</h2>
-        <br/>
-        <form class="mt-4" action="#" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="name" class="text-dark">Name</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="email" class="text-dark">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="message" class="text-dark">Message</label>
-                <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Send Message</button>
-        </form>
+        <div class="container d-flex justify-content-center">
+            <h2 class="h4 font-weight-bold text-dark">Contact Us</h2>
+            <br/>
+            <form class="mt-4" action="#" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name" class="text-dark">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="text-dark">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message" class="text-dark">Message</label>
+                    <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
     </div>
 
     <div id="pricing" style="display: none;">
         <div class="container d-flex justify-content-center align-items-center">
-            <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
-                <div class="card-body">
-                     <div class="plan">
-                        <div class="inner">
-                            <span class="pricing"><span>$1500 <small>/ year</small></span></span>
-                            <p class="title">Basic</p>
-                            <p class="info">Ideal for small manufacturers and customers with basic RFQ and quote management needs.</p>
-                            <ul class="features">
-                                <li>
-                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
-                                    <span><strong>5</strong> RFQs per month</span>
-                                </li>
-                                <li>
-                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
-                                    <span><strong>1</strong> user</span>
-                                </li>
-                                <li>
-                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
-                                    <span>Basic support</span>
-                                </li>
-                            </ul>
-                            <div class="action">
-                                <a class="button" href="#">
-                                    Choose plan
-                                </a>
-                            </div>
-                        </div>
+            <section class="pricing pt-5 mt-5 mb-5">
+                <div class="container">
+                  <div class="pricing-head text-center mb-3">
+                    Plans & Pricing
+                  </div>
+                  <div class="top">
+                    <div class="toggle-btn">
+                      <span style="margin: 0.8em;">Supplier</span>
+                      <label class="switch">
+                        <input type="checkbox" id="checbox" onclick="check()" ; />
+                        <span class="slider round"></span>
+                      </label>
+                      <span style="margin: 0.8em;">Buyer</span>
                     </div>
-                </div>
-            </div>&nbsp;
-            <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
-                <div class="card-body">
-                    <div class="plan">
-                        <div class="inner">
-                            <span class="pricing"><span>$2000 <small>/ year</small></span></span>
-                            <p class="title">Professional</p>
-                            <p class="info">Best for medium-sized manufacturers needing advanced RFQ features and team collaboration tools.</p>
-                            <ul class="features">
-                                <li>
-                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
-                                    <span><strong>20</strong> RFQs per month</span>
-                                </li>
-                                <li>
-                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
-                                    <span><strong>5</strong> users</span>
-                                </li>
-                                <li>
-                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
-                                    <span>Priority support</span>
-                                </li>
-                            </ul>
-                            <div class="action">
-                                <a class="button" href="#">
-                                    Choose plan
-                                </a>
-                            </div>
-                        </div>
+                  </div>
+              
+                  <div class="package-container">
+                    <div class="packages">
+                      <div class="pricing-title pb-3">
+                        Free
+                      </div>
+                      <h2 class="text1">&dollar;0</h2>
+                      <h2 class="text2">&dollar;0</h2>                                        
+                      <ul class="list1 text-center">
+                        <li><span><strong>5</strong> RFQs request per month</span></li>
+                        <li><span><strong>1</strong> user</span></li>
+                        <li><span<strong>Basic support</strong></span></li>
+                      </ul>
+                      <ul class="list2 text-center">
+                        <li><span><strong>5</strong> RFQs Approve.Reject per month</span></li>
+                        <li><span><strong>1</strong> user</span></li>
+                        <li><span<strong>Basic support</strong></span></li>
+                      </ul>                                      
                     </div>
-                </div>
-            </div>&nbsp;
-            <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
-                <div class="card-body">
-
-                    <div class="plan">
-                        <div class="inner">
-                            <span class="pricing"><span>$3500 <small>/ year</small></span></span>
-                            <p class="title">Enterprise</p>
-                            <p class="info">Designed for large manufacturers with extensive RFQ needs and dedicated account management.</p>
-                            <ul class="features">
-                                <li>
-                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
-                                    <span><strong>Unlimited</strong> RFQs per month</span>
-                                </li>
-                                <li>
-                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
-                                    <span><strong>Unlimited</strong> users</span>
-                                </li>
-                                <li>
-                                    <span class="icon"><svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path></svg></span>
-                                    <span>Dedicated support</span>
-                                </li>
-                            </ul>
-                            <div class="action">
-                                <a class="button" href="#">
-                                    Choose plan
-                                </a>
-                            </div>
-                        </div>
+                    <div class="packages">
+                      <div class="pricing-title">
+                        Professional
+                      </div>
+                      <h2 class="text1">&dollar;2000</h2>
+                      <h2 class="text2">&dollar;2000</h2>
+                      <ul class="list1 text-center">
+                        <li><span><strong>20</strong> RFQs request per month</span></li>
+                        <li><span><strong>5</strong> user</span></li>
+                        <li><span<strong>Priority support</strong></span></li>
+                      </ul>
+                      <ul class="list2 text-center">
+                        <li><span><strong>20</strong> RFQs Approve/Reject per month</span></li>
+                        <li><span><strong>5</strong> user</span></li>
+                        <li><span<strong>Priority support</strong></span></li>
+                      </ul>
                     </div>
+                    <div class="packages">
+                        <div class="pricing-title">
+                            Enterprise
+                        </div>
+                        <h2 class="text1">&dollar;3500</h2>
+                        <h2 class="text2">&dollar;3500</h2>
+                        <ul class="list1 text-center">
+                          <li><span><strong>unlimited</strong> RFQs request per month</span></li>
+                          <li><span><strong>unlimited</strong> user</span></li>
+                          <li><span<strong>Dedicated support</strong></span></li>
+                        </ul>
+                        <ul class="list2 text-center">
+                          <li><span><strong>unlimited</strong> RFQs Approve/Reject per month</span></li>
+                          <li><span><strong>unlimited</strong> user</span></li>
+                          <li><span<strong>Dedicated support</strong></span></li>
+                        </ul>
+                    </div>                    
+                  </div>
                 </div>
-            </div>
-
-
+            </section>
         </div>
-        </div>
-        <br/>
-        <br/>
-        <br/>
-
     </div>
 
     <div id="login" style="display: none;">
@@ -402,5 +375,7 @@
         <p class="text-muted">&copy; 2024 ManufactureHub. All rights reserved.</p>
     </footer>
 </div>
+<link rel="stylesheet" type="text/css" href="{% static 'css/pricing.css' %}">
+<script src="{% static 'js/pricing.js' %}"></script>
 </body>
 </html>

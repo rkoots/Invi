@@ -62,7 +62,7 @@ def register(request):
 class CreateCustomer(SuccessMessageMixin, CreateView):
     model = Customer
     form_class = SelectCustomer
-    success_url = '/'
+    success_url = '/#login'
     success_message = "Customer has been created successfully"
     template_name = "register_customer.html"
 
