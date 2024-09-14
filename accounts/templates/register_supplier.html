@@ -32,6 +32,13 @@
                         <div class="invalid-feedback">{{ error }}</div>
                         {% endfor %}
                     </div>
+                    <div class="form-group"></div>
+                        <label for="id_email">Email ID:</label>
+                        <input type="text" name="email" class="form-control{% if form.email.errors %} is-invalid{% endif %}" id="id_email" value="{{ form.email.value|default_if_none:'' }}">
+                        {% for error in form.email.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>                    
                     <div class="form-group">
                         <label for="id_phone">Phone:</label>
                         <input type="text" name="phone" class="form-control{% if form.phone.errors %} is-invalid{% endif %}" id="id_phone" value="{{ form.phone.value|default_if_none:'' }}">
@@ -69,7 +76,7 @@
                     </div>
                     <button type="button" class="next-btn btn btn-primary btn-block" onclick="showSection('section-2')">Next</button>
                 </div>
-                <div id="section-2" class="form-section" style="display:none;">
+                <div id="section-2" class="form-section" style="display:none;">                 
                     <div class="form-group">
                         <label for="id_activity_type">Activity Type:</label>
                         <select name="activity_type" class="form-control{% if form.activity_type.errors %} is-invalid{% endif %}" id="id_activity_type">

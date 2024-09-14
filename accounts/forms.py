@@ -38,7 +38,7 @@ class SupplierDetailsForm(forms.ModelForm):
     class Meta:
         model = Supplier_details
         fields = [
-            'user', 'companyname', 'phone', 'address', 'city', 'state', 'country',
+            'user', 'companyname', 'email', 'phone', 'address', 'city', 'state', 'country',
             'activity_type', 'company_street', 'company_postalcode', 'company_city',
             'company_url', 'production_area', 'manufacturing_competency1', 'manufacturing_competency2',
             'info_source', 'amount_of_employees', 'turnover_per_year', 'certificates'

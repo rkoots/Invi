@@ -8,6 +8,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django_filters.views import FilterView
 from .filters import CustomerFilter
+from django.conf import settings
+from django.apps import apps
+
+model_str = settings.AUTH_USER_MODEL
+app_label, model_name = model_str.split('.')
+User = apps.get_model(app_label, model_name)
 
 
 
@@ -15,7 +21,7 @@ class CreateSupplier(SuccessMessageMixin, CreateView):
     model = Supplier_details
     form_class = SupplierDetailsForm
     template_name = "register_supplier.html"
-    success_url = '/'  # Redirects to home page after submitting the form
+    success_url = '/#login'  # Redirects to home page after submitting the form
     success_message = "Manufacturer account has been created successfully"
 
     def get_form_kwargs(self):
@@ -40,19 +46,31 @@ class CreateSupplier(SuccessMessageMixin, CreateView):
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            request.session['session_user_id'] = user.id
-            request.session['session_username'] = user.username
-            request.session['session_first_name'] = user.first_name
-            request.session['session_last_name'] = user.last_name
-            request.session['session_is_staff'] = user.is_staff
-            request.session['session_email'] = user.email
-            if user.is_staff:
-                return redirect('register-supplier')
+        email = request.POST.get('email')
+        is_staff = request.POST.get('is_staff')
+        if Customer.objects.filter(email=email).exists() \
+            or Supplier_details.objects.filter(email=email).exists():
+                form = UserRegistrationForm(request.POST)
+        else:
+            if User.objects.filter(email=email).exists():
+                if is_staff=='1':
+                    return redirect('register-supplier')
+                else:
+                    return redirect('register-customer')
             else:
-                return redirect('register-customer')
+                form = UserRegistrationForm(request.POST)
+                if form.is_valid():
+                    user = form.save()
+                    request.session['session_user_id'] = user.id
+                    request.session['session_username'] = user.username
+                    request.session['session_first_name'] = user.first_name
+                    request.session['session_last_name'] = user.last_name
+                    request.session['session_is_staff'] = user.is_staff
+                    request.session['session_email'] = user.email
+                    if user.is_staff:
+                        return redirect('register-supplier')
+                    else:
+                        return redirect('register-customer')
     else:
         form = UserRegistrationForm()
     return render(request, 'register_first.html', {'form': form})
@@ -127,7 +145,6 @@ class CustomerUpdateView(SuccessMessageMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context["title"] = 'Edit Customer'
         context["savebtn"] = 'Save Changes'
-        context["delbtn"] = 'Delete Customer'
         return context
 
 class CustomerDeleteView(View):
