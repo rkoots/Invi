@@ -1,12 +1,13 @@
+from typing import Any
 from django import forms
-from .models import Supplier_details
 from django.contrib.auth.forms import UserCreationForm
 #from django.contrib.auth.models import User
 from django.conf import settings
 from transactions.models import Customer
 from django import forms
-from .models import Supplier_details
+from .models import Supplier_details, SubscriptionPlan
 from django.apps import apps
+from core.settings import subscription_plan_details
 
 model_str = settings.AUTH_USER_MODEL
 app_label, model_name = model_str.split('.')
@@ -74,22 +75,50 @@ class SelectCustomer(forms.ModelForm):
 
 
 
-class SelectCustomer(forms.ModelForm):
+class UpdateSubscription(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['user'].queryset = User.objects.filter(customer__isnull=True)
-        self.fields['user'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
-        self.fields['Name'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
-        self.fields['type_of_business'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
-        self.fields['Address'].widget.attrs.update({'class': 'form-control'})
-        self.fields['phone'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
-        self.fields['email'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
-        self.fields['EORI_number'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
-        self.fields['VAT_number'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
-        self.fields['is_deleted'].widget.attrs.update({'class': 'form-check-input'})
-
+        self.fields['plan_type'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['end_date'].widget.attrs.update({'class': 'form-control'})
+        self.fields['is_active'].widget.attrs.update({'class': 'form-check-input'})
 
     class Meta:
-        model = Customer
-        fields = ['Name','type_of_business','Address','phone','email','EORI_number','VAT_number','is_deleted', 'user']
-
+        model = SubscriptionPlan
+        fields = ['plan_type','end_date','is_active']
+        widgets = {
+            'end_date': forms.DateInput(attrs={'type': 'date'})  # HTML5 date picker
+        }
+        
+    def clean(self):
+        cleaned_data = super().clean()
+        plan_type = cleaned_data.get('plan_type')
+        
+        # Set the value of dependent_field based on the selection
+        if plan_type == 'basic':
+            cleaned_data['price'] = subscription_plan_details[plan_type]['price']
+            cleaned_data['rfq_limit'] = subscription_plan_details[plan_type]['rfq_limit']
+        elif plan_type == 'standard':
+            cleaned_data['price'] = subscription_plan_details[plan_type]['price']
+            cleaned_data['rfq_limit'] = subscription_plan_details[plan_type]['rfq_limit']
+        else:
+            cleaned_data['price'] = subscription_plan_details[plan_type]['price']
+            cleaned_data['rfq_limit'] = subscription_plan_details[plan_type]['rfq_limit']
+        
+        return cleaned_data
+    
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        # Ensure the dependent_field is set correctly
+        if self.cleaned_data['plan_type'] == 'basic':
+            instance.price = subscription_plan_details[self.cleaned_data['plan_type']]['price']
+            instance.rfq_limit = subscription_plan_details[self.cleaned_data['plan_type']]['rfq_limit']
+        elif self.cleaned_data['plan_type'] == 'standard':
+            instance.price = subscription_plan_details[self.cleaned_data['plan_type']]['price']
+            instance.rfq_limit = subscription_plan_details[self.cleaned_data['plan_type']]['rfq_limit']
+        else:
+            instance.price = subscription_plan_details[self.cleaned_data['plan_type']]['price']
+            instance.rfq_limit = subscription_plan_details[self.cleaned_data['plan_type']]['rfq_limit']
+        
+        if commit:
+            instance.save()
+        return instance    

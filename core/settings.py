@@ -108,4 +108,13 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 3600
 
 AUTH_USER_MODEL = 'core.User'
-AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend']
+AUTHENTICATION_BACKENDS = [
+    'core.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+subscription_plan_details = {
+    'basic' : {'price' : '0.00', 'rfq_limit' : '5'},
+    'standard' : {'price' : '1500.00', 'rfq_limit' : '10'},
+    'enterprise' : {'price' : '3000.00', 'rfq_limit' : 'unlimited'}
+}

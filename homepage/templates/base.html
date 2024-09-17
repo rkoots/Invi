@@ -169,6 +169,11 @@
                             <i class="bi-person-plus me-2"></i> Add New User
                         </a>
                     </li>
+                    <li class="nav-item"></li>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'subscription-list' %}active{% endif %} " href="{% url 'subscription-list' %}">
+                            <i class="bi-person-plus me-2"></i> Upgrade Subscription
+                        </a>
+                    </li>                    
                     {% endif %}
                 </ul>
             </div>

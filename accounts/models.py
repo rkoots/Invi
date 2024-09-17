@@ -255,3 +255,22 @@ class Customer(models.Model):
 
     def __str__(self):
         return f"#{self.id} - {self.Name}"
+
+class SubscriptionPlan(models.Model):
+    PLAN_CHOICES = [
+        ('basic', 'Basic'),
+        ('standard', 'Standard'),
+        ('enterprise', 'Enterprise'),
+    ]
+    user_profile = models.ForeignKey(settings.AUTH_USER_MODEL, to_field='email', on_delete=models.CASCADE)
+    plan_type = models.CharField(max_length=20, choices=PLAN_CHOICES)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    rfq_limit = models.CharField(max_length=50) # unlimited for Enterprise
+
+    # Additional fields for subscription management
+    start_date = models.DateField(auto_now=True)
+    end_date = models.DateField(blank=True, null=True) # Set this for expiration
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.user_profile.user.username} - {self.plan_type}"

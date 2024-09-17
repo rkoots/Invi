@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from .forms import SupplierDetailsForm, UserRegistrationForm, SelectCustomer
-from .models import Supplier_details, Customer
+from .forms import SupplierDetailsForm, UserRegistrationForm, SelectCustomer, UpdateSubscription
+from .models import Supplier_details, Customer, SubscriptionPlan
 from django.views.generic import (View, ListView, CreateView, UpdateView, DeleteView)
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,6 +10,7 @@ from django_filters.views import FilterView
 from .filters import CustomerFilter
 from django.conf import settings
 from django.apps import apps
+from core.settings import subscription_plan_details
 
 model_str = settings.AUTH_USER_MODEL
 app_label, model_name = model_str.split('.')
@@ -67,6 +68,11 @@ def register(request):
                     request.session['session_last_name'] = user.last_name
                     request.session['session_is_staff'] = user.is_staff
                     request.session['session_email'] = user.email
+                    subscription_plan = SubscriptionPlan(plan_type='basic',
+                        price=subscription_plan_details['basic']['price'],
+                        rfq_limit = subscription_plan_details['basic']['rfq_limit'],
+                        user_profile_id = email)
+                    subscription_plan.save()
                     if user.is_staff:
                         return redirect('register-supplier')
                     else:
@@ -166,3 +172,38 @@ class CustomerView(View):
     def get(self, request, pk):
         customer = get_object_or_404(Customer, pk=pk)
         return render(request, 'customer/customer.html', {'customer' : customer})
+
+class SubscriptionView(ListView,FilterView):
+    model = SubscriptionPlan
+    #filterset_class = CustomerFilter
+    template_name = "subscription_list.html"
+    queryset = SubscriptionPlan.objects.all()
+    paginate_by = 5
+
+class SubscriptionDeleteView(View):
+    template_name = "delete_subscription.html"
+    success_message = "Customer Record has been Deactivated successfully"
+
+    def get(self, request, pk):
+        subscription = get_object_or_404(SubscriptionPlan, pk=pk)
+        return render(request, self.template_name, {'object' : subscription})
+
+    def post(self, request, pk):
+        subscription = get_object_or_404(SubscriptionPlan, pk=pk)
+        subscription.is_active = False
+        subscription.save()
+        messages.success(request, self.success_message)
+        return redirect('home')
+    
+class SubscriptionUpdateView(SuccessMessageMixin, UpdateView):
+    model = SubscriptionPlan
+    form_class = UpdateSubscription
+    success_url = '/accounts/subscription'
+    success_message = "Customer details has been updated successfully"
+    template_name = "edit_subscription.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Edit Customer'
+        context["savebtn"] = 'Save Changes'
+        return context

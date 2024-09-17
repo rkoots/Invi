@@ -13,4 +13,8 @@ urlpatterns = [
     path('customers/<pk>/delete', views.CustomerDeleteView.as_view(), name='delete-customer'),
     path('customers/<pk>', views.CustomerView.as_view(), name='customer'),
 
+    path('subscription', views.SubscriptionView.as_view(), name='subscription-list'),
+    path('subscription/<pk>/delete', views.SubscriptionDeleteView.as_view(), name='delete-subscription'),
+    path('subscription/<pk>/edit', views.SubscriptionUpdateView.as_view(), name='edit-subscription'),
+
 ]
