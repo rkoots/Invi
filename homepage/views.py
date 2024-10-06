@@ -7,6 +7,12 @@ from django.http import JsonResponse
 from django.db.models import Count, Sum, Q
 from datetime import datetime
 from django.db.models.functions import ExtractMonth
+from django.conf import settings
+from django.apps import apps
+
+model_str = settings.AUTH_USER_MODEL
+app_label, model_name = model_str.split('.')
+User = apps.get_model(app_label, model_name)
 
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
@@ -14,7 +20,7 @@ def custom_404_view(request, exception):
 
 
 class HomeView(View):
-    template_name = "home.html"
+    template_name = "customer_home.html"
 
     def get_monthly_data(self, request):
         current_year = datetime.now().year
@@ -44,6 +50,8 @@ class HomeView(View):
     def get(self, request):
         if not self.request.user.is_authenticated:
             return render(request, "landingpage.html")
+        if (self.request.user.is_staff):
+            self.template_name = "supplier_home.html"
         overall_demand_count = Demand.objects.filter(is_deleted=False).count()
         supplier_count = Supplier_details.objects.filter().count()
         my_demand_count = Demand.objects.filter(user=self.request.user).count()
@@ -81,3 +89,9 @@ class HomeView(View):
         return render(request, self.template_name, context)
 class AboutView(TemplateView):
     template_name = "about.html"
+    
+    def get(self, request):
+        context = {'base_template' : 'customer_base.html'}
+        if (self.request.user.is_staff):
+            context['base_template'] = "supplier_home.html"
+        return render(request, self.template_name, context)

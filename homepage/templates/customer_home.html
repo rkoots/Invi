@@ -22,7 +22,7 @@
                     </div>
                     <div class="ms-auto">
                         <small>Account Type</small><br/>
-                        <span>{% if request.user.is_staff %}Supplier/Manufacturer{% else %}Customer/Buyer{% endif %}</span>
+                        <span>Customer/Buyer</span>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,6 @@
                 </p>
             </div>
 
-            {% if not request.user.is_staff %}
             <div class="custom-block custom-block-transations">
                 <h5 class="mb-4">RFQ's for my Action</h5>
                 {% for quote in quotes_with_no_status %}
@@ -147,7 +146,6 @@
                     </a>
                 </div>
             </div>
-            {% endif %}
 
         </div>
     </div>

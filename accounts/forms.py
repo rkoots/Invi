@@ -71,8 +71,22 @@ class SelectCustomer(forms.ModelForm):
 
     class Meta:
         model = Customer
-        fields = ['Name','type_of_business','Address','phone','email','EORI_number','VAT_number','is_deleted', 'user']
+        fields = ['Name','type_of_business','Address','phone','email','EORI_number','VAT_number','is_deleted','user']
 
+class updateCustomer(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['Name'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['type_of_business'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['Address'].widget.attrs.update({'class': 'form-control'})
+        self.fields['phone'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['EORI_number'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+        self.fields['VAT_number'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
+
+    class Meta:
+        model = Customer
+        fields = ['Name','type_of_business','Address','phone','email','EORI_number','VAT_number']
 
 
 class UpdateSubscription(forms.ModelForm):

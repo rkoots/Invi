@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends base_template %}
 {% load widget_tweaks %}
 {% block title %} Customer List {% endblock title %}
 {% block content %}
@@ -36,8 +36,12 @@
                 <td class="align-middle "> {{ customer.VAT_number }} </td>
                 <td class="align-middle">
                     <div class="align-middle">
-                        <a href="{% url 'edit-customer' customer.pk %}" class="badge text-bg-success">+ Edit</a><br/>
-                        <a href="{% url 'delete-customer' customer.pk %}" class="badge text-bg-danger">- Delete</a>
+                        {% if customer.is_deleted %}
+                        <a href="{% url 'activate-customer' customer.pk %}" class="badge text-bg-success">+ Activate</a><br/>
+                        {% else%}
+                            <a href="{% url 'edit-customer' customer.pk %}" class="badge text-bg-success">+ Edit</a><br/>
+                            <a href="{% url 'delete-customer' customer.pk %}" class="badge text-bg-danger">- Delete</a>
+                        {% endif %}
                     </div>
                 </td>
             </tr>
