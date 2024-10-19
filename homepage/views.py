@@ -3,6 +3,7 @@ from django.views.generic import View, TemplateView
 from inventory.models import Stock
 from django.db.models import Count
 from transactions.models import Demand, Supplier_details, Customer, Quote
+from accounts.models import SubscriptionPlan
 from django.http import JsonResponse
 from django.db.models import Count, Sum, Q
 from datetime import datetime
@@ -67,6 +68,7 @@ class HomeView(View):
         get_monthly_data_json = self.get_monthly_data(request)
         quotes_with_no_status = Quote.objects.filter( Q(status__isnull=True) | Q(status=''), demand__user=request.user )
         demand_approved_status = Demand.objects.filter(is_deleted=False, user=self.request.user,quote_id__gt=0)
+        subscription_plan = SubscriptionPlan.objects.filter(user_profile_id=request.user.email).values('plan_type')
 
         context = {
             'overall_demand_count': overall_demand_count,
@@ -83,7 +85,7 @@ class HomeView(View):
             'get_monthly_data_json':get_monthly_data_json,
             'quotes_with_no_status':quotes_with_no_status,
             'demand_approved_status':demand_approved_status,
-
+            'subscription_plan' : subscription_plan[0]['plan_type'] if not self.request.user.is_superuser else ''
         }
 
         return render(request, self.template_name, context)

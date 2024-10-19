@@ -17,6 +17,11 @@ class StockListView(FilterView):
     template_name = 'inventory.html'
     paginate_by = 10
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['base_template'] = 'supplier_base.html'
+        return context
+
 class StockCreateView(SuccessMessageMixin, CreateView):                                 # createview class to add new stock, mixin used to display message
     model = Stock                                                                       # setting 'Stock' model as model
     form_class = StockForm                                                              # setting 'StockForm' form as form
@@ -28,6 +33,7 @@ class StockCreateView(SuccessMessageMixin, CreateView):                         
         context = super().get_context_data(**kwargs)
         context["title"] = 'New Stock'
         context["savebtn"] = 'Add to Inventory'
+        context['base_template'] = 'supplier_base.html'
         return context       
 
 class StockUpdateView(SuccessMessageMixin, UpdateView):                                 # updateview class to edit stock, mixin used to display message
@@ -42,6 +48,7 @@ class StockUpdateView(SuccessMessageMixin, UpdateView):                         
         context["title"] = 'Edit Stock'
         context["savebtn"] = 'Update Stock'
         context["delbtn"] = 'Delete Stock'
+        context['base_template'] = 'supplier_base.html'
         return context
 
 class StockDeleteView(View):                                                            # view class to delete stock
@@ -49,7 +56,7 @@ class StockDeleteView(View):                                                    
     success_message = "Stock has been deleted successfully"                             # displays message when form is submitted
     def get(self, request, pk):
         stock = get_object_or_404(Stock, pk=pk)
-        return render(request, self.template_name, {'object' : stock})
+        return render(request, self.template_name, {'object' : stock,'base_template':'supplier_base.html'})
     def post(self, request, pk):  
         stock = get_object_or_404(Stock, pk=pk)
         stock.is_deleted = True
