@@ -4,9 +4,10 @@ from . import views
 
 urlpatterns = [
     path('suppliers/', views.SupplierListView.as_view(), name='suppliers-list'),
-    path('suppliers/new', views.SupplierCreateUpdateView.as_view(), name='new-supplier'),
-    path('suppliers/<pk>/edit', views.SupplierCreateUpdateView.as_view(), name='edit-supplier'),
+    #path('suppliers/new', views.SupplierCreateUpdateView.as_view(), name='new-supplier'),
+    path('suppliers/<pk>/edit', views.SupplierUpdateView.as_view(), name='edit-supplier'),
     path('suppliers/<pk>/delete', views.SupplierDeleteView.as_view(), name='delete-supplier'),
+    path('suppliers/<pk>/activate', views.SupplieractivateView.as_view(), name='activate-supplier'),
     path('supplier/<pk>', views.SupplierView.as_view(), name='supplier'),
 
     path('purchases/', views.PurchaseView.as_view(), name='purchases-list'), 
@@ -28,7 +29,6 @@ urlpatterns = [
     path('demand/<pk>/edit', views.DemandUpdateView.as_view(), name='edit-demand'),
     path('demand/<pk>/delete', views.DemandDeleteView.as_view(), name='delete-demand'),
     path('demand/<pk>', views.DemandView.as_view(), name='demand'),
-    path('demand_to_quote/', views.DemandQuoteListView.as_view(), name='demand-quote-list'),
 
 
     path('quote/', views.QuoteListView.as_view(), name='quote-list'),

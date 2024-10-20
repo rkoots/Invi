@@ -187,6 +187,9 @@ class Supplier_details(models.Model):
     turnover_per_year = models.CharField(max_length=20, choices=TURNOVER_CHOICES)
     certificates = models.CharField(max_length=40, choices=CERTIFICATES_CHOICES)
     email = models.EmailField(max_length=254, unique=True, blank=False, null=False)
+    is_deleted = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)    
 
     def __str__(self):
         return f"{self.user} - CompanyDetails({self.amount_of_employees}, {self.turnover_per_year}, {self.certificates})"

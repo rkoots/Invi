@@ -34,8 +34,12 @@
                             <td class="align-middle"> {{ supplier.country }} </td>
                             <td class="align-middle">
                                 <div class="align-middle">
-                                    <a href="{% url 'edit-supplier' supplier.pk %}" class="badge text-bg-success">Edit</a><br/>
-                                    <a href="{% url 'delete-supplier' supplier.pk %}" class="badge text-bg-danger">Delete</a>
+                                    {% if supplier.is_deleted %}
+                                        <a href="{% url 'activate-supplier' supplier.pk %}" class="badge text-bg-success">+ Activate</a><br/>
+                                    {% else%}
+                                        <a href="{% url 'edit-supplier' supplier.pk %}" class="badge text-bg-success">+ Edit</a><br/>
+                                        <a href="{% url 'delete-supplier' supplier.pk %}" class="badge text-bg-danger">- Delete</a>
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>

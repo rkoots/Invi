@@ -43,7 +43,7 @@ from .forms import (
     DemandPartsForm,
 )
 
-from accounts.forms import SupplierDetailsForm
+from accounts.forms import updateSupplierDetailsForm
 from inventory.models import Stock
 from django.db.models import Count
 from django.views.generic.edit import CreateView, UpdateView
@@ -55,6 +55,12 @@ from django.shortcuts import redirect
 from django.views.generic.edit import CreateView
 from django.forms import formset_factory
 from django.utils import timezone
+from django.conf import settings
+from django.apps import apps
+
+model_str = settings.AUTH_USER_MODEL
+app_label, model_name = model_str.split('.')
+User = apps.get_model(app_label, model_name)
 
 
 class SupplierListView(ListView):
@@ -66,51 +72,20 @@ class SupplierListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['base_template'] = 'supplier_base.html'
-        return context
-
-class SupplierCreateUpdateView(SuccessMessageMixin, CreateView, UpdateView):
+        return context    
+class SupplierUpdateView(SuccessMessageMixin, UpdateView):
     model = Supplier_details
-    form_class = SupplierDetailsForm
+    form_class = updateSupplierDetailsForm
     success_url = '/transactions/suppliers'
+    success_message = "Supplier details has been updated successfully"
     template_name = "suppliers/edit_supplier.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # Check if we are in edit mode
-        if 'pk' in self.kwargs:
-            context["title"] = 'Edit Supplier'
-            context["savebtn"] = 'Save Changes'
-            context["delbtn"] = 'Delete Supplier'
-            context['base_template'] = 'supplier_base.html'
-            self.success_message = "Manufacturer details have been updated successfully"
-        else:
-            context["title"] = 'New Manufacturer'
-            context["savebtn"] = 'Add Manufacturer'
-            context['base_template'] = 'supplier_base.html'
-            self.success_message = "Manufacturer has been created successfully"
-        # Add session data to context
-        context["session_user_id"] = self.request.session.get('session_user_id')
-        context["session_username"] = self.request.session.get('session_username')
-        context["session_first_name"] = self.request.session.get('session_first_name')
-        context["session_last_name"] = self.request.session.get('session_last_name')
-        context["session_email"] = self.request.session.get('session_email')
-        context["session_is_staff"] = self.request.session.get('session_is_staff')
-        return context
-
-    def get_object(self, queryset=None):
-        # Return the object for updating if pk is present
-        if 'pk' in self.kwargs:
-            return get_object_or_404(Supplier_details, pk=self.kwargs['pk'])
-        return None  # For create view
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        # Clear the session data after successful form submission
-        for key in ['session_user_id', 'session_username', 'session_first_name', 'session_last_name', 'session_is_staff']:
-            if key in self.request.session:
-                del self.request.session[key]
-        return response
+        context["title"] = 'Edit Supplier'
+        context["savebtn"] = 'Save Changes'
+        context['base_template'] = 'supplier_base.html'
+        return context    
 
 
 # used to delete a supplier
@@ -128,6 +103,23 @@ class SupplierDeleteView(View):
         supplier.save()                                               
         messages.success(request, self.success_message)
         return redirect('suppliers-list')
+    
+class SupplieractivateView(View):
+    template_name = "suppliers/activate_supplier.html"
+    success_message = "Supplier Record has been activated successfully"
+
+    def get(self, request, pk):      
+        supplier = get_object_or_404(Supplier_details, pk=pk)
+        return render(request, self.template_name, {'object' : supplier,'base_template':'supplier_base.html'})
+
+    def post(self, request, pk):
+        user_id = Supplier_details.objects.filter(pk=pk).values('user_id').last()
+        User.objects.filter(id=user_id['user_id']).update(is_active=True)
+        supplier = get_object_or_404(Supplier_details, pk=pk)
+        supplier.is_deleted = False
+        supplier.save()
+        messages.success(request, self.success_message)
+        return redirect('suppliers-list')        
 
 # used to view a supplier's profile
 class SupplierView(View):
@@ -136,8 +128,8 @@ class SupplierView(View):
         paginate_by = 5
         context = {
             'supplier'  : supplierobj,
+            'base_template' : 'supplier_base.html'
         }
-        context['base_template'] = 'supplier_base.html'
         return render(request, 'suppliers/supplier.html', context)
 
 
@@ -147,7 +139,12 @@ class PurchaseView(ListView):
     template_name = "purchases/purchases_list.html"
     context_object_name = 'bills'
     ordering = ['-time']
-    paginate_by = 10    
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['base_template'] = 'supplier_base.html'
+        return context    
 
 # used to select the supplier
 class SelectSupplierView(View):
@@ -156,7 +153,7 @@ class SelectSupplierView(View):
 
     def get(self, request, *args, **kwargs):                                    # loads the form page
         form = self.form_class
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form,'base_template' : 'supplier_base.html'})
 
     def post(self, request, *args, **kwargs):                                   # gets selected supplier and redirects to 'PurchaseCreateView' class
         form = self.form_class(request.POST)
@@ -164,7 +161,7 @@ class SelectSupplierView(View):
             supplierid = request.POST.get("supplier")
             supplier = get_object_or_404(Supplier, id=supplierid)
             return redirect('new-purchase', supplier.pk)
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form,'base_template' : 'supplier_base.html'})
 
 # used to generate a bill object and save items
 class PurchaseCreateView(View):                                                 
@@ -176,6 +173,7 @@ class PurchaseCreateView(View):
         context = {
             'formset'   : formset,
             'supplier'  : supplierobj,
+            'base_template' : 'supplier_base.html'
         }                                                                       # sends the supplier and formset as context
         return render(request, self.template_name, context)
 
@@ -212,7 +210,8 @@ class PurchaseCreateView(View):
         formset = PurchaseItemFormset(request.GET or None)
         context = {
             'formset'   : formset,
-            'supplier'  : supplierobj
+            'supplier'  : supplierobj,
+            'base_template' : 'supplier_base.html'
         }
         return render(request, self.template_name, context)
 
@@ -696,17 +695,7 @@ class QuoteView(View):
     def get(self, request, pk):
         quote = get_object_or_404(Quote, pk=pk)
         return render(request, 'quote/quote.html', {'quote': quote,'base_template':'supplier_base.html'})
-
-class DemandQuoteListView(ListView):
-    model = Demand
-    template_name = "demand/demand_list.html"
-    queryset = Demand.objects.annotate(quote_count=Count('quote')).filter(quote_count__gt=0)
-    paginate_by = 10
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['base_template'] = 'supplier_base.html'
-        return context    
+ 
 
 class QuoteStatusUpdateView(ListView):
     def get(self, request, pk, status):

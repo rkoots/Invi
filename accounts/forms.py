@@ -55,6 +55,32 @@ class SupplierDetailsForm(forms.ModelForm):
             'certificates': forms.Select(choices=Supplier_details.CERTIFICATES_CHOICES),
         }
 
+class updateSupplierDetailsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.fields['companyname'].initial = 'Default Company Name'
+        self.fields['phone'].widget.attrs.update({'readonly': 'readonly'})
+        self.fields['address'].widget.attrs.update({'placeholder': 'Enter your address here'})
+
+    class Meta:
+        model = Supplier_details
+        fields = [
+            'companyname', 'phone', 'address', 'city', 'state', 'country','activity_type',
+            'company_street', 'company_postalcode', 'company_city',
+            'company_url', 'production_area', 'manufacturing_competency1', 'manufacturing_competency2',
+            'info_source', 'amount_of_employees', 'turnover_per_year', 'certificates'
+        ]
+        widgets = {
+            'activity_type': forms.Select(choices=Supplier_details.ACTIVITY_TYPE_CHOICES),
+            'manufacturing_competency1': forms.Select(choices=Supplier_details.MANUFACTURING_COMPETENCY_CHOICES),
+            'manufacturing_competency2': forms.Select(choices=Supplier_details.MANUFACTURING_COMPETENCY_CHOICES),
+            'info_source': forms.Select(choices=Supplier_details.INFO_SOURCE_CHOICES),
+            'amount_of_employees': forms.Select(choices=Supplier_details.EMPLOYEES_CHOICES),
+            'turnover_per_year': forms.Select(choices=Supplier_details.TURNOVER_CHOICES),
+            'certificates': forms.Select(choices=Supplier_details.CERTIFICATES_CHOICES),
+        }        
+
 class SelectCustomer(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
