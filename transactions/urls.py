@@ -4,7 +4,6 @@ from . import views
 
 urlpatterns = [
     path('suppliers/', views.SupplierListView.as_view(), name='suppliers-list'),
-    #path('suppliers/new', views.SupplierCreateUpdateView.as_view(), name='new-supplier'),
     path('suppliers/<pk>/edit', views.SupplierUpdateView.as_view(), name='edit-supplier'),
     path('suppliers/<pk>/delete', views.SupplierDeleteView.as_view(), name='delete-supplier'),
     path('suppliers/<pk>/activate', views.SupplieractivateView.as_view(), name='activate-supplier'),
@@ -23,7 +22,6 @@ urlpatterns = [
     path("sales/<billno>", views.SaleBillView.as_view(), name="sale-bill"),
 
     path('demand/', views.DemandListView.as_view(), name='demand-list'),
-    path('demand/approved', views.DemandListView.as_view(), name='demand-list-Approved'),
     path('demand/status/<str:status>', views.DemandListStatusView.as_view(), name='demand-status-list'),
     path('demand/new', views.DemandCreateView.as_view(), name='new-demand'),
     path('demand/<pk>/edit', views.DemandUpdateView.as_view(), name='edit-demand'),

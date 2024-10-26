@@ -114,13 +114,11 @@
                             <i class="bi-file-earmark-text me-2"></i> List of RFQ's
                         </a>
                     </li>
-                    {% if subscription_plan == 'standard' %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'demand-status-list' and request.resolver_match.kwargs.status == 'Approved' %}active{% endif %} " href="{% url 'demand-status-list' 'Approved'%}">
                             <i class="bi-plus-circle me-2"></i> RFQ's Accepted
                         </a>
                     </li>
-                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'demand-status-list' and request.resolver_match.kwargs.status == 'Production' %}active{% endif %} " href="{% url 'demand-status-list' 'Production'%}">
                             <i class="bi-plus-circle me-2"></i> RFQ's In Production

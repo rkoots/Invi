@@ -71,7 +71,9 @@ class SupplierListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['base_template'] = 'supplier_base.html'
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'
         return context    
 class SupplierUpdateView(SuccessMessageMixin, UpdateView):
     model = Supplier_details
@@ -84,7 +86,9 @@ class SupplierUpdateView(SuccessMessageMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context["title"] = 'Edit Supplier'
         context["savebtn"] = 'Save Changes'
-        context['base_template'] = 'supplier_base.html'
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'
         return context    
 
 
@@ -95,7 +99,10 @@ class SupplierDeleteView(View):
 
     def get(self, request, pk):
         supplier = get_object_or_404(Supplier_details, pk=pk)
-        return render(request, self.template_name, {'object' : supplier,'base_template':'supplier_base.html'})
+        base_template = 'customer_base.html'
+        if self.request.user.is_staff:
+            base_template = 'supplier_base.html'        
+        return render(request, self.template_name, {'object' : supplier,'base_template':base_template})
 
     def post(self, request, pk):  
         supplier = get_object_or_404(Supplier_details, pk=pk)
@@ -110,7 +117,10 @@ class SupplieractivateView(View):
 
     def get(self, request, pk):      
         supplier = get_object_or_404(Supplier_details, pk=pk)
-        return render(request, self.template_name, {'object' : supplier,'base_template':'supplier_base.html'})
+        base_template = 'customer_base.html'
+        if self.request.user.is_staff:
+            base_template = 'supplier_base.html'        
+        return render(request, self.template_name, {'object' : supplier,'base_template':base_template})
 
     def post(self, request, pk):
         user_id = Supplier_details.objects.filter(pk=pk).values('user_id').last()
@@ -128,8 +138,10 @@ class SupplierView(View):
         paginate_by = 5
         context = {
             'supplier'  : supplierobj,
-            'base_template' : 'supplier_base.html'
         }
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'        
         return render(request, 'suppliers/supplier.html', context)
 
 
@@ -143,7 +155,9 @@ class PurchaseView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['base_template'] = 'supplier_base.html'
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'
         return context    
 
 # used to select the supplier
@@ -153,7 +167,10 @@ class SelectSupplierView(View):
 
     def get(self, request, *args, **kwargs):                                    # loads the form page
         form = self.form_class
-        return render(request, self.template_name, {'form': form,'base_template' : 'supplier_base.html'})
+        base_template = 'customer_base.html'
+        if self.request.user.is_staff:
+            base_template = 'supplier_base.html'            
+        return render(request, self.template_name, {'form': form,'base_template' : base_template})
 
     def post(self, request, *args, **kwargs):                                   # gets selected supplier and redirects to 'PurchaseCreateView' class
         form = self.form_class(request.POST)
@@ -161,7 +178,10 @@ class SelectSupplierView(View):
             supplierid = request.POST.get("supplier")
             supplier = get_object_or_404(Supplier, id=supplierid)
             return redirect('new-purchase', supplier.pk)
-        return render(request, self.template_name, {'form': form,'base_template' : 'supplier_base.html'})
+        base_template = 'customer_base.html'
+        if self.request.user.is_staff:
+            base_template = 'supplier_base.html'            
+        return render(request, self.template_name, {'form': form,'base_template' : base_template})
 
 # used to generate a bill object and save items
 class PurchaseCreateView(View):                                                 
@@ -173,8 +193,10 @@ class PurchaseCreateView(View):
         context = {
             'formset'   : formset,
             'supplier'  : supplierobj,
-            'base_template' : 'supplier_base.html'
         }                                                                       # sends the supplier and formset as context
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'        
         return render(request, self.template_name, context)
 
     def post(self, request, pk):
@@ -211,8 +233,10 @@ class PurchaseCreateView(View):
         context = {
             'formset'   : formset,
             'supplier'  : supplierobj,
-            'base_template' : 'supplier_base.html'
         }
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'        
         return render(request, self.template_name, context)
 
 # used to delete a bill object
@@ -249,8 +273,10 @@ class SaleView(ListView):
             customer = Customer.objects.filter(user=user).first()
             rfq = RfqBill.objects.filter(customer=customer)
             print(customer,rfq)
-        context = {'bills':rfq,'base_template':'supplier_base.html'}
-
+        context = {'bills':rfq}
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'        
         return render(request, self.template_name, context)
 
 # used to generate a bill object and save items
@@ -265,8 +291,10 @@ class SaleCreateView(View):
             'form'      : form,
             'formset'   : formset,
             'stocks'    : stocks,
-            'base_template':'supplier_base.html'
         }
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'        
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -283,8 +311,10 @@ class SaleCreateView(View):
                 context = {
                     'form'      : form,
                     'formset'   : formset,
-                    'base_template':'supplier_base.html'
                 }
+                context['base_template'] = 'customer_base.html'
+                if self.request.user.is_staff:
+                    context['base_template'] = 'supplier_base.html'                
                 return render(request, self.template_name, context)
 
             try:
@@ -299,8 +329,10 @@ class SaleCreateView(View):
                 context = {
                     'form'      : form,
                     'formset'   : formset,
-                    'base_template':'supplier_base.html'
                 }
+                context['base_template'] = 'customer_base.html'
+                if self.request.user.is_staff:
+                    context['base_template'] = 'supplier_base.html'                
                 return render(request, self.template_name, context)
 
             for form in formset:                                                # for loop to save each individual form as its own object
@@ -325,9 +357,11 @@ class SaleCreateView(View):
         formset = SaleItemFormset(request.GET or None)
         context = {
             'form'      : form,
-            'formset'   : formset,
-            'base_template':'supplier_base.html'
+            'formset'   : formset
         }
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'        
         return render(request, self.template_name, context)
 
 # used to delete a bill object
@@ -359,8 +393,10 @@ class PurchaseBillView(View):
             'items'         : PurchaseItem.objects.filter(billno=billno),
             'billdetails'   : PurchaseBillDetails.objects.get(billno=billno),
             'bill_base'     : self.bill_base,
-            'base_template':'supplier_base.html'
         }
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'        
         return render(request, self.template_name, context)
 
     def post(self, request, billno):
@@ -386,8 +422,10 @@ class PurchaseBillView(View):
             'items'         : PurchaseItem.objects.filter(billno=billno),
             'billdetails'   : PurchaseBillDetails.objects.get(billno=billno),
             'bill_base'     : self.bill_base,
-            'base_template':'supplier_base.html'
         }
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'        
         return render(request, self.template_name, context)
 
 # used to display the sale bill object
@@ -415,8 +453,10 @@ class SaleBillView(View):
             'supplier':supplier,
             'customer':customer,
             'total' : total,
-            'base_template':'supplier_base.html'
         }
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'        
         return render(request, self.template_name, context)
 
     def post(self, request, billno):
@@ -442,8 +482,10 @@ class SaleBillView(View):
             'items'         : SaleItem.objects.filter(billno=billno),
             'billdetails'   : SaleBillDetails.objects.get(billno=billno),
             'bill_base'     : self.bill_base,
-            'base_template':'supplier_base.html'
         }
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'        
         return render(request, self.template_name, context)
 
 class DemandListStatusView(LoginRequiredMixin, ListView):
@@ -467,7 +509,9 @@ class DemandListStatusView(LoginRequiredMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['base_template'] = 'supplier_base.html'
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'
         return context    
 
 class DemandListView(LoginRequiredMixin, ListView):
@@ -503,25 +547,10 @@ class DemandListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['sort'] = self.request.GET.get('sort', '')
-        context['base_template'] = 'supplier_base.html'
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'
         return context
-
-class DemandListApprovedView(LoginRequiredMixin, ListView):
-    model = Demand
-    template_name = "demand/demand_list.html"
-    paginate_by = 10
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_staff:
-            return Demand.objects.filter(end_date__gte=timezone.now(), quote_id=0, is_deleted=False).order_by('-pk')
-        else:
-            return Demand.objects.filter(user=user, is_deleted=False)
-        
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['sort'] = self.request.GET.get('sort', '')
-        context['base_template'] = 'supplier_base.html'
-        return context        
 
 
 class DemandCreateView(SuccessMessageMixin, CreateView):
@@ -535,7 +564,9 @@ class DemandCreateView(SuccessMessageMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["title"] = 'New RFQ'
         context["savebtn"] = 'Add RFQ'
-        context['base_template'] = 'supplier_base.html'
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'
         PartFormSet = formset_factory(DemandPartsForm, extra=1)
         context["formset"] = PartFormSet()
         return context
@@ -574,15 +605,20 @@ class DemandUpdateView(SuccessMessageMixin, UpdateView):
         context["title"] = 'Edit Demand'
         context["savebtn"] = 'Save Changes'
         context["delbtn"] = 'Delete Demand'
-        context['base_template'] = 'supplier_base.html'
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'
         return context
 
 class DemandDeleteView(View):
     template_name = "demand/delete_demand.html"
     success_message = "Demand Record has been deleted successfully"
     def get(self, request, pk):
+        base_template = 'customer_base.html'
+        if self.request.user.is_staff:
+            base_template = 'supplier_base.html'
         demand = get_object_or_404(Demand, pk=pk)
-        return render(request, self.template_name, {'object' : demand,'base_template':'supplier_base.html'})
+        return render(request, self.template_name, {'object' : demand,'base_template':base_template})
 
     def post(self, request, pk):
         demand = get_object_or_404(Demand, pk=pk)
@@ -598,17 +634,10 @@ class DemandView(View):
         quote = Quote.objects.filter(demand=demand)
         btn_class = 'ghost-blue'
         demand.demand_buttons = utils.demand_buttons(demand,request.user.is_staff)
-        return render(request, 'demand/demand.html', {'demand' : demand, 'quotes' : quote, 'demanddetails':demanddetails, 'btn_class' : btn_class ,'base_template':'supplier_base.html'})
-
-
-class DemandProduce(View):
-    def get(self, request, pk):
-        demand = get_object_or_404(Demand, pk=pk)
-        demand.status = 'Production'
-        btn_class = 'ghost-blue'
-        return render(request, 'demand/demand.html', {'demand' : demand, 'quotes' : quote, 'demanddetails':demanddetails, 'btn_class' : btn_class,'base_template':'supplier_base.html'})
-
-
+        base_template = 'customer_base.html'
+        if self.request.user.is_staff:
+            base_template = 'supplier_base.html'
+        return render(request, 'demand/demand.html', {'demand' : demand, 'quotes' : quote, 'demanddetails':demanddetails, 'btn_class' : btn_class ,'base_template':base_template})
 
 class QuoteListView(ListView):
     model = Quote
@@ -626,7 +655,9 @@ class QuoteListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['base_template'] = 'supplier_base.html'
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'
         return context    
 
 class QuoteCreateView(SuccessMessageMixin, CreateView):
@@ -640,7 +671,9 @@ class QuoteCreateView(SuccessMessageMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["title"] = 'New Quote'
         context["savebtn"] = 'Add Quote'
-        context['base_template'] = 'supplier_base.html'
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'
         context["demand"] = Demand.objects.filter(pk=self.kwargs.get('pk')).first()
         return context
 
@@ -674,7 +707,9 @@ class QuoteUpdateView(SuccessMessageMixin, UpdateView):
         context["title"] = 'Edit Quote'
         context["savebtn"] = 'Save Changes'
         context["delbtn"] = 'Delete Quote'
-        context['base_template'] = 'supplier_base.html'
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'
         return context
 
 class QuoteDeleteView(View):
@@ -682,7 +717,10 @@ class QuoteDeleteView(View):
     success_message = "Quotation has been deleted successfully"
     def get(self, request, pk):
         quote = get_object_or_404(Quote, pk=pk)
-        return render(request, self.template_name, {'object' : quote,'base_template':'supplier_base.html'})
+        base_template = 'customer_base.html'
+        if self.request.user.is_staff:
+            base_template = 'supplier_base.html'          
+        return render(request, self.template_name, {'object' : quote,'base_template':base_template})
 
     def post(self, request, pk):
         quote = get_object_or_404(Quote, pk=pk)
@@ -694,7 +732,10 @@ class QuoteDeleteView(View):
 class QuoteView(View):
     def get(self, request, pk):
         quote = get_object_or_404(Quote, pk=pk)
-        return render(request, 'quote/quote.html', {'quote': quote,'base_template':'supplier_base.html'})
+        base_template = 'customer_base.html'
+        if self.request.user.is_staff:
+            base_template = 'supplier_base.html'          
+        return render(request, 'quote/quote.html', {'quote': quote,'base_template':base_template})
  
 
 class QuoteStatusUpdateView(ListView):
@@ -723,8 +764,10 @@ class QuoteStatusUpdateView(ListView):
             'quote': quote,
             'btn_class' : btn_class,
             'demanddetails':demanddetails,
-            'base_template':'supplier_base.html'
         }
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'        
         return redirect(reverse('demand', kwargs={'pk': demand.id}))
 
 
@@ -739,8 +782,11 @@ class DemandStatusUpdateView(ListView):
             demand.save()
             if not RfqBill.objects.filter(demand = demand):
                 quote = get_object_or_404(Quote, pk=demand.quote_id)
+                print(quote)
                 supplier = get_object_or_404(Supplier_details, pk=demand.supplier_id)
+                print(supplier)
                 customer = get_object_or_404(Customer, user=demand.user.id)
+                print(customer)
                 rfq_bill = RfqBill.objects.create(demand = demand, quote = quote, supplier = supplier, customer = customer )
         return redirect(reverse('demand', kwargs={'pk': demand.id}))
 
@@ -772,6 +818,8 @@ class global_search_view(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search'] = self.request.GET.get('search', '')
-        context['base_template'] = 'supplier_base.html'
+        context['base_template'] = 'customer_base.html'
+        if self.request.user.is_staff:
+            context['base_template'] = 'supplier_base.html'
         return context
 
