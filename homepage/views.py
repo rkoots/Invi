@@ -66,7 +66,7 @@ class HomeView(View):
         demands_with_quotes = demands_entity.filter(quote_count__gt=0).count()
         demands_approved = demands_entity.filter(status='Approved').count()
         get_monthly_data_json = self.get_monthly_data(request)
-        quotes_with_no_status = Quote.objects.filter( Q(status__isnull=True) | Q(status=''), demand__user=request.user )
+        quotes_with_no_status = Quote.objects.filter( Q(status__isnull=True) | Q(status=''), demand__user=request.user, is_deleted=False )
         demand_approved_status = Demand.objects.filter(is_deleted=False, user=self.request.user,quote_id__gt=0)
         subscription_plan = SubscriptionPlan.objects.filter(user_profile_id=request.user.email).values('plan_type')
 

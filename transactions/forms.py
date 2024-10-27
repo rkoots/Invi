@@ -165,5 +165,3 @@ class SelectQuote(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['quote_price'].widget.attrs.update({'class': 'form-control', 'required': 'true'})
         self.fields['note'].widget.attrs.update({'class': 'form-control'})
-
-

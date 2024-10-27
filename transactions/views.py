@@ -724,7 +724,7 @@ class QuoteDeleteView(View):
 
     def post(self, request, pk):
         quote = get_object_or_404(Quote, pk=pk)
-        #quote.is_deleted = True
+        quote.is_deleted = True
         quote.save()
         messages.success(request, self.success_message)
         return redirect('quote-list')
