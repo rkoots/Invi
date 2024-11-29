@@ -39,6 +39,8 @@ Ensure you have Python and Django installed on your machine. If not, you can dow
 To set up the database for the first time, run the following commands in the project's directory. This process involves creating and applying migrations for each app within the project.
 
 ```bash
+python manage.py makemigrations core
+python manage.py migrate core
 python manage.py makemigrations homepage
 python manage.py migrate homepage
 python manage.py makemigrations accounts

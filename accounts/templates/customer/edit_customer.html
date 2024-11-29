@@ -1,11 +1,10 @@
-{% extends "base.html" %}
+{% extends base_template %}
 {% block title %} {{title}} {% endblock title %}
 {% block content %}
     <div style="color:#ea2088; font-style: bold; font-size: 3rem; border-bottom: 1px solid white;">{{title}}</div> <br>
     <form method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
-        {{ form.user.errors }}
         {{ form.Name.errors }}
         {{ form.type_of_business.errors }}
         {{ form.Address.errors }}
@@ -13,11 +12,6 @@
         {{ form.email.errors }}
         {{ form.EORI_number.errors }}
         {{ form.VAT_number.errors }}
-        {{ form.is_deleted.errors }}
-        <div class="form-group">
-            <label for="{{ form.user.id_for_label }}">User ID:</label>
-            <input type="hidden"  class="form-control" value="{{ user_id }}" readonly>
-        </div>
         <div class="form-group">
             <label for="{{ form.Name.id_for_label }}">Name:</label>
             {{ form.Name }}
@@ -50,19 +44,11 @@
             <label for="{{ form.VAT_number.id_for_label }}">VAT #:</label>
             {{ form.VAT_number }}
         </div>
-
-        <div class="form-group">
-            <label for="{{ form.is_deleted.id_for_label }}">Is Deleted:</label>
-            {{ form.is_deleted }}
-        </div>
         <br>
         <div class="align-middle">
             <button type="submit" class="btn ghost-green">{{ savebtn }}</button>
             {% if title == "New Customer" %}
                 <button type="reset" class="btn ghost-blue" >Reset</button>
-            {% endif %}
-            {% if delbtn %}
-                <a href="{% url 'delete-customer' customer.pk %}" class="btn ghost-red"> Delete Customer </a>
             {% endif %}
             <a href="{% url 'customers-list' %}" class="btn ghost-button">Cancel</a>
         </div>

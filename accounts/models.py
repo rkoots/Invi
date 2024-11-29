@@ -1,6 +1,7 @@
 # models.py
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class ManufacturingSector(models.Model):
@@ -166,7 +167,7 @@ class Supplier_details(models.Model):
         ('96', 'Other'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     companyname = models.CharField(max_length=40, blank=True, null=True)
     phone = models.CharField(max_length=12, unique=True)
     address = models.CharField(max_length=200)
@@ -185,6 +186,10 @@ class Supplier_details(models.Model):
     amount_of_employees = models.CharField(max_length=20, choices=EMPLOYEES_CHOICES)
     turnover_per_year = models.CharField(max_length=20, choices=TURNOVER_CHOICES)
     certificates = models.CharField(max_length=40, choices=CERTIFICATES_CHOICES)
+    email = models.EmailField(max_length=254, unique=True, blank=False, null=False)
+    is_deleted = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)    
 
     def __str__(self):
         return f"{self.user} - CompanyDetails({self.amount_of_employees}, {self.turnover_per_year}, {self.certificates})"
@@ -235,7 +240,7 @@ class Customer(models.Model):
         (84, 'Telecommunication industry'),
     ]
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     Name = models.CharField(max_length=75, blank=False, null=False)
     type_of_business = models.CharField(max_length=50, choices=BUSINESS_TYPES)
     Address = models.CharField(max_length=150, blank=True, null=True)
@@ -253,3 +258,22 @@ class Customer(models.Model):
 
     def __str__(self):
         return f"#{self.id} - {self.Name}"
+
+class SubscriptionPlan(models.Model):
+    PLAN_CHOICES = [
+        ('basic', 'Basic'),
+        ('standard', 'Standard'),
+        ('enterprise', 'Enterprise'),
+    ]
+    user_profile = models.ForeignKey(settings.AUTH_USER_MODEL, to_field='email', on_delete=models.CASCADE)
+    plan_type = models.CharField(max_length=20, choices=PLAN_CHOICES)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    rfq_limit = models.CharField(max_length=50) # unlimited for Enterprise
+
+    # Additional fields for subscription management
+    start_date = models.DateField(auto_now=True)
+    end_date = models.DateField(blank=True, null=True) # Set this for expiration
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.user_profile.user.username} - {self.plan_type}"

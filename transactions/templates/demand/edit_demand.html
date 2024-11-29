@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends base_template %}
 
 {% load static %}
 
@@ -264,9 +264,7 @@
                             {% if title == "New RFQ" %}
                             <button type="reset" class="btn btn-primary">Reset</button>
                             {% endif %}
-                            {% if cancel %}
-                            <a href="{{ cancel }}" class="btn btn-secondary">Cancel</a>
-                            {% endif %}
+                            <a href="{% url 'demand-list' %}" class="btn btn-secondary">Cancel</a>
                         </div>
                     </form>
                 </div>

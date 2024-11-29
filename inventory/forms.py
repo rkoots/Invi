@@ -1,7 +1,5 @@
 from django import forms
 from .models import Stock
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 
 class StockForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):                                                        # used to set css classes to the various fields

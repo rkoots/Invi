@@ -11,6 +11,11 @@ urlpatterns = [
     path('customers/new', views.CustomerCreateView.as_view(), name='new-customer'),
     path('customers/<pk>/edit', views.CustomerUpdateView.as_view(), name='edit-customer'),
     path('customers/<pk>/delete', views.CustomerDeleteView.as_view(), name='delete-customer'),
+    path('customers/<pk>/activate', views.CustomeractivateView.as_view(), name='activate-customer'),
     path('customers/<pk>', views.CustomerView.as_view(), name='customer'),
+
+    path('subscription', views.SubscriptionView.as_view(), name='subscription-list'),
+    path('subscription/<pk>/delete', views.SubscriptionDeleteView.as_view(), name='delete-subscription'),
+    path('subscription/<pk>/edit', views.SubscriptionUpdateView.as_view(), name='edit-subscription'),
 
 ]

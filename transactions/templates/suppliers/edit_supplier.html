@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends base_template %}
 {% block title %} {{ title }} {% endblock title %}
 {% block content %}
 <div class="container mt-4">
@@ -8,14 +8,6 @@
 
         <div class="form-errors mb-4">
             {{ form.non_field_errors }}
-        </div>
-
-        <div class="row mb-3">
-
-            <div class="col-md-8">
-                <input type="hidden" id="{{ form.user.id_for_label }}" value="{{ user_id }}" readonly>
-                <p class="form-control-plaintext">{{ user_id }}</p>
-            </div>
         </div>
 
         <div class="row mb-3">
@@ -202,9 +194,6 @@
             <button type="submit" class="btn btn-success">{{ savebtn }}</button>
             {% if title == "New Supplier" %}
             <button type="reset" class="btn btn-secondary">Reset</button>
-            {% endif %}
-            {% if delbtn %}
-            <a href="#" class="btn btn-danger">Delete Supplier</a>
             {% endif %}
             <a href="{% url 'suppliers-list' %}" class="btn btn-outline-secondary">Cancel</a>
         </div>

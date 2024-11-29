@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_register.html" %}
 
 {% block title %} User Registration {% endblock title %}
 
@@ -80,6 +80,7 @@
 
                         <button type="submit" class="btn btn-primary w-100">Register</button>
                     </form>
+                    <a href="{% url 'home' %}"  class="text-muted px-3 py-2">Back to Homepage</a>
                 </div>
             </div>
         </div>
